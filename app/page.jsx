@@ -1,7 +1,7 @@
 // use the global prisma instance defined in lib/prisma.js
 // instead of  import { PrismaClient } from '@prisma/client';
 // which would create a new instance of PrismaClient
-import { prisma } from "../lib/prisma";
+import prisma from "../lib/prisma";
 
 export default async function Page() {
   // just testing out the usage of prisma in a page
