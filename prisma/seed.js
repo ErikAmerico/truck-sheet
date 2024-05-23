@@ -1,14 +1,16 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
+import { saltAndHashPassword } from "../utils/saltHashPw.js";
 
 async function main() {
+  const hashedPassword = await saltAndHashPassword("Chris123.");
   const employee = await prisma.employee.upsert({
     where: { username: "chrisdas" },
     update: {},
     create: {
       role: "office",
       username: "chrisdas",
-      password: "Chris123.",
+      password: hashedPassword,
       firstName: "Chris",
       lastName: "Das",
     },
