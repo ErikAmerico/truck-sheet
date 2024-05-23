@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import { saltAndHashPassword } from "../utils/saltHashPw.js";
 
@@ -22,8 +22,7 @@ async function main() {
 main()
   .then(() => prisma.$disconnect())
   .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-    });
-  
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
