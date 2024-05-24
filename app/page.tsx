@@ -10,9 +10,7 @@ export default async function HomePage() {
 
   return (
     <main>
-      <div>
-        Hello, {session.user.firstName} {session.user.lastName}
-      </div>
+      <div>Hey this is the home page</div>
     </main>
   );
 }
