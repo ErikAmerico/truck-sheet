@@ -1,10 +1,11 @@
 import { auth } from "../auth";
+import Login from "./components/Login";
 
-export default async function Page() {
+export default async function HomePage() {
   const session = await auth();
 
   if (!session) {
-    return <main>No session</main>;
+    return <Login />;
   }
 
   return (
