@@ -1,0 +1,60 @@
+#login-form-container {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+#login-form-container .MuiFormControl-root {
+  margin-bottom: 25px;
+}
+
+#login-form-title {
+  text-align: center;
+  margin: 0;
+  padding-bottom: 35px;
+  font-family: "Roboto", sans-serif;
+}
+
+#login-form-submit {
+  margin-top: 20px;
+}
+
+@media screen and (max-width: 460px) {
+  #login-form-container {
+    width: 350px;
+  }
+}
+
+@media screen and (max-width: 410px) {
+  #login-form-container {
+    width: 300px;
+  }
+}
+
+@media screen and (max-width: 355px) {
+  #login-form-container {
+    width: 275px;
+  }
+}
+
+@media screen and (max-width: 325px) {
+  #login-form-container {
+    width: 250px;
+  }
+}
+
+@media screen and (max-width: 300px) {
+  #login-form-container {
+    width: 225px;
+  }
+}
+
+@media screen and (max-width: 275px) {
+  #login-form-container {
+    width: 200px;
+  }
+}
