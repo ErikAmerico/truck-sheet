@@ -2,7 +2,12 @@
   background-color: white;
   margin-bottom: 16px;
   box-shadow: 0 0 20px 10px rgba(9, 159, 255, 0.5);
-  z-index: -1;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
 }
 
 #toolbar {
