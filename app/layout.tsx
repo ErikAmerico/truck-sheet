@@ -1,5 +1,5 @@
 import "./globals.css";
-import AppBar from "./components/appbar";
+import NavBar from "./components/appbar";
 
 export default function RootLayout({
   children,
@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AppBar />
+        <NavBar />
         {children}
       </body>
     </html>
