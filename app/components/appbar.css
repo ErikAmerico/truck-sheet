@@ -1,0 +1,46 @@
+#appbar {
+  background-color: white;
+  margin-bottom: 16px;
+  box-shadow: 0 0 20px 10px rgba(9, 159, 255, 0.5);
+  z-index: -1;
+}
+
+#toolbar {
+  justify-content: space-between;
+}
+
+#user-info-container {
+  display: flex;
+  align-items: center;
+}
+
+#first-last-name {
+  color: black;
+  margin-right: 16px;
+}
+
+#logout-button {
+  border: 1px solid rgba(9, 159, 255, 0.5);
+  color: black;
+}
+
+#logout-button:hover {
+  background-color: rgb(37, 40, 45);
+  color: white;
+}
+
+#logout-button::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  left: 1px;
+  right: 1px;
+  border: 2px solid rgba(9, 159, 255, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#logout-button:hover::before {
+  opacity: 1;
+}
