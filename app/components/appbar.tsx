@@ -19,7 +19,7 @@ export default async function NavBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" id="appbar">
         <Toolbar id="toolbar">
-          <Image src="/logo.png" alt="Logo" width={140} height={60} />
+          <Image src="/logo.png" alt="Logo" width={140} height={60} priority />
           <Box sx={{ flexGrow: 1 }} />
           <Box id="user-info-container">
             <Typography variant="h6" component="div" id="first-last-name">
