@@ -7,10 +7,11 @@ export async function POST(req: NextRequest) {
 
   try {
     const hashedPassword = await saltAndHashPassword(password);
+    const lowerCaseUsername = username.toLowerCase();
 
     const newDriver = await prisma.employee.create({
       data: {
-        username,
+        username: lowerCaseUsername,
         password: hashedPassword,
         firstName,
         lastName,
