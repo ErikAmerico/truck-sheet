@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Image from "next/image";
 import { auth, signOut } from "auth";
-import "./appBar.css";
+import "./navBar.css";
 
 export default async function NavBar() {
   const session = await auth();
