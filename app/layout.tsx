@@ -1,6 +1,6 @@
 import "./globals.css";
 import { auth } from "auth";
-import NavBar from "./components/appbar";
+import NavBar from "./components/AppBar";
 
 export default async function RootLayout({
   children,
