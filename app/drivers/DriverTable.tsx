@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -13,6 +12,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
+import AddDriverModal from "./AddDriverModalAndButton";
 import "./driverTable.css";
 
 interface Driver {
@@ -126,6 +126,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           Drivers
         </Typography>
       )}
+      {selectedUser ? null : <AddDriverModal />}
     </Toolbar>
   );
 }
