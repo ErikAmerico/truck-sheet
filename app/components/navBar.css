@@ -1,12 +1,27 @@
 #appbar {
   background-color: white;
   margin-bottom: 16px;
-  box-shadow: 0 0 20px 10px rgba(9, 159, 255, 0.5);
-  z-index: -1;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
 }
 
 #toolbar {
   justify-content: space-between;
+}
+
+#centered-button-container {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+#drivers-button {
+  border: 1px solid rgba(9, 159, 255, 0.5);
+  color: black;
 }
 
 #user-info-container {
@@ -24,12 +39,14 @@
   color: black;
 }
 
-#logout-button:hover {
+#logout-button:hover,
+#drivers-button:hover {
   background-color: rgb(37, 40, 45);
   color: white;
 }
 
-#logout-button::before {
+#logout-button::before,
+#drivers-button::before {
   content: "";
   position: absolute;
   top: 1px;
@@ -41,6 +58,7 @@
   transition: opacity 0.3s;
 }
 
-#logout-button:hover::before {
+#logout-button:hover::before,
+#drivers-button:hover::before {
   opacity: 1;
 }

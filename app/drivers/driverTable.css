@@ -1,0 +1,33 @@
+#toolbar {
+  padding-left: 16px;
+  padding-right: 8px;
+}
+
+#toolbar.selected {
+  background-color: rgba(25, 118, 210, 0.12);
+}
+
+.subtitle {
+  flex: 1 1 100%;
+  color: rgb(37, 40, 45);
+}
+
+.driver-table-container {
+  width: 100%;
+  margin-top: 80px;
+  box-shadow: 0 0 20px 10px rgba(9, 159, 255, 0.5);
+}
+
+.paper {
+  width: 100%;
+  margin-bottom: 16px;
+  height: 450px;
+}
+
+.tableContainer {
+  max-height: 380px;
+}
+
+.table-row-drivers {
+  cursor: pointer;
+}
