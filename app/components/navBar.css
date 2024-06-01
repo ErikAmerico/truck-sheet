@@ -1,6 +1,5 @@
 #appbar {
   background-color: white;
-  margin-bottom: 16px;
   width: 100%;
   position: fixed;
   top: 0;
@@ -9,7 +8,7 @@
   z-index: 100;
 }
 
-#toolbar {
+#nav-toolbar {
   justify-content: space-between;
 }
 

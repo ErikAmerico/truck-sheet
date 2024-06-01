@@ -13,7 +13,8 @@
 }
 
 .driver-table-container {
-  width: 100%;
+  width: 98.6%;
+  margin-left: 0.7%;
   margin-top: 80px;
   box-shadow: 0 0 20px 10px rgba(9, 159, 255, 0.5);
 }
