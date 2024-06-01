@@ -19,7 +19,7 @@ export default async function NavBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" id="appbar">
-        <Toolbar id="toolbar">
+        <Toolbar id="nav-toolbar">
           <Image src="/logo.png" alt="Logo" width={140} height={60} priority />
           {session.user.role === "office" ? (
             <Box id="centered-button-container">
