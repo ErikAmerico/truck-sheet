@@ -1,5 +1,6 @@
 import { auth } from "auth";
 import { redirect } from "next/navigation";
+import TruckSheetForm from "./form";
 
 export default async function TruckSheet() {
   const session = await auth();
@@ -14,7 +15,7 @@ export default async function TruckSheet() {
 
   return (
     <div id="trucksheet-page-container">
-      <h1>Truck SHeet page</h1>
+      <TruckSheetForm />
     </div>
   );
 }
