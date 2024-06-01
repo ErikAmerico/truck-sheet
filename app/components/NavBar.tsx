@@ -21,9 +21,11 @@ export default async function NavBar() {
       <AppBar position="static" id="appbar">
         <Toolbar id="toolbar">
           <Image src="/logo.png" alt="Logo" width={140} height={60} priority />
-          <Box id="centered-button-container">
-            <DriversButton id="drivers-button" />
-          </Box>
+          {session.user.role === "office" ? (
+            <Box id="centered-button-container">
+              <DriversButton id="drivers-button" />
+            </Box>
+          ) : null}
           <Box sx={{ flexGrow: 1 }} />
           <Box id="user-info-container">
             <Typography variant="h6" component="div" id="first-last-name">

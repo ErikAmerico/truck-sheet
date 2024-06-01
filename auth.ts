@@ -3,7 +3,6 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { comparePassword } from "./utils/saltHashPw";
 import { prisma } from "./lib/prisma";
-import { employee } from "@prisma/client";
 
 declare module "next-auth" {
   //extending properties for the user object

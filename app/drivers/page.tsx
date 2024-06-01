@@ -9,6 +9,10 @@ export default async function Drivers() {
     redirect("/login");
   }
 
+  if (session.user.role !== "office") {
+    redirect("/");
+  }
+
   const response = await fetch(
     "http://localhost:3000/api/employees/getdrivers"
   );
