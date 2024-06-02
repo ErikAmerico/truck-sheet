@@ -1,0 +1,34 @@
+#truck-toolbar {
+  padding-left: 16px;
+  padding-right: 8px;
+}
+
+#truck-toolbar.selected {
+  background-color: rgba(25, 118, 210, 0.12);
+}
+
+.truck-subtitle {
+  flex: 1 1 100%;
+  color: rgb(37, 40, 45);
+}
+
+.truck-table-container {
+  width: 98.6%;
+  margin-left: 0.7%;
+  margin-top: 80px;
+  box-shadow: 0 0 20px 10px rgba(9, 159, 255, 0.5);
+}
+
+.truck-paper {
+  width: 100%;
+  margin-bottom: 16px;
+  height: 450px;
+}
+
+.truck-tableContainer {
+  max-height: 380px;
+}
+
+.truck-table-row {
+  cursor: pointer;
+}
