@@ -7,6 +7,13 @@
   background-color: rgba(25, 118, 210, 0.12);
 }
 
+#driver-table-head-cell {
+  background-color: rgb(37, 40, 45);
+  color: white;
+  border-top: 2px solid rgba(9, 159, 255, 0.5);
+  border-bottom: 2px solid rgba(9, 159, 255, 0.5);
+}
+
 .driver-subtitle {
   flex: 1 1 100%;
   color: rgb(37, 40, 45);
@@ -31,4 +38,17 @@
 
 .driver-table-row {
   cursor: pointer;
+}
+
+.MuiTableSortLabel-root {
+  color: white !important;
+}
+
+.MuiTableSortLabel-root.Mui-active {
+  color: white !important;
+}
+
+.MuiTableSortLabel-iconDirectionAsc,
+.MuiTableSortLabel-iconDirectionDesc {
+  color: white !important;
 }
