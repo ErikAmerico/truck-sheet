@@ -1,4 +1,4 @@
-#modal-box {
+#driver-modal-box {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -14,33 +14,33 @@
   align-items: center;
 }
 
-#modal-title {
+#driver-modal-title {
   color: rgb(37, 40, 45);
   margin-bottom: 24px;
 }
 
-#submit-button {
+#driver-submit-button {
   margin-top: 16px;
   border: 1px solid rgba(9, 159, 255, 0.5);
   color: rgb(37, 40, 45);
   background-color: white;
 }
 
-#modal-button {
+#driver-modal-button {
   width: 130px;
   border: 1px solid rgba(9, 159, 255, 0.5);
   color: rgb(37, 40, 45);
   background-color: white;
 }
 
-#modal-button:hover,
-#submit-button:hover {
+#driver-modal-button:hover,
+#driver-submit-button:hover {
   background-color: rgb(37, 40, 45);
   color: white;
 }
 
-#modal-button::before,
-#submit-button::before {
+#driver-modal-button::before,
+#driver-submit-button::before {
   content: "";
   position: absolute;
   top: 1px;
@@ -52,7 +52,7 @@
   transition: opacity 0.3s;
 }
 
-#modal-button:hover::before,
-#submit-button:hover::before {
+#driver-modal-button:hover::before,
+#driver-submit-button:hover::before {
   opacity: 1;
 }

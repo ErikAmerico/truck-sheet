@@ -111,16 +111,16 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   const { selectedUser } = props;
 
   return (
-    <Toolbar id="toolbar" className={selectedUser ? "selected" : ""}>
+    <Toolbar id="driver-toolbar" className={selectedUser ? "selected" : ""}>
       {selectedUser ? (
-        <Typography className="subtitle" variant="h6" component="div">
+        <Typography className="driver-subtitle" variant="h6" component="div">
           Selected: {selectedUser}
         </Typography>
       ) : (
         <Typography
-          className="subtitle"
+          className="driver-subtitle"
           variant="h6"
-          id="tableTitle"
+          id="driver-tableTitle"
           component="div"
         >
           Drivers
@@ -166,10 +166,14 @@ export default function DriverTable({ drivers }: DriverTableProps) {
 
   return (
     <Box className="driver-table-container">
-      <Paper className="paper">
+      <Paper className="driver-paper">
         <EnhancedTableToolbar selectedUser={selectedUser} />
-        <TableContainer className="tableContainer">
-          <Table aria-labelledby="tableTitle" size={"medium"} stickyHeader>
+        <TableContainer className="driver-tableContainer">
+          <Table
+            aria-labelledby="driver-tableTitle"
+            size={"medium"}
+            stickyHeader
+          >
             <EnhancedTableHead
               selectedUser={selectedUser}
               order={order}
@@ -186,7 +190,7 @@ export default function DriverTable({ drivers }: DriverTableProps) {
                     onClick={(event) => handleClick(event, row.id)}
                     key={row.id}
                     selected={isItemSelected}
-                    className="table-row-drivers"
+                    className="driver-table-row"
                   >
                     <TableCell align="left">{row.firstName}</TableCell>
                     <TableCell align="left">{row.lastName}</TableCell>

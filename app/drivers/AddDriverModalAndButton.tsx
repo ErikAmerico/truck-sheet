@@ -44,7 +44,7 @@ export default function AddDriverModal() {
 
   return (
     <div>
-      <Button onClick={handleOpen} variant="contained" id="modal-button">
+      <Button onClick={handleOpen} variant="contained" id="driver-modal-button">
         Add Driver
       </Button>
       <Modal
@@ -54,12 +54,12 @@ export default function AddDriverModal() {
         aria-describedby="modal-modal-description"
       >
         <Box
-          id="modal-box"
+          id="driver-modal-box"
           component="form"
           autoComplete="off"
           onSubmit={handleSubmit}
         >
-          <Typography id="modal-title" variant="h6" component="h2">
+          <Typography id="driver-modal-title" variant="h6" component="h2">
             Driver Details
           </Typography>
           <TextField
@@ -98,7 +98,7 @@ export default function AddDriverModal() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button type="submit" variant="contained" id="submit-button">
+          <Button type="submit" variant="contained" id="driver-submit-button">
             Create Driver
           </Button>
         </Box>
