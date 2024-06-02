@@ -14,14 +14,14 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 export default function TruckSheetForm() {
   const [expanded, setExpanded] = React.useState<string | false>("panel3");
-  const [truck, setTruck] = React.useState("");
+  const [selectedTruck, setSelectedTruck] = React.useState("");
   const [fuel, setFuel] = React.useState<number | "">("");
   const [mileage, setMileage] = React.useState<number | "">("");
   //use truckId in place of 1 in the fetch call
   //const [truckId, setTruckId] = React.useState<number | "">("");
 
   const handleTruckChange = (event: SelectChangeEvent) => {
-    setTruck(event.target.value);
+    setSelectedTruck(event.target.value);
     //set truckId to the truck id associated with the truck number
   };
 
@@ -84,7 +84,7 @@ export default function TruckSheetForm() {
           <Select
             labelId="truck-number-label"
             id="truck-number-select"
-            value={truck}
+            value={selectedTruck}
             onChange={handleTruckChange}
             MenuProps={menuProps}
             sx={{
