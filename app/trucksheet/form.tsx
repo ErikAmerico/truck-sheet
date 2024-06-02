@@ -4,6 +4,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -14,6 +15,10 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 export default function TruckSheetForm() {
   const [expanded, setExpanded] = React.useState<string | false>("panel3");
   const [truck, setTruck] = React.useState("");
+  const [fuel, setFuel] = React.useState<number | "">("");
+  const [mileage, setMileage] = React.useState<number | "">("");
+  //use truckId in place of 1 in the fetch call
+  //const [truckId, setTruckId] = React.useState<number | "">("");
   const today = new Date();
   const formattedDate = today.toLocaleDateString("en-US", {
     year: "numeric",
@@ -23,12 +28,30 @@ export default function TruckSheetForm() {
 
   const handleTruckChange = (event: SelectChangeEvent) => {
     setTruck(event.target.value);
+    //set truckId to the truck id associated with the truck number
   };
 
   const handleAccordianChange =
     (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? panel : false);
     };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const response = await fetch("/api/trucksheets/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      //need to get the correct truck id associated with the truck number
+      body: JSON.stringify({ date: new Date(), fuel, mileage, truckId: 1 }),
+    });
+    if (response.ok) {
+      console.log("Truck sheet created");
+    } else {
+      console.error("Failed to create truck sheet");
+    }
+  };
 
   const menuProps = {
     PaperProps: {
@@ -43,7 +66,7 @@ export default function TruckSheetForm() {
   };
 
   return (
-    <div>
+    <form onSubmit={handleSubmit}>
       <Box
         sx={{
           display: "flex",
@@ -78,6 +101,7 @@ export default function TruckSheetForm() {
               borderRight: "1px solid gray",
             }}
           >
+            {/* associate truck number with truck id */}
             <MenuItem value={100}>100</MenuItem>
             <MenuItem value={101}>101</MenuItem>
             <MenuItem value={102}>102</MenuItem>
@@ -152,9 +176,23 @@ export default function TruckSheetForm() {
           <Typography>Fuel & Mileage</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            This is where you would enter fuel and mileage information
-          </Typography>
+          <Box sx={{ padding: "10px" }}>
+            <TextField
+              label="Fuel"
+              type="number"
+              value={fuel}
+              onChange={(e) => setFuel(Number(e.target.value))}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Mileage"
+              type="number"
+              value={mileage}
+              onChange={(e) => setMileage(Number(e.target.value))}
+              fullWidth
+            />
+          </Box>
         </AccordionDetails>
       </Accordion>
       <Accordion
@@ -191,6 +229,13 @@ export default function TruckSheetForm() {
           </Typography>
         </AccordionDetails>
       </Accordion>
-    </div>
+      <Button
+        type="submit"
+        variant="contained"
+        sx={{ mt: 2, backgroundColor: "rgb(9, 159, 255)" }}
+      >
+        Submit
+      </Button>
+    </form>
   );
 }
