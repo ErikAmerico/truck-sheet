@@ -11,6 +11,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import FuelSlider from "./fuelSlider";
+import Divider from "@mui/material/Divider";
 
 export default function TruckSheetForm() {
   const [expanded, setExpanded] = React.useState<string | false>("panel3");
@@ -32,6 +34,8 @@ export default function TruckSheetForm() {
     };
 
     fetchTrucks();
+    //setFuel to 0, because when the fuel slider first mounts the value is null
+    setFuel(0);
   }, []);
 
   const handleTruckChange = (event: SelectChangeEvent) => {
@@ -82,6 +86,22 @@ export default function TruckSheetForm() {
     },
   };
 
+  const handleMileageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (value.match(/^\d*\.?\d{0,2}$/)) {
+      setMileage(value === "" ? "" : Number(value));
+    }
+  };
+
+  const handleMileageKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    const invalidChars = ["e", "E", "+", "-"];
+    if (invalidChars.includes(event.key)) {
+      event.preventDefault();
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <Box
@@ -110,6 +130,7 @@ export default function TruckSheetForm() {
             value={selectedTruck}
             onChange={handleTruckChange}
             MenuProps={menuProps}
+            required
             sx={{
               color: "white",
               border: "1px solid rgba(9, 159, 255, 0.5)",
@@ -170,20 +191,18 @@ export default function TruckSheetForm() {
         <AccordionDetails>
           <Box sx={{ padding: "10px" }}>
             <TextField
-              label="Fuel"
-              type="number"
-              value={fuel}
-              onChange={(e) => setFuel(Number(e.target.value))}
-              fullWidth
-              sx={{ mb: 2 }}
-            />
-            <TextField
               label="Mileage"
+              required
               type="number"
               value={mileage}
-              onChange={(e) => setMileage(Number(e.target.value))}
+              onChange={handleMileageChange}
+              onKeyDown={handleMileageKeyDown}
+              inputProps={{ pattern: "[0-9]*" }}
               fullWidth
+              sx={{ mb: 5 }}
             />
+            <Divider />
+            <FuelSlider setFuel={setFuel} />
           </Box>
         </AccordionDetails>
       </Accordion>
