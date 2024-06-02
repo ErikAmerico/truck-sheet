@@ -19,12 +19,6 @@ export default function TruckSheetForm() {
   const [mileage, setMileage] = React.useState<number | "">("");
   //use truckId in place of 1 in the fetch call
   //const [truckId, setTruckId] = React.useState<number | "">("");
-  const today = new Date();
-  const formattedDate = today.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
 
   const handleTruckChange = (event: SelectChangeEvent) => {
     setTruck(event.target.value);
@@ -81,7 +75,6 @@ export default function TruckSheetForm() {
             minWidth: 120,
             backgroundColor: "rgb(47, 50, 55)",
             borderRadius: 1,
-            boxShadow: "0 0 20px 1px rgba(9, 159, 255, 0.5)",
           }}
           size="small"
         >
@@ -96,9 +89,7 @@ export default function TruckSheetForm() {
             MenuProps={menuProps}
             sx={{
               color: "white",
-              borderBottom: "1px solid gray",
-              borderLeft: "1px solid gray",
-              borderRight: "1px solid gray",
+              border: "1px solid rgba(9, 159, 255, 0.5)",
             }}
           >
             {/* associate truck number with truck id */}
@@ -119,18 +110,6 @@ export default function TruckSheetForm() {
             <MenuItem value={114}>114</MenuItem>
           </Select>
         </FormControl>
-        <Typography
-          sx={{
-            color: "white",
-            mr: 1,
-            border: "1px solid gray",
-            borderRadius: 1,
-            padding: "10px",
-            boxShadow: "0 0 20px 1px rgba(9, 159, 255, 0.5)",
-          }}
-        >
-          {formattedDate}
-        </Typography>
       </Box>
 
       <Accordion
