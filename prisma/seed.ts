@@ -16,7 +16,16 @@ async function main() {
     },
   });
 
+  const truck = await prisma.truck.upsert({
+    where: { number: 100 },
+    update: {},
+    create: {
+      number: 100,
+    },
+  });
+
   console.log({ employee });
+  console.log({ truck });
 }
 
 main()

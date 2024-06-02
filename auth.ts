@@ -7,9 +7,7 @@ import { prisma } from "./lib/prisma";
 declare module "next-auth" {
   //extending properties for the user object
   interface User {
-    // having trouble getting the id
-    // to match types across the app
-    // id: number;
+    id: string;
     username: string;
     firstName: string;
     lastName: string;
@@ -21,7 +19,7 @@ declare module "next-auth" {
   interface Session {
     // extending properties for the session object
     user: {
-      // id: number;
+      id: string;
       username: string;
       firstName: string;
       lastName: string;
@@ -33,7 +31,7 @@ declare module "next-auth" {
 
   interface JWT {
     // extending properties for the JWT object
-    // id: number;
+    id: string;
     username: string;
     firstName: string;
     lastName: string;
