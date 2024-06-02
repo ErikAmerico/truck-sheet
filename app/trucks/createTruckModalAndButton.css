@@ -1,4 +1,4 @@
-#driver-modal-box {
+#truck-modal-box {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -14,33 +14,33 @@
   align-items: center;
 }
 
-#driver-modal-title {
+#truck-modal-title {
   color: rgb(37, 40, 45);
   margin-bottom: 24px;
 }
 
-#driver-submit-button {
+#truck-submit-button {
   margin-top: 16px;
   border: 1px solid rgba(9, 159, 255, 0.5);
   color: rgb(37, 40, 45);
   background-color: white;
 }
 
-#driver-modal-button {
+#truck-modal-button {
   width: 130px;
   border: 1px solid rgba(9, 159, 255, 0.5);
   color: rgb(37, 40, 45);
   background-color: white;
 }
 
-#driver-modal-button:hover,
-#driver-submit-button:hover {
+#truck-modal-button:hover,
+#truck-submit-button:hover {
   background-color: rgb(37, 40, 45);
   color: white;
 }
 
-#driver-modal-button::before,
-#driver-submit-button::before {
+#truck-modal-button::before,
+#truck-submit-button::before {
   content: "";
   position: absolute;
   top: 1px;
@@ -52,7 +52,7 @@
   transition: opacity 0.3s;
 }
 
-#driver-modal-button:hover::before,
-#driver-submit-button:hover::before {
+#truck-modal-button:hover::before,
+#truck-submit-button:hover::before {
   opacity: 1;
 }

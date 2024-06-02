@@ -8,6 +8,7 @@ import Image from "next/image";
 import { auth, signOut } from "auth";
 import "./navBar.css";
 import DriversButton from "./DriversButton";
+import TrucksButton from "./TrucksButton";
 
 export default async function NavBar() {
   const session = await auth();
@@ -21,11 +22,15 @@ export default async function NavBar() {
       <AppBar position="static" id="appbar">
         <Toolbar id="nav-toolbar">
           <Image src="/logo.png" alt="Logo" width={140} height={60} priority />
-          {session.user.role === "office" ? (
-            <Box id="centered-button-container">
+          <Box className="centered-button-container">
+            {session.user.role === "office" ? (
               <DriversButton id="drivers-button" />
-            </Box>
-          ) : null}
+            ) : null}
+            {session.user.role === "office" ? (
+              <TrucksButton id="trucks-button" />
+            ) : null}
+          </Box>
+
           <Box sx={{ flexGrow: 1 }} />
           <Box id="user-info-container">
             <Typography variant="h6" component="div" id="first-last-name">

@@ -1,54 +1,41 @@
-#driver-toolbar {
+#truck-toolbar {
   padding-left: 16px;
   padding-right: 8px;
 }
 
-#driver-toolbar.selected {
+#truck-toolbar.selected {
   background-color: rgba(25, 118, 210, 0.12);
 }
 
-#driver-table-head-cell {
+#truck-table-head-cell {
   background-color: rgb(37, 40, 45);
   color: white;
   border-top: 2px solid rgba(9, 159, 255, 0.5);
   border-bottom: 2px solid rgba(9, 159, 255, 0.5);
 }
 
-.driver-subtitle {
+.truck-subtitle {
   flex: 1 1 100%;
   color: rgb(37, 40, 45);
 }
 
-.driver-table-container {
+.truck-table-container {
   width: 98.6%;
   margin-left: 0.7%;
   margin-top: 80px;
   box-shadow: 0 0 20px 10px rgba(9, 159, 255, 0.5);
 }
 
-.driver-paper {
+.truck-paper {
   width: 100%;
   margin-bottom: 16px;
   height: 450px;
 }
 
-.driver-tableContainer {
+.truck-tableContainer {
   max-height: 380px;
 }
 
-.driver-table-row {
+.truck-table-row {
   cursor: pointer;
-}
-
-.MuiTableSortLabel-root {
-  color: white !important;
-}
-
-.MuiTableSortLabel-root.Mui-active {
-  color: white !important;
-}
-
-.MuiTableSortLabel-iconDirectionAsc,
-.MuiTableSortLabel-iconDirectionDesc {
-  color: white !important;
 }
