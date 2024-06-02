@@ -13,6 +13,7 @@ import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import CreateTruckModal from "./CreateTruckModalAndButton";
 import "./truckTable.css";
+import FuelGauge from "./FuelGauge";
 
 interface Truck {
   id: number;
@@ -131,7 +132,9 @@ export default function TruckTable({ trucks }: TruckTableProps) {
                     <TableCell align="left">
                       {latestTruckSheet.mileage}
                     </TableCell>
-                    <TableCell align="left">{latestTruckSheet.fuel}</TableCell>
+                    <TableCell align="left" style={{ padding: 0 }}>
+                      <FuelGauge value={latestTruckSheet.fuel} />
+                    </TableCell>
                   </TableRow>
                 );
               })}
