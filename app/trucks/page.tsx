@@ -13,7 +13,9 @@ export default async function TrucksPage() {
     redirect("/trucksheet");
   }
 
-  const response = await fetch("http://localhost:3000/api/trucks/gettrucks");
+  const response = await fetch(
+    "http://localhost:3000/api/trucks/getlatesttrucksheets"
+  );
   const trucks = await response.json();
 
   return <main>{<TruckTable trucks={trucks} />}</main>;
