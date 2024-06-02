@@ -7,7 +7,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
@@ -18,8 +17,10 @@ import "./truckTable.css";
 interface Truck {
   id: number;
   number: number;
-  mileage: number;
-  fuel: number;
+  trucksheet: {
+    mileage: number;
+    fuel: number;
+  }[];
 }
 
 const headCells = [
@@ -33,47 +34,11 @@ const headCells = [
   { id: "fuel", numeric: false, disablePadding: true, label: "Fuel Level" },
 ];
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-type Order = "asc" | "desc";
-
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string }
-) => number {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
 interface EnhancedTableProps {
   selectedTruck: string | null;
-  order: Order;
-  orderBy: string;
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof Truck
-  ) => void;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const { order, orderBy, onRequestSort } = props;
-  const createSortHandler =
-    (property: keyof Truck) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
-
   return (
     <TableHead>
       <TableRow>
@@ -82,20 +47,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
+            id="truck-table-head-cell"
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id as keyof Truck)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
+            {headCell.label}
           </TableCell>
         ))}
       </TableRow>
@@ -136,18 +90,7 @@ interface TruckTableProps {
 }
 
 export default function TruckTable({ trucks }: TruckTableProps) {
-  const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Truck>("mileage");
   const [selectedTruck, setSelectedTruck] = React.useState<string | null>(null);
-
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: keyof Truck
-  ) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedTruck = trucks.find((row) => row.id === id);
@@ -157,11 +100,6 @@ export default function TruckTable({ trucks }: TruckTableProps) {
         : selectedTruck?.number.toString() || null
     );
   };
-
-  const sortedRows = React.useMemo(
-    () => trucks.slice().sort(getComparator(order, orderBy)),
-    [order, orderBy, trucks]
-  );
 
   return (
     <Box className="truck-table-container">
@@ -173,14 +111,13 @@ export default function TruckTable({ trucks }: TruckTableProps) {
             size={"medium"}
             stickyHeader
           >
-            <EnhancedTableHead
-              selectedTruck={selectedTruck}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-            />
+            <EnhancedTableHead selectedTruck={selectedTruck} />
             <TableBody>
-              {sortedRows.map((row) => {
+              {trucks.map((row) => {
+                const latestTruckSheet = row.trucksheet[0] || {
+                  mileage: 0,
+                  fuel: 0,
+                };
                 const isItemSelected = selectedTruck === row.number.toString();
                 return (
                   <TableRow
@@ -191,9 +128,10 @@ export default function TruckTable({ trucks }: TruckTableProps) {
                     className="truck-table-row"
                   >
                     <TableCell align="left">{row.number}</TableCell>
-                    {/* mileage and fuel will come from the latest trucksheet */}
-                    <TableCell align="left">{row.mileage}</TableCell>
-                    <TableCell align="left">{row.fuel}</TableCell>
+                    <TableCell align="left">
+                      {latestTruckSheet.mileage}
+                    </TableCell>
+                    <TableCell align="left">{latestTruckSheet.fuel}</TableCell>
                   </TableRow>
                 );
               })}
