@@ -17,12 +17,31 @@ export default function TruckSheetForm() {
   const [selectedTruck, setSelectedTruck] = React.useState("");
   const [fuel, setFuel] = React.useState<number | "">("");
   const [mileage, setMileage] = React.useState<number | "">("");
-  //use truckId in place of 1 in the fetch call
-  //const [truckId, setTruckId] = React.useState<number | "">("");
+  const [trucksFromDB, setTrucksFromDB] = React.useState("");
+  const [selectedTruckId, setSelectedTruckId] = React.useState<number | "">("");
+
+  React.useEffect(() => {
+    const fetchTrucks = async () => {
+      try {
+        const response = await fetch("/api/trucks/gettrucks");
+        const data = await response.json();
+        setTrucksFromDB(data);
+      } catch (error) {
+        console.error("Failed to fetch trucks", error);
+      }
+    };
+
+    fetchTrucks();
+  }, []);
 
   const handleTruckChange = (event: SelectChangeEvent) => {
     setSelectedTruck(event.target.value);
-    //set truckId to the truck id associated with the truck number
+    const selectedTruck = Array.isArray(trucksFromDB)
+      ? trucksFromDB.find(
+          (truck: any) => truck.number === parseInt(event.target.value, 10)
+        )
+      : null;
+    setSelectedTruckId(selectedTruck ? selectedTruck.id : "");
   };
 
   const handleAccordianChange =
@@ -37,8 +56,12 @@ export default function TruckSheetForm() {
       headers: {
         "Content-Type": "application/json",
       },
-      //need to get the correct truck id associated with the truck number
-      body: JSON.stringify({ date: new Date(), fuel, mileage, truckId: 1 }),
+      body: JSON.stringify({
+        date: new Date(),
+        fuel,
+        mileage,
+        truckId: selectedTruckId,
+      }),
     });
     if (response.ok) {
       console.log("Truck sheet created");
@@ -92,22 +115,12 @@ export default function TruckSheetForm() {
               border: "1px solid rgba(9, 159, 255, 0.5)",
             }}
           >
-            {/* associate truck number with truck id */}
-            <MenuItem value={100}>100</MenuItem>
-            <MenuItem value={101}>101</MenuItem>
-            <MenuItem value={102}>102</MenuItem>
-            <MenuItem value={103}>103</MenuItem>
-            <MenuItem value={104}>104</MenuItem>
-            <MenuItem value={105}>105</MenuItem>
-            <MenuItem value={106}>106</MenuItem>
-            <MenuItem value={107}>107</MenuItem>
-            <MenuItem value={108}>108</MenuItem>
-            <MenuItem value={109}>109</MenuItem>
-            <MenuItem value={110}>110</MenuItem>
-            <MenuItem value={111}>111</MenuItem>
-            <MenuItem value={112}>112</MenuItem>
-            <MenuItem value={113}>113</MenuItem>
-            <MenuItem value={114}>114</MenuItem>
+            {Array.isArray(trucksFromDB) &&
+              trucksFromDB.map((truck: any) => (
+                <MenuItem key={truck.id} value={truck.number}>
+                  {truck.number}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
       </Box>
