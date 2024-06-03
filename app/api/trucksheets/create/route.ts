@@ -13,6 +13,18 @@ export async function POST(req: NextRequest) {
   const { date, fuel, mileage, truckId } = await req.json();
 
   try {
+    const latestTruckSheet = await prisma.trucksheet.findFirst({
+      where: { truckId },
+      orderBy: { date: "desc" },
+    });
+
+    if (latestTruckSheet && mileage < latestTruckSheet.mileage) {
+      return NextResponse.json(
+        { error: "Mileage must be greater than the last reported value." },
+        { status: 400 }
+      );
+    }
+
     const trucksheet = await prisma.trucksheet.create({
       data: {
         date: new Date(date),

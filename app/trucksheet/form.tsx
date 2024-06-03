@@ -21,6 +21,7 @@ export default function TruckSheetForm() {
   const [mileage, setMileage] = React.useState<number | "">("");
   const [trucksFromDB, setTrucksFromDB] = React.useState("");
   const [selectedTruckId, setSelectedTruckId] = React.useState<number | "">("");
+  const [mileageError, setMileageError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const fetchTrucks = async () => {
@@ -67,10 +68,14 @@ export default function TruckSheetForm() {
         truckId: selectedTruckId,
       }),
     });
+
+    const result = await response.json();
+
     if (response.ok) {
       console.log("Truck sheet created");
     } else {
       console.error("Failed to create truck sheet");
+      setMileageError(result.error);
     }
   };
 
@@ -87,6 +92,7 @@ export default function TruckSheetForm() {
   };
 
   const handleMileageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMileageError(null);
     const value = event.target.value;
     if (value.match(/^\d*\.?\d{0,2}$/)) {
       setMileage(value === "" ? "" : Number(value));
@@ -182,7 +188,11 @@ export default function TruckSheetForm() {
         }}
       >
         <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
-          <Typography>Fuel & Mileage</Typography>
+          {mileageError ? (
+            <Typography sx={{ color: "red" }}>{mileageError}</Typography>
+          ) : (
+            <Typography>Fuel & Mileage</Typography>
+          )}
         </AccordionSummary>
         <AccordionDetails>
           <Box sx={{ padding: "10px" }}>
