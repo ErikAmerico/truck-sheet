@@ -132,11 +132,13 @@ export default function TruckTable({ trucks }: TruckTableProps) {
                     selected={isItemSelected}
                     className="truck-table-row"
                   >
-                    <TableCell align="left">{row.number}</TableCell>
-                    <TableCell align="left">
+                    <TableCell align="left" className="truck-data">
+                      {row.number}
+                    </TableCell>
+                    <TableCell align="left" className="truck-data">
                       {latestTruckSheet.mileage}
                     </TableCell>
-                    <TableCell align="left" style={{ padding: 0 }}>
+                    <TableCell align="left" id="truck-fuelgauge-data">
                       <FuelGauge value={latestTruckSheet.fuel} />
                     </TableCell>
                   </TableRow>
