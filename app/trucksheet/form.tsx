@@ -157,9 +157,7 @@ export default function TruckSheetForm() {
           <Typography>Truck Parts</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            Click any defective item and give details under &quot;Remarks&quot;
-          </Typography>
+          <Typography>Coming Soon!</Typography>
         </AccordionDetails>
       </Accordion>
       <Accordion
@@ -173,9 +171,7 @@ export default function TruckSheetForm() {
           <Typography>Equipment</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            This is where you would check off equipment counts
-          </Typography>
+          <Typography>Coming Soon!</Typography>
         </AccordionDetails>
       </Accordion>
       <Accordion
@@ -218,7 +214,13 @@ export default function TruckSheetForm() {
         </AccordionSummary>
         <AccordionDetails>
           <div>
-            <TextField id="remarks-textfield" multiline rows={8} fullWidth />
+            <TextField
+              id="remarks-textfield"
+              multiline
+              rows={8}
+              fullWidth
+              defaultValue={"DB integration coming soon!"}
+            />
           </div>
         </AccordionDetails>
       </Accordion>
@@ -234,10 +236,7 @@ export default function TruckSheetForm() {
           <Typography>Final Checks</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            This is where you would check off the boxes that were around the
-            signature line
-          </Typography>
+          <Typography>Coming Soon!</Typography>
         </AccordionDetails>
       </Accordion>
       <Button
