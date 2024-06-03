@@ -8,12 +8,15 @@ import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
 import Paper from "@mui/material/Paper";
+import { useRouter } from "next/navigation";
 
 export const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const router = useRouter();
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -31,12 +34,25 @@ export const LoginForm = () => {
     }
 
     if (valid) {
-      await SignIn(username, password);
+      try {
+        const result = await SignIn(username, password);
+        if (!result?.error) {
+          router.push("/");
+        } else {
+          setFormError(result.error);
+        }
+      } catch (error: any) {
+        setFormError(error.message);
+      }
     }
   };
   return (
     <Paper elevation={8} id="login-form-container">
-      <h1 id="login-form-title">Login</h1>
+      {formError ? (
+        <h1 id="login-error-message">{formError}</h1>
+      ) : (
+        <h1 id="login-form-title">Login</h1>
+      )}
       <TextField
         id="username"
         error={usernameError}
@@ -51,6 +67,7 @@ export const LoginForm = () => {
         label={usernameError ? "Username is required" : "Username"}
         autoComplete="off"
         onChange={(e) => {
+          setFormError(null);
           setUsernameError(false);
           setUsername(e.target.value);
         }}
@@ -69,6 +86,7 @@ export const LoginForm = () => {
         type="password"
         label={passwordError ? "Password is required" : "Password"}
         onChange={(e) => {
+          setFormError(null);
           setPasswordError(false);
           setPassword(e.target.value);
         }}
