@@ -193,9 +193,18 @@ export default function DriverTable({ drivers }: DriverTableProps) {
                     selected={isItemSelected}
                     className="driver-table-row"
                   >
-                    <TableCell align="left">{row.firstName}</TableCell>
-                    <TableCell align="left">{row.lastName}</TableCell>
-                    <TableCell component="th" scope="row" padding="none">
+                    <TableCell align="left" className="driver-data">
+                      {row.firstName}
+                    </TableCell>
+                    <TableCell align="left" className="driver-data">
+                      {row.lastName}
+                    </TableCell>
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      padding="none"
+                      className="driver-data"
+                    >
                       {row.username}
                     </TableCell>
                   </TableRow>
