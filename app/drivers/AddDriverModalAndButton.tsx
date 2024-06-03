@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import Alert from "@mui/material/Alert";
 import "./addDriverModalAndButton.css";
 
 export default function AddDriverModal() {
@@ -13,6 +14,7 @@ export default function AddDriverModal() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState<string | null>(null);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -46,6 +48,11 @@ export default function AddDriverModal() {
 
       const result = await response.json();
       console.log("Driver created successfully:", result);
+
+      setSuccess("Driver added!");
+      setTimeout(() => {
+        setSuccess(null);
+      }, 3000);
 
       handleClose();
     } catch (error) {
@@ -123,6 +130,14 @@ export default function AddDriverModal() {
           </Button>
         </Box>
       </Modal>
+      {success && (
+        <Alert
+          severity="success"
+          sx={{ position: "fixed", bottom: 20, right: 20 }}
+        >
+          {success}
+        </Alert>
+      )}
     </div>
   );
 }
