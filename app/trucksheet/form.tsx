@@ -13,15 +13,17 @@ import TextField from "@mui/material/TextField";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import FuelSlider from "./fuelSlider";
 import Divider from "@mui/material/Divider";
+import Alert from "@mui/material/Alert";
 
 export default function TruckSheetForm() {
   const [expanded, setExpanded] = React.useState<string | false>("panel3");
   const [selectedTruck, setSelectedTruck] = React.useState("");
   const [fuel, setFuel] = React.useState<number | "">("");
   const [mileage, setMileage] = React.useState<number | "">("");
-  const [trucksFromDB, setTrucksFromDB] = React.useState("");
+  const [trucksFromDB, setTrucksFromDB] = React.useState<any[]>([]);
   const [selectedTruckId, setSelectedTruckId] = React.useState<number | "">("");
   const [mileageError, setMileageError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const fetchTrucks = async () => {
@@ -73,6 +75,13 @@ export default function TruckSheetForm() {
 
     if (response.ok) {
       console.log("Truck sheet created");
+      setSuccess("Truck sheet submitted!");
+      setTimeout(() => {
+        setSuccess(null);
+      }, 3000);
+      setMileage("");
+      setSelectedTruck("");
+      setSelectedTruckId("");
     } else {
       console.error("Failed to create truck sheet");
       setMileageError(result.error);
@@ -108,6 +117,10 @@ export default function TruckSheetForm() {
     }
   };
 
+  const sortedTrucksFromDB = React.useMemo(() => {
+    return trucksFromDB.slice().sort((a, b) => a.number - b.number);
+  }, [trucksFromDB]);
+
   return (
     <form onSubmit={handleSubmit}>
       <Box
@@ -142,8 +155,8 @@ export default function TruckSheetForm() {
               border: "1px solid rgba(9, 159, 255, 0.5)",
             }}
           >
-            {Array.isArray(trucksFromDB) &&
-              trucksFromDB.map((truck: any) => (
+            {Array.isArray(sortedTrucksFromDB) &&
+              sortedTrucksFromDB.map((truck: any) => (
                 <MenuItem key={truck.id} value={truck.number}>
                   {truck.number}
                 </MenuItem>
@@ -270,6 +283,14 @@ export default function TruckSheetForm() {
           Submit
         </Button>
       </Box>
+      {success && (
+        <Alert
+          severity="success"
+          sx={{ position: "fixed", bottom: 20, right: 20 }}
+        >
+          {success}
+        </Alert>
+      )}
     </form>
   );
 }
