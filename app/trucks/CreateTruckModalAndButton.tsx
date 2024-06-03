@@ -55,6 +55,25 @@ export default function CreateTruckModal() {
     }
   };
 
+  const handleTruckNumberChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setError(null);
+    const value = event.target.value;
+    if (value.match(/^\d*$/) && value.length <= 3) {
+      setTruckNumber(value);
+    }
+  };
+
+  const handleTruckNumberKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    const invalidChars = ["e", "E", "+", "-", "."];
+    if (invalidChars.includes(event.key)) {
+      event.preventDefault();
+    }
+  };
+
   return (
     <div>
       <Button onClick={handleOpen} variant="contained" id="truck-modal-button">
@@ -88,10 +107,9 @@ export default function CreateTruckModal() {
             margin="normal"
             fullWidth
             value={truckNumber}
-            onChange={(e) => {
-              setError(null);
-              setTruckNumber(e.target.value);
-            }}
+            onChange={handleTruckNumberChange}
+            onKeyDown={handleTruckNumberKeyDown}
+            type="number"
           />
           <Button type="submit" variant="contained" id="truck-submit-button">
             Submit

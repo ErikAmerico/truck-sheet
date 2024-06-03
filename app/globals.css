@@ -133,3 +133,15 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+/* Hide increment arrows in WebKit browsers (e.g., Chrome, Safari) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide increment arrows in Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
