@@ -29,11 +29,11 @@
 .driver-paper {
   width: 100%;
   margin-bottom: 16px;
-  height: 450px;
+  height: 88vh;
 }
 
 .driver-tableContainer {
-  max-height: 380px;
+  max-height: 80vh;
 }
 
 .driver-table-row {
