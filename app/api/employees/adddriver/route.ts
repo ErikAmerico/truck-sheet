@@ -9,6 +9,17 @@ export async function POST(req: NextRequest) {
     const hashedPassword = await saltAndHashPassword(password);
     const lowerCaseUsername = username.toLowerCase();
 
+    const existingUser = await prisma.employee.findUnique({
+      where: { username: lowerCaseUsername },
+    });
+
+    if (existingUser) {
+      return NextResponse.json(
+        { error: "Username already exists" },
+        { status: 400 }
+      );
+    }
+
     const newDriver = await prisma.employee.create({
       data: {
         username: lowerCaseUsername,

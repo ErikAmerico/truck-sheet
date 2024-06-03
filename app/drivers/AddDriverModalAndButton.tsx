@@ -12,8 +12,17 @@ export default function AddDriverModal() {
   const [lastName, setLastName] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState<string | null>(null);
+
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setError(null);
+    setFirstName("");
+    setLastName("");
+    setUsername("");
+    setPassword("");
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -30,7 +39,9 @@ export default function AddDriverModal() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create driver");
+        const result = await response.json();
+        setError(result.error || "Failed to create driver");
+        throw new Error(result.error || "Failed to create driver");
       }
 
       const result = await response.json();
@@ -59,9 +70,15 @@ export default function AddDriverModal() {
           autoComplete="off"
           onSubmit={handleSubmit}
         >
-          <Typography id="driver-modal-title" variant="h6" component="h2">
-            Driver Details
-          </Typography>
+          {error ? (
+            <Typography id="driver-error-title" variant="h6" component="h2">
+              {error}
+            </Typography>
+          ) : (
+            <Typography id="driver-modal-title" variant="h6" component="h2">
+              Driver Details
+            </Typography>
+          )}
           <TextField
             required
             id="firstName"
@@ -87,7 +104,10 @@ export default function AddDriverModal() {
             margin="normal"
             fullWidth
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => {
+              setError(null);
+              setUsername(e.target.value);
+            }}
           />
           <TextField
             required
