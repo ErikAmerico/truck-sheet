@@ -19,6 +19,11 @@
   margin-bottom: 24px;
 }
 
+#truck-error-title {
+  color: red;
+  margin-bottom: 24px;
+}
+
 #truck-submit-button {
   margin-top: 16px;
   border: 1px solid rgba(9, 159, 255, 0.5);

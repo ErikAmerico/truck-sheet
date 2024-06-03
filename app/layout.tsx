@@ -1,6 +1,5 @@
 import "./globals.css";
 import { auth } from "auth";
-import NavBar from "./navBar/NavBar";
 
 export default async function RootLayout({
   children,
@@ -11,10 +10,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body style={{ marginTop: session ? "64px" : "0" }}>
-        <NavBar />
-        {children}
-      </body>
+      <body style={{ marginTop: session ? "64px" : "0" }}>{children}</body>
     </html>
   );
 }

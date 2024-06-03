@@ -93,6 +93,10 @@ interface TruckTableProps {
 export default function TruckTable({ trucks }: TruckTableProps) {
   const [selectedTruck, setSelectedTruck] = React.useState<string | null>(null);
 
+  const sortedTrucks = React.useMemo(() => {
+    return trucks.slice().sort((a, b) => a.number - b.number);
+  }, [trucks]);
+
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedTruck = trucks.find((row) => row.id === id);
     setSelectedTruck((prevSelected) =>
@@ -114,7 +118,7 @@ export default function TruckTable({ trucks }: TruckTableProps) {
           >
             <EnhancedTableHead selectedTruck={selectedTruck} />
             <TableBody>
-              {trucks.map((row) => {
+              {sortedTrucks.map((row) => {
                 const latestTruckSheet = row.trucksheet[0] || {
                   mileage: 0,
                   fuel: 0,

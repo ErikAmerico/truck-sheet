@@ -13,14 +13,17 @@ import TextField from "@mui/material/TextField";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import FuelSlider from "./fuelSlider";
 import Divider from "@mui/material/Divider";
+import Alert from "@mui/material/Alert";
 
 export default function TruckSheetForm() {
   const [expanded, setExpanded] = React.useState<string | false>("panel3");
   const [selectedTruck, setSelectedTruck] = React.useState("");
   const [fuel, setFuel] = React.useState<number | "">("");
   const [mileage, setMileage] = React.useState<number | "">("");
-  const [trucksFromDB, setTrucksFromDB] = React.useState("");
+  const [trucksFromDB, setTrucksFromDB] = React.useState<any[]>([]);
   const [selectedTruckId, setSelectedTruckId] = React.useState<number | "">("");
+  const [mileageError, setMileageError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const fetchTrucks = async () => {
@@ -67,10 +70,21 @@ export default function TruckSheetForm() {
         truckId: selectedTruckId,
       }),
     });
+
+    const result = await response.json();
+
     if (response.ok) {
       console.log("Truck sheet created");
+      setSuccess("Truck sheet submitted!");
+      setTimeout(() => {
+        setSuccess(null);
+      }, 3000);
+      setMileage("");
+      setSelectedTruck("");
+      setSelectedTruckId("");
     } else {
       console.error("Failed to create truck sheet");
+      setMileageError(result.error);
     }
   };
 
@@ -87,6 +101,7 @@ export default function TruckSheetForm() {
   };
 
   const handleMileageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMileageError(null);
     const value = event.target.value;
     if (value.match(/^\d*\.?\d{0,2}$/)) {
       setMileage(value === "" ? "" : Number(value));
@@ -101,6 +116,10 @@ export default function TruckSheetForm() {
       event.preventDefault();
     }
   };
+
+  const sortedTrucksFromDB = React.useMemo(() => {
+    return trucksFromDB.slice().sort((a, b) => a.number - b.number);
+  }, [trucksFromDB]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -136,8 +155,8 @@ export default function TruckSheetForm() {
               border: "1px solid rgba(9, 159, 255, 0.5)",
             }}
           >
-            {Array.isArray(trucksFromDB) &&
-              trucksFromDB.map((truck: any) => (
+            {Array.isArray(sortedTrucksFromDB) &&
+              sortedTrucksFromDB.map((truck: any) => (
                 <MenuItem key={truck.id} value={truck.number}>
                   {truck.number}
                 </MenuItem>
@@ -157,9 +176,7 @@ export default function TruckSheetForm() {
           <Typography>Truck Parts</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            Click any defective item and give details under &quot;Remarks&quot;
-          </Typography>
+          <Typography>Coming Soon!</Typography>
         </AccordionDetails>
       </Accordion>
       <Accordion
@@ -173,9 +190,7 @@ export default function TruckSheetForm() {
           <Typography>Equipment</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            This is where you would check off equipment counts
-          </Typography>
+          <Typography>Coming Soon!</Typography>
         </AccordionDetails>
       </Accordion>
       <Accordion
@@ -186,7 +201,11 @@ export default function TruckSheetForm() {
         }}
       >
         <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
-          <Typography>Fuel & Mileage</Typography>
+          {mileageError ? (
+            <Typography sx={{ color: "red" }}>{mileageError}</Typography>
+          ) : (
+            <Typography>Fuel & Mileage</Typography>
+          )}
         </AccordionSummary>
         <AccordionDetails>
           <Box sx={{ padding: "10px" }}>
@@ -218,7 +237,13 @@ export default function TruckSheetForm() {
         </AccordionSummary>
         <AccordionDetails>
           <div>
-            <TextField id="remarks-textfield" multiline rows={8} fullWidth />
+            <TextField
+              id="remarks-textfield"
+              multiline
+              rows={8}
+              fullWidth
+              defaultValue={"DB integration coming soon!"}
+            />
           </div>
         </AccordionDetails>
       </Accordion>
@@ -234,19 +259,38 @@ export default function TruckSheetForm() {
           <Typography>Final Checks</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            This is where you would check off the boxes that were around the
-            signature line
-          </Typography>
+          <Typography>Coming Soon!</Typography>
         </AccordionDetails>
       </Accordion>
-      <Button
-        type="submit"
-        variant="contained"
-        sx={{ mt: 2, backgroundColor: "rgb(9, 159, 255)" }}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "left",
+          mt: 2,
+          ml: 1,
+          padding: "10px",
+        }}
       >
-        Submit
-      </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{
+            backgroundColor: "rgb(9, 159, 255)",
+            width: "118px",
+            boxShadow: "0 0 5px 1px rgb(9, 159, 255)",
+          }}
+        >
+          Submit
+        </Button>
+      </Box>
+      {success && (
+        <Alert
+          severity="success"
+          sx={{ position: "fixed", bottom: 20, right: 20 }}
+        >
+          {success}
+        </Alert>
+      )}
     </form>
   );
 }

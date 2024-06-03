@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import Alert from "@mui/material/Alert";
 import "./addDriverModalAndButton.css";
 
 export default function AddDriverModal() {
@@ -12,8 +13,18 @@ export default function AddDriverModal() {
   const [lastName, setLastName] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState<string | null>(null);
+
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setError(null);
+    setFirstName("");
+    setLastName("");
+    setUsername("");
+    setPassword("");
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -30,11 +41,18 @@ export default function AddDriverModal() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create driver");
+        const result = await response.json();
+        setError(result.error || "Failed to create driver");
+        throw new Error(result.error || "Failed to create driver");
       }
 
       const result = await response.json();
       console.log("Driver created successfully:", result);
+
+      setSuccess("Driver added!");
+      setTimeout(() => {
+        setSuccess(null);
+      }, 3000);
 
       handleClose();
     } catch (error) {
@@ -59,9 +77,15 @@ export default function AddDriverModal() {
           autoComplete="off"
           onSubmit={handleSubmit}
         >
-          <Typography id="driver-modal-title" variant="h6" component="h2">
-            Driver Details
-          </Typography>
+          {error ? (
+            <Typography id="driver-error-title" variant="h6" component="h2">
+              {error}
+            </Typography>
+          ) : (
+            <Typography id="driver-modal-title" variant="h6" component="h2">
+              Driver Details
+            </Typography>
+          )}
           <TextField
             required
             id="firstName"
@@ -87,7 +111,10 @@ export default function AddDriverModal() {
             margin="normal"
             fullWidth
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => {
+              setError(null);
+              setUsername(e.target.value);
+            }}
           />
           <TextField
             required
@@ -103,6 +130,14 @@ export default function AddDriverModal() {
           </Button>
         </Box>
       </Modal>
+      {success && (
+        <Alert
+          severity="success"
+          sx={{ position: "fixed", bottom: 20, right: 20 }}
+        >
+          {success}
+        </Alert>
+      )}
     </div>
   );
 }
