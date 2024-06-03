@@ -249,13 +249,27 @@ export default function TruckSheetForm() {
           <Typography>Coming Soon!</Typography>
         </AccordionDetails>
       </Accordion>
-      <Button
-        type="submit"
-        variant="contained"
-        sx={{ mt: 2, backgroundColor: "rgb(9, 159, 255)" }}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "left",
+          mt: 2,
+          ml: 1,
+          padding: "10px",
+        }}
       >
-        Submit
-      </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{
+            backgroundColor: "rgb(9, 159, 255)",
+            width: "118px",
+            boxShadow: "0 0 5px 1px rgb(9, 159, 255)",
+          }}
+        >
+          Submit
+        </Button>
+      </Box>
     </form>
   );
 }
