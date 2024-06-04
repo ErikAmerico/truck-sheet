@@ -14,6 +14,10 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import FuelSlider from "./fuelSlider";
 import Divider from "@mui/material/Divider";
 import Alert from "@mui/material/Alert";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Grid from "@mui/material/Grid";
 
 export default function TruckSheetForm() {
   const [expanded, setExpanded] = React.useState<string | false>("panel3");
@@ -176,7 +180,74 @@ export default function TruckSheetForm() {
           <Typography>Truck Parts</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Coming Soon!</Typography>
+          <Typography
+            sx={{
+              fontSize: ".8rem",
+            }}
+          >
+            Check any defective item and give details under &quot;Remarks&quot;.
+          </Typography>
+          <FormGroup>
+            <Grid container spacing={2}>
+              <Grid item xs={4}>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Air Compressor"
+                />
+                <FormControlLabel control={<Checkbox />} label="Air Lines" />
+                <FormControlLabel control={<Checkbox />} label="Battery" />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Brake Accessories"
+                />
+                <FormControlLabel control={<Checkbox />} label="Brakes" />
+                <FormControlLabel control={<Checkbox />} label="Carburetor" />
+                <FormControlLabel control={<Checkbox />} label="Clutch" />
+                <FormControlLabel control={<Checkbox />} label="Defroster" />
+                <FormControlLabel control={<Checkbox />} label="Drive Line" />
+                <FormControlLabel control={<Checkbox />} label="Engine" />
+              </Grid>
+              <Grid item xs={4}>
+                <FormControlLabel control={<Checkbox />} label="Fuel Tanks" />
+                <FormControlLabel control={<Checkbox />} label="Heater" />
+                <FormControlLabel control={<Checkbox />} label="Horn" />
+                <FormControlLabel control={<Checkbox />} label="Lights" />
+                <FormControlLabel control={<Checkbox />} label="Mirrors" />
+                <FormControlLabel control={<Checkbox />} label="Muffler" />
+                <FormControlLabel control={<Checkbox />} label="Oil Pressure" />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="On-Board Recorder"
+                  sx={{
+                    ".MuiFormControlLabel-label": {
+                      fontSize: "15px",
+                    },
+                  }}
+                />
+                <FormControlLabel control={<Checkbox />} label="Radiator" />
+                <FormControlLabel control={<Checkbox />} label="Rear End" />
+              </Grid>
+              <Grid item xs={4}>
+                <FormControlLabel control={<Checkbox />} label="Reflectors" />
+
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Safety Equipment"
+                />
+                <FormControlLabel control={<Checkbox />} label="Springs" />
+                <FormControlLabel control={<Checkbox />} label="Starter" />
+                <FormControlLabel control={<Checkbox />} label="Steering" />
+                <FormControlLabel control={<Checkbox />} label="Tachograph" />
+                <FormControlLabel control={<Checkbox />} label="Transmission" />
+                <FormControlLabel control={<Checkbox />} label="Wheels" />
+                <FormControlLabel control={<Checkbox />} label="Windows" />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Windshield Wipers"
+                />
+              </Grid>
+            </Grid>
+          </FormGroup>
         </AccordionDetails>
       </Accordion>
       <Accordion
