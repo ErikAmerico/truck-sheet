@@ -7,7 +7,7 @@ import { prisma } from "./lib/prisma";
 declare module "next-auth" {
   //extending properties for the user object
   interface User {
-    id: string;
+    id?: string | undefined;
     username: string;
     firstName: string;
     lastName: string;
@@ -122,6 +122,7 @@ const config = {
       return session;
     },
   },
+  secret: process.env.NEXTAUTH_SECRET,
 } satisfies NextAuthConfig;
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config);
