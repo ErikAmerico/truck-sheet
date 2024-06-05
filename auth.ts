@@ -7,7 +7,7 @@ import { prisma } from "./lib/prisma";
 declare module "next-auth" {
   //extending properties for the user object
   interface User {
-    id?: number | undefined;
+    id: number;
     username: string;
     firstName: string;
     lastName: string;
