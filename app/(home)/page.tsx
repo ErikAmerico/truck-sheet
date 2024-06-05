@@ -8,7 +8,7 @@ export default async function HomePage() {
     redirect("/login");
   }
 
-  if (session.user.role === "driver") {
+  if (session?.user?.role === "driver") {
     redirect("/trucksheet");
   }
 
