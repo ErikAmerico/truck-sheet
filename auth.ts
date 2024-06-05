@@ -7,7 +7,7 @@ import { prisma } from "./lib/prisma";
 declare module "next-auth" {
   //extending properties for the user object
   interface User {
-    id: string;
+    id?: number | undefined;
     username: string;
     firstName: string;
     lastName: string;
@@ -19,7 +19,7 @@ declare module "next-auth" {
   interface Session {
     // extending properties for the session object
     user: {
-      id: string;
+      id: number;
       username: string;
       firstName: string;
       lastName: string;
@@ -31,7 +31,7 @@ declare module "next-auth" {
 
   interface JWT {
     // extending properties for the JWT object
-    id: string;
+    id: number;
     username: string;
     firstName: string;
     lastName: string;
@@ -69,7 +69,7 @@ const config = {
 
           // Return the necessary user data
           return {
-            id: employee.id.toString(),
+            id: employee.id,
             username: employee.username,
             firstName: employee.firstName,
             lastName: employee.lastName,
@@ -107,7 +107,7 @@ const config = {
       if (token) {
         // Assert the type of session.user
         session.user = {
-          id: token.id as string,
+          id: token.id as number,
           username: token.username as string,
           firstName: token.firstName as string,
           lastName: token.lastName as string,
@@ -122,6 +122,7 @@ const config = {
       return session;
     },
   },
+  secret: process.env.NEXTAUTH_SECRET,
 } satisfies NextAuthConfig;
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config);
