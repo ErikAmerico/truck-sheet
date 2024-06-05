@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
           connect: { id: truckId },
         },
         employee: {
-          connect: { id: session.user.id },
+          connect: { id: parseInt(session.user.id, 10) },
         },
       },
     });
