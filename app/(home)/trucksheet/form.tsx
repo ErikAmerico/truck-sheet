@@ -177,7 +177,7 @@ export default function TruckSheetForm() {
         }}
       >
         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-          <Typography>Truck Parts</Typography>
+          <Typography>Truck Inspection</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography
@@ -206,12 +206,24 @@ export default function TruckSheetForm() {
                 <FormControlLabel control={<Checkbox />} label="Defroster" />
                 <FormControlLabel control={<Checkbox />} label="Drive Line" />
                 <FormControlLabel control={<Checkbox />} label="Engine" />
+                <FormControlLabel control={<Checkbox />} label="Fuel Tanks" />
               </Grid>
               <Grid item xs={4}>
-                <FormControlLabel control={<Checkbox />} label="Fuel Tanks" />
                 <FormControlLabel control={<Checkbox />} label="Heater" />
                 <FormControlLabel control={<Checkbox />} label="Horn" />
                 <FormControlLabel control={<Checkbox />} label="Lights" />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    ml: 4,
+                    color: "gray",
+                  }}
+                >
+                  <p>Head-Stop</p>
+                  <p>Tail-Dash</p>
+                  <p>Turn Signals</p>
+                </Box>
                 <FormControlLabel control={<Checkbox />} label="Mirrors" />
                 <FormControlLabel control={<Checkbox />} label="Muffler" />
                 <FormControlLabel control={<Checkbox />} label="Oil Pressure" />
@@ -226,18 +238,32 @@ export default function TruckSheetForm() {
                 />
                 <FormControlLabel control={<Checkbox />} label="Radiator" />
                 <FormControlLabel control={<Checkbox />} label="Rear End" />
+                <FormControlLabel control={<Checkbox />} label="Reflectors" />
               </Grid>
               <Grid item xs={4}>
-                <FormControlLabel control={<Checkbox />} label="Reflectors" />
-
                 <FormControlLabel
                   control={<Checkbox />}
                   label="Safety Equipment"
                 />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    fontSize: "10px",
+                    ml: 4,
+                    color: "gray",
+                  }}
+                >
+                  <p>Fire Extinguisher</p>
+                  <p>Flags, Flares, Fuses</p>
+                  <p>Spare bulbs & fuses</p>
+                  <p>Spare Seal Beam</p>
+                </Box>
                 <FormControlLabel control={<Checkbox />} label="Springs" />
                 <FormControlLabel control={<Checkbox />} label="Starter" />
                 <FormControlLabel control={<Checkbox />} label="Steering" />
                 <FormControlLabel control={<Checkbox />} label="Tachograph" />
+                <FormControlLabel control={<Checkbox />} label="Tires" />
                 <FormControlLabel control={<Checkbox />} label="Transmission" />
                 <FormControlLabel control={<Checkbox />} label="Wheels" />
                 <FormControlLabel control={<Checkbox />} label="Windows" />
@@ -258,7 +284,7 @@ export default function TruckSheetForm() {
         }}
       >
         <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-          <Typography>Equipment</Typography>
+          <Typography>Equipment Inspection</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>Coming Soon!</Typography>
@@ -327,7 +353,7 @@ export default function TruckSheetForm() {
         }}
       >
         <AccordionSummary aria-controls="panel5d-content" id="panel5d-header">
-          <Typography>Final Checks</Typography>
+          <Typography>Final Review</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>Coming Soon!</Typography>
