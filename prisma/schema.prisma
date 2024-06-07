@@ -30,57 +30,57 @@ model trucksheet {
   truckId     Int
   truck       truck  @relation(fields: [truckId], references: [id])
   date        DateTime
-  aircompressor  Boolean?
-  airlines      Boolean?
-  battery       Boolean?
-  brakeaccessories  Boolean?
-  brakes  Boolean?
-  carburetor  Boolean?
-  clutch  Boolean?
-  defroster  Boolean?
-  driveline  Boolean?
-  engine  Boolean?
-  fueltanks Boolean?
-  heater  Boolean?
-  horn  Boolean?
-  lights  Boolean?
-  mirrors  Boolean?
-  muffler  Boolean?
-  oilpressure  Boolean?
-  onboardrecorder  Boolean?
-  radiator  Boolean?
-  rearend  Boolean?
-  reflectors  Boolean?
-  safetyequipment  Boolean?
-  springs  Boolean?
-  starter  Boolean?
-  steering  Boolean?
-  tachograph  Boolean?
-  tires  Boolean?
-  transmission  Boolean?
-  wheels  Boolean?
-  windows  Boolean?
-  windshieldwipers  Boolean?
-  other  Boolean?
+  aircompressor  Boolean? @default(false)
+  airlines      Boolean? @default(false)
+  battery       Boolean? @default(false)
+  brakeaccessories  Boolean? @default(false)
+  brakes  Boolean? @default(false)
+  carburetor  Boolean? @default(false)
+  clutch  Boolean? @default(false)
+  defroster  Boolean? @default(false)
+  driveline  Boolean? @default(false)
+  engine  Boolean? @default(false) 
+  fueltanks Boolean? @default(false)
+  heater  Boolean? @default(false)
+  horn  Boolean? @default(false)
+  lights  Boolean? @default(false)
+  mirrors  Boolean? @default(false)
+  muffler  Boolean? @default(false)
+  oilpressure  Boolean? @default(false)
+  onboardrecorder  Boolean? @default(false)
+  radiator  Boolean? @default(false)
+  rearend  Boolean? @default(false)
+  reflectors  Boolean? @default(false)
+  safetyequipment  Boolean? @default(false)
+  springs  Boolean? @default(false)
+  starter  Boolean? @default(false)
+  steering  Boolean? @default(false)
+  tachograph  Boolean? @default(false)
+  tires  Boolean? @default(false)
+  transmission  Boolean? @default(false)
+  wheels  Boolean? @default(false)
+  windows  Boolean? @default(false)
+  windshieldwipers  Boolean? @default(false)
+  other  Boolean? @default(false)
   fuel Int
   mileage Int
-  furniturepads Boolean?
-  burlapskins Boolean?
-  humpstraps Boolean?
-  estraps Boolean?
-  bucklestraps Boolean?
-  doorstops Boolean?
-  blocks Boolean?
-  fireextinguisher Boolean?
-  setofreflectors Boolean?
-  setofjumpercables Boolean?
-  bigred Boolean?
-  steelplate Boolean?
-  diamondplate Boolean?
-  rubberbands Boolean?
+  furniturepads Boolean? @default(false)
+  burlapskins Boolean? @default(false)
+  humpstraps Boolean? @default(false)
+  estraps Boolean? @default(false)
+  bucklestraps Boolean? @default(false)
+  doorstops Boolean? @default(false)
+  blocks Boolean? @default(false)
+  fireextinguisher Boolean? @default(false)
+  setofreflectors Boolean? @default(false)
+  setofjumpercables Boolean? @default(false)
+  bigred Boolean? @default(false)
+  steelplate Boolean? @default(false)
+  diamondplate Boolean? @default(false)
+  rubberbands Boolean? @default(false)
   remarks String?
-  trashremove Boolean?
-  conditionsatisfactory Boolean?
-  defectscorrected Boolean?
-  defectsneednocorrection Boolean?
+  trashremove Boolean? @default(false)
+  conditionsatisfactory Boolean? @default(false)
+  defectscorrected Boolean? @default(false)
+  defectsneednocorrection Boolean? @default(false)
 }
