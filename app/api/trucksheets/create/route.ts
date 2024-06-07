@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
     wheels,
     windows,
     windshieldwipers,
+    remarks,
   } = await req.json();
 
   try {
@@ -103,6 +104,7 @@ export async function POST(req: NextRequest) {
         wheels,
         windows,
         windshieldwipers,
+        remarks,
       },
     });
     return NextResponse.json(trucksheet, { status: 201 });

@@ -29,6 +29,7 @@ export default function TruckSheetForm() {
   const [mileageError, setMileageError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState<string | null>(null);
   const [checkBoxes, setCheckBoxes] = React.useState<Object>({});
+  const [remarks, setRemarks] = React.useState<string>("");
 
   React.useEffect(() => {
     const fetchTrucks = async () => {
@@ -81,6 +82,7 @@ export default function TruckSheetForm() {
         mileage,
         truckId: selectedTruckId,
         ...checkBoxes,
+        remarks,
       }),
     });
 
@@ -457,7 +459,7 @@ export default function TruckSheetForm() {
               multiline
               rows={8}
               fullWidth
-              defaultValue={"DB integration coming soon!"}
+              onChange={(e) => setRemarks(e.target.value)}
             />
           </div>
         </AccordionDetails>
