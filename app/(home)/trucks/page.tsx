@@ -14,7 +14,7 @@ export default async function TrucksPage() {
   }
 
   const response = await fetch(
-    "http://localhost:3000/api/trucks/getlatesttrucksheets"
+    "http://localhost:3000/api/trucksheets/getlatesttrucksheets"
   );
   const trucks = await response.json();
 
