@@ -28,6 +28,7 @@ export default function TruckSheetForm() {
   const [selectedTruckId, setSelectedTruckId] = React.useState<number | "">("");
   const [mileageError, setMileageError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState<string | null>(null);
+  const [checkBoxes, setCheckBoxes] = React.useState<Object>({});
 
   React.useEffect(() => {
     const fetchTrucks = async () => {
@@ -60,6 +61,13 @@ export default function TruckSheetForm() {
       setExpanded(newExpanded ? panel : false);
     };
 
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckBoxes({
+      ...checkBoxes,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const response = await fetch("/api/trucksheets/create", {
@@ -72,6 +80,7 @@ export default function TruckSheetForm() {
         fuel,
         mileage,
         truckId: selectedTruckId,
+        ...checkBoxes,
       }),
     });
 
@@ -187,31 +196,81 @@ export default function TruckSheetForm() {
           >
             Check any defective item and give details under &quot;Remarks&quot;.
           </Typography>
-          <FormGroup>
+          <FormGroup onChange={handleCheckboxChange}>
             <Grid container spacing={2}>
               <Grid item xs={4}>
                 <FormControlLabel
                   control={<Checkbox />}
                   label="Air Compressor"
+                  name="aircompressor"
                 />
-                <FormControlLabel control={<Checkbox />} label="Air Lines" />
-                <FormControlLabel control={<Checkbox />} label="Battery" />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Air Lines"
+                  name="airlines"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Battery"
+                  name="battery"
+                />
                 <FormControlLabel
                   control={<Checkbox />}
                   label="Brake Accessories"
+                  name="brakeaccessories"
                 />
-                <FormControlLabel control={<Checkbox />} label="Brakes" />
-                <FormControlLabel control={<Checkbox />} label="Carburetor" />
-                <FormControlLabel control={<Checkbox />} label="Clutch" />
-                <FormControlLabel control={<Checkbox />} label="Defroster" />
-                <FormControlLabel control={<Checkbox />} label="Drive Line" />
-                <FormControlLabel control={<Checkbox />} label="Engine" />
-                <FormControlLabel control={<Checkbox />} label="Fuel Tanks" />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Brakes"
+                  name="brakes"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Carburetor"
+                  name="carburetor"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Clutch"
+                  name="clutch"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Defroster"
+                  name="defroster"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Drive Line"
+                  name="driveline"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Engine"
+                  name="engine"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Fuel Tanks"
+                  name="fueltanks"
+                />
               </Grid>
               <Grid item xs={4}>
-                <FormControlLabel control={<Checkbox />} label="Heater" />
-                <FormControlLabel control={<Checkbox />} label="Horn" />
-                <FormControlLabel control={<Checkbox />} label="Lights" />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Heater"
+                  name="heater"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Horn"
+                  name="horn"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Lights"
+                  name="lights"
+                />
                 <Box
                   sx={{
                     display: "flex",
@@ -224,26 +283,52 @@ export default function TruckSheetForm() {
                   <p>Tail-Dash</p>
                   <p>Turn Signals</p>
                 </Box>
-                <FormControlLabel control={<Checkbox />} label="Mirrors" />
-                <FormControlLabel control={<Checkbox />} label="Muffler" />
-                <FormControlLabel control={<Checkbox />} label="Oil Pressure" />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Mirrors"
+                  name="mirrors"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Muffler"
+                  name="muffler"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Oil Pressure"
+                  name="oilpressure"
+                />
                 <FormControlLabel
                   control={<Checkbox />}
                   label="On-Board Recorder"
+                  name="onboardrecorder"
                   sx={{
                     ".MuiFormControlLabel-label": {
                       fontSize: "15px",
                     },
                   }}
                 />
-                <FormControlLabel control={<Checkbox />} label="Radiator" />
-                <FormControlLabel control={<Checkbox />} label="Rear End" />
-                <FormControlLabel control={<Checkbox />} label="Reflectors" />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Radiator"
+                  name="radiator"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Rear End"
+                  name="rearend"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Reflectors"
+                  name="reflectors"
+                />
               </Grid>
               <Grid item xs={4}>
                 <FormControlLabel
                   control={<Checkbox />}
                   label="Safety Equipment"
+                  name="safetyequipment"
                 />
                 <Box
                   sx={{
@@ -259,17 +344,50 @@ export default function TruckSheetForm() {
                   <p>Spare bulbs & fuses</p>
                   <p>Spare Seal Beam</p>
                 </Box>
-                <FormControlLabel control={<Checkbox />} label="Springs" />
-                <FormControlLabel control={<Checkbox />} label="Starter" />
-                <FormControlLabel control={<Checkbox />} label="Steering" />
-                <FormControlLabel control={<Checkbox />} label="Tachograph" />
-                <FormControlLabel control={<Checkbox />} label="Tires" />
-                <FormControlLabel control={<Checkbox />} label="Transmission" />
-                <FormControlLabel control={<Checkbox />} label="Wheels" />
-                <FormControlLabel control={<Checkbox />} label="Windows" />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Springs"
+                  name="springs"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Starter"
+                  name="starter"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Steering"
+                  name="steering"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Tachograph"
+                  name="tachograph"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Tires"
+                  name="tires"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Transmission"
+                  name="transmission"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Wheels"
+                  name="wheels"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Windows"
+                  name="windows"
+                />
                 <FormControlLabel
                   control={<Checkbox />}
                   label="Windshield Wipers"
+                  name="windshieldwipers"
                 />
               </Grid>
             </Grid>
