@@ -407,7 +407,92 @@ export default function TruckSheetForm() {
           <Typography>Equipment Inspection</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Coming Soon!</Typography>
+          <Typography
+            sx={{
+              fontSize: ".8rem",
+            }}
+          >
+            Check off items with wrong counts, note details under
+            &quot;Remarks&quot;.
+          </Typography>
+          <FormGroup onChange={handleCheckboxChange}>
+            <Grid container spacing={1}>
+              <Grid item xs={6}>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="36 Furniture Pads"
+                  name="furniturepads"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="6 Burlap Skins"
+                  name="burlapskins"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="2 Hump Straps"
+                  name="humpstraps"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="15 E-Straps"
+                  name="estraps"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="4 Buckle Straps"
+                  name="bucklestraps"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="6 Door Stops"
+                  name="doorstops"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="4 Blocks"
+                  name="blocks"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="1 Fire Extinguisher"
+                  name="fireextinguisher"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="1 Set of Reflectors"
+                  name="setofreflectors"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="1 Set of Jump. Cables"
+                  name="setofjumpercables"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="1 Big Red"
+                  name="bigred"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="1 Steel Plate"
+                  name="steelplate"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="1 Diamond Plate"
+                  name="diamondplate"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="20 Rubber Bands"
+                  name="rubberbands"
+                />
+              </Grid>
+            </Grid>
+          </FormGroup>
         </AccordionDetails>
       </Accordion>
       <Accordion
@@ -476,7 +561,39 @@ export default function TruckSheetForm() {
           <Typography>Final Review</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Coming Soon!</Typography>
+          <Typography
+            sx={{
+              fontSize: ".8rem",
+            }}
+          >
+            Check off items that meet the criteria.
+          </Typography>
+          <FormGroup onChange={handleCheckboxChange}>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Trash has been removed from the vehicle"
+                  name="trashremove"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Condition of the above vehicle is satisfactory"
+                  name="conditionsatisfactory"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Above defects corrected"
+                  name="defectscorrected"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Above defects need not be corrected for safe operation of vehicle"
+                  name="defectsneednocorrection"
+                />
+              </Grid>
+            </Grid>
+          </FormGroup>
         </AccordionDetails>
       </Accordion>
       <Box
