@@ -105,7 +105,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 interface EnhancedTableToolbarProps {
-  selectedUser: string | null;
+  selectedUser: { name: string; id: number } | null;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
@@ -115,7 +115,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     <Toolbar id="driver-toolbar" className={selectedUser ? "selected" : ""}>
       {selectedUser ? (
         <Typography className="driver-subtitle" variant="h6" component="div">
-          Selected: {selectedUser}
+          Selected: {selectedUser ? selectedUser.name : null}
         </Typography>
       ) : (
         <Typography
@@ -139,7 +139,13 @@ interface DriverTableProps {
 export default function DriverTable({ drivers }: DriverTableProps) {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Driver>("lastName");
-  const [selectedUser, setSelectedUser] = React.useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = React.useState<{
+    name: string;
+    id: number;
+  } | null>(null);
+
+  console.log(drivers);
+  console.log(selectedUser);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -153,10 +159,14 @@ export default function DriverTable({ drivers }: DriverTableProps) {
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedDriver = drivers.find((row) => row.id === id);
     const selectedUser = selectedDriver
-      ? `${selectedDriver.firstName} ${selectedDriver.lastName}`
+      ? {
+          name: `${selectedDriver.firstName} ${selectedDriver.lastName}`,
+          id: selectedDriver.id,
+        }
       : null;
+
     setSelectedUser((prevSelected) =>
-      prevSelected === selectedUser ? null : selectedUser
+      prevSelected && prevSelected.id === selectedUser?.id ? null : selectedUser
     );
   };
 
@@ -176,7 +186,7 @@ export default function DriverTable({ drivers }: DriverTableProps) {
             stickyHeader
           >
             <EnhancedTableHead
-              selectedUser={selectedUser}
+              selectedUser={selectedUser ? selectedUser.name : null}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
@@ -184,13 +194,16 @@ export default function DriverTable({ drivers }: DriverTableProps) {
             <TableBody>
               {sortedRows.map((row) => {
                 const isItemSelected =
-                  selectedUser === `${row.firstName} ${row.lastName}`;
+                  selectedUser &&
+                  selectedUser.name === `${row.firstName} ${row.lastName}`;
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
+                    onClick={(event: React.MouseEvent<unknown>) =>
+                      handleClick(event, row.id)
+                    }
                     key={row.id}
-                    selected={isItemSelected}
+                    selected={isItemSelected ? true : false}
                     className="driver-table-row"
                   >
                     <TableCell align="left" className="driver-data">
