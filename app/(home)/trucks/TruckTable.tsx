@@ -8,12 +8,17 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import { visuallyHidden } from "@mui/utils";
 import CreateTruckModal from "./CreateTruckModalAndButton";
 import "./truckTable.css";
 import FuelGauge from "./FuelGauge";
+
+const formatDate = (date: string) => {
+  const d = new Date(date);
+  return d.toLocaleDateString();
+};
 
 interface Truck {
   id: number;
@@ -21,18 +26,27 @@ interface Truck {
   trucksheet: {
     mileage: number;
     fuel: number;
+    remarks: string;
+    date: string;
+    employeeId: number;
   }[];
 }
 
 const headCells = [
   {
     id: "trucknumber",
-    numeric: false,
     disablePadding: false,
     label: "Truck #",
   },
-  { id: "mileage", numeric: false, disablePadding: false, label: "Mileage" },
-  { id: "fuel", numeric: false, disablePadding: true, label: "Fuel Level" },
+  { id: "mileage", disablePadding: false, label: "Mileage" },
+  { id: "fuel", disablePadding: true, label: "Fuel Level" },
+  {
+    id: "remarks",
+    disablePadding: false,
+    label: "Remarks",
+  },
+  { id: "date", disablePadding: true, label: "Date Reported" },
+  { id: "driver", disablePadding: false, label: "Driver" },
 ];
 
 interface EnhancedTableProps {
@@ -46,7 +60,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align="center"
             padding={headCell.disablePadding ? "none" : "normal"}
             id="truck-table-head-cell"
           >
@@ -88,9 +102,10 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 
 interface TruckTableProps {
   trucks: Truck[];
+  drivers: { [key: number]: string };
 }
 
-export default function TruckTable({ trucks }: TruckTableProps) {
+export default function TruckTable({ trucks, drivers }: TruckTableProps) {
   const [selectedTruck, setSelectedTruck] = React.useState<string | null>(null);
 
   const sortedTrucks = React.useMemo(() => {
@@ -123,6 +138,7 @@ export default function TruckTable({ trucks }: TruckTableProps) {
                   mileage: 0,
                   fuel: 0,
                 };
+                const driverName = drivers[latestTruckSheet.employeeId];
                 const isItemSelected = selectedTruck === row.number.toString();
                 return (
                   <TableRow
@@ -132,14 +148,29 @@ export default function TruckTable({ trucks }: TruckTableProps) {
                     selected={isItemSelected}
                     className="truck-table-row"
                   >
-                    <TableCell align="left" className="truck-data">
+                    <TableCell align="center" className="truck-data">
                       {row.number}
                     </TableCell>
-                    <TableCell align="left" className="truck-data">
+                    <TableCell align="center" className="truck-data">
                       {latestTruckSheet.mileage}
                     </TableCell>
-                    <TableCell align="left" id="truck-fuelgauge-data">
+                    <TableCell align="center" id="truck-fuelgauge-data">
                       <FuelGauge value={latestTruckSheet.fuel} />
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className="truck-data"
+                      id="truck-remarks"
+                    >
+                      <Tooltip title={latestTruckSheet.remarks}>
+                        <span>{latestTruckSheet.remarks}</span>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell align="center" className="truck-data">
+                      {formatDate(latestTruckSheet.date)}
+                    </TableCell>
+                    <TableCell align="center" className="truck-data">
+                      {driverName}
                     </TableCell>
                   </TableRow>
                 );

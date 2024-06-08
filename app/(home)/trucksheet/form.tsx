@@ -14,6 +14,10 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import FuelSlider from "./fuelSlider";
 import Divider from "@mui/material/Divider";
 import Alert from "@mui/material/Alert";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Grid from "@mui/material/Grid";
 
 export default function TruckSheetForm() {
   const [expanded, setExpanded] = React.useState<string | false>("panel3");
@@ -24,6 +28,8 @@ export default function TruckSheetForm() {
   const [selectedTruckId, setSelectedTruckId] = React.useState<number | "">("");
   const [mileageError, setMileageError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState<string | null>(null);
+  const [checkBoxes, setCheckBoxes] = React.useState<Object>({});
+  const [remarks, setRemarks] = React.useState<string>("");
 
   React.useEffect(() => {
     const fetchTrucks = async () => {
@@ -56,6 +62,13 @@ export default function TruckSheetForm() {
       setExpanded(newExpanded ? panel : false);
     };
 
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckBoxes({
+      ...checkBoxes,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const response = await fetch("/api/trucksheets/create", {
@@ -68,6 +81,8 @@ export default function TruckSheetForm() {
         fuel,
         mileage,
         truckId: selectedTruckId,
+        ...checkBoxes,
+        remarks,
       }),
     });
 
@@ -173,10 +188,212 @@ export default function TruckSheetForm() {
         }}
       >
         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-          <Typography>Truck Parts</Typography>
+          <Typography>Truck Inspection</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Coming Soon!</Typography>
+          <Typography
+            sx={{
+              fontSize: ".8rem",
+            }}
+          >
+            Check any defective item and give details under &quot;Remarks&quot;.
+          </Typography>
+          <FormGroup onChange={handleCheckboxChange}>
+            <Grid container spacing={2}>
+              <Grid item xs={4}>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Air Compressor"
+                  name="aircompressor"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Air Lines"
+                  name="airlines"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Battery"
+                  name="battery"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Brake Accessories"
+                  name="brakeaccessories"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Brakes"
+                  name="brakes"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Carburetor"
+                  name="carburetor"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Clutch"
+                  name="clutch"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Defroster"
+                  name="defroster"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Drive Line"
+                  name="driveline"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Engine"
+                  name="engine"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Fuel Tanks"
+                  name="fueltanks"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Heater"
+                  name="heater"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Horn"
+                  name="horn"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Lights"
+                  name="lights"
+                />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    ml: 4,
+                    color: "gray",
+                  }}
+                >
+                  <p>Head-Stop</p>
+                  <p>Tail-Dash</p>
+                  <p>Turn Signals</p>
+                </Box>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Mirrors"
+                  name="mirrors"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Muffler"
+                  name="muffler"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Oil Pressure"
+                  name="oilpressure"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="On-Board Recorder"
+                  name="onboardrecorder"
+                  sx={{
+                    ".MuiFormControlLabel-label": {
+                      fontSize: "15px",
+                    },
+                  }}
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Radiator"
+                  name="radiator"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Rear End"
+                  name="rearend"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Reflectors"
+                  name="reflectors"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Safety Equipment"
+                  name="safetyequipment"
+                />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    fontSize: "10px",
+                    ml: 4,
+                    color: "gray",
+                  }}
+                >
+                  <p>Fire Extinguisher</p>
+                  <p>Flags, Flares, Fuses</p>
+                  <p>Spare bulbs & fuses</p>
+                  <p>Spare Seal Beam</p>
+                </Box>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Springs"
+                  name="springs"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Starter"
+                  name="starter"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Steering"
+                  name="steering"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Tachograph"
+                  name="tachograph"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Tires"
+                  name="tires"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Transmission"
+                  name="transmission"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Wheels"
+                  name="wheels"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Windows"
+                  name="windows"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Windshield Wipers"
+                  name="windshieldwipers"
+                />
+              </Grid>
+            </Grid>
+          </FormGroup>
         </AccordionDetails>
       </Accordion>
       <Accordion
@@ -187,10 +404,95 @@ export default function TruckSheetForm() {
         }}
       >
         <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-          <Typography>Equipment</Typography>
+          <Typography>Equipment Inspection</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Coming Soon!</Typography>
+          <Typography
+            sx={{
+              fontSize: ".8rem",
+            }}
+          >
+            Check off items with wrong counts, note details under
+            &quot;Remarks&quot;.
+          </Typography>
+          <FormGroup onChange={handleCheckboxChange}>
+            <Grid container spacing={1}>
+              <Grid item xs={6}>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="36 Furniture Pads"
+                  name="furniturepads"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="6 Burlap Skins"
+                  name="burlapskins"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="2 Hump Straps"
+                  name="humpstraps"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="15 E-Straps"
+                  name="estraps"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="4 Buckle Straps"
+                  name="bucklestraps"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="6 Door Stops"
+                  name="doorstops"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="4 Blocks"
+                  name="blocks"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="1 Fire Extinguisher"
+                  name="fireextinguisher"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="1 Set of Reflectors"
+                  name="setofreflectors"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="1 Set of Jump. Cables"
+                  name="setofjumpercables"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="1 Big Red"
+                  name="bigred"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="1 Steel Plate"
+                  name="steelplate"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="1 Diamond Plate"
+                  name="diamondplate"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="20 Rubber Bands"
+                  name="rubberbands"
+                />
+              </Grid>
+            </Grid>
+          </FormGroup>
         </AccordionDetails>
       </Accordion>
       <Accordion
@@ -242,7 +544,7 @@ export default function TruckSheetForm() {
               multiline
               rows={8}
               fullWidth
-              defaultValue={"DB integration coming soon!"}
+              onChange={(e) => setRemarks(e.target.value)}
             />
           </div>
         </AccordionDetails>
@@ -256,10 +558,42 @@ export default function TruckSheetForm() {
         }}
       >
         <AccordionSummary aria-controls="panel5d-content" id="panel5d-header">
-          <Typography>Final Checks</Typography>
+          <Typography>Final Review</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Coming Soon!</Typography>
+          <Typography
+            sx={{
+              fontSize: ".8rem",
+            }}
+          >
+            Check off items that meet the criteria.
+          </Typography>
+          <FormGroup onChange={handleCheckboxChange}>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Trash has been removed from the vehicle"
+                  name="trashremove"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Condition of the above vehicle is satisfactory"
+                  name="conditionsatisfactory"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Above defects corrected"
+                  name="defectscorrected"
+                />
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Above defects need not be corrected for safe operation of vehicle"
+                  name="defectsneednocorrection"
+                />
+              </Grid>
+            </Grid>
+          </FormGroup>
         </AccordionDetails>
       </Accordion>
       <Box

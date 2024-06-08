@@ -54,10 +54,12 @@ model trucksheet {
   safetyequipment  Boolean?
   springs  Boolean?
   starter  Boolean?
+  steering  Boolean?
   tachograph  Boolean?
   tires  Boolean?
   transmission  Boolean?
   wheels  Boolean?
+  windows  Boolean?
   windshieldwipers  Boolean?
   other  Boolean?
   fuel Int
