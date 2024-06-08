@@ -44,6 +44,16 @@
 #truck-fuelgauge-data {
   padding: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#truck-remarks {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 3vw;
 }
 
 .truck-tableContainer {
