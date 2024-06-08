@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import AddDriverModal from "./AddDriverModalAndButton";
+import UpdateDriverModal from "./UpdateDriverModalAndButton";
 import "./driverTable.css";
 
 interface Driver {
@@ -105,7 +106,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 interface EnhancedTableToolbarProps {
-  selectedUser: { name: string; id: number } | null;
+  selectedUser: {
+    name: string;
+    id: number;
+    firstName: string;
+    lastName: string;
+    username: string;
+  } | null;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
@@ -127,7 +134,11 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           Drivers
         </Typography>
       )}
-      {selectedUser ? null : <AddDriverModal />}
+      {selectedUser ? (
+        <UpdateDriverModal selectedUser={selectedUser} />
+      ) : (
+        <AddDriverModal />
+      )}
     </Toolbar>
   );
 }
@@ -142,6 +153,9 @@ export default function DriverTable({ drivers }: DriverTableProps) {
   const [selectedUser, setSelectedUser] = React.useState<{
     name: string;
     id: number;
+    firstName: string;
+    lastName: string;
+    username: string;
   } | null>(null);
 
   console.log(drivers);
@@ -162,6 +176,9 @@ export default function DriverTable({ drivers }: DriverTableProps) {
       ? {
           name: `${selectedDriver.firstName} ${selectedDriver.lastName}`,
           id: selectedDriver.id,
+          firstName: selectedDriver.firstName,
+          lastName: selectedDriver.lastName,
+          username: selectedDriver.username,
         }
       : null;
 
