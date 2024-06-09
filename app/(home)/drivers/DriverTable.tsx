@@ -23,15 +23,22 @@ interface Driver {
   lastName: string;
 }
 
+interface DriversLastReport extends Driver {
+  lastReport: {
+    date: string;
+    truckNumber: number;
+  };
+}
+
 const headCells = [
   {
     id: "firstName",
-    numeric: false,
-    disablePadding: false,
     label: "First Name",
+    sortable: true,
   },
-  { id: "lastName", numeric: false, disablePadding: false, label: "Last Name" },
-  { id: "username", numeric: false, disablePadding: true, label: "Username" },
+  { id: "lastName", label: "Last Name", sortable: true },
+  { id: "username", label: "Username", sortable: true },
+  { id: "lastreport", label: "Last Reported Truck Sheet", sortable: false },
 ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -81,23 +88,29 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
+            align="center"
             sortDirection={orderBy === headCell.id ? order : false}
             id="driver-table-head-cell"
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id as keyof Driver)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
+            {headCell.sortable ? (
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id as keyof Driver)}
+                id="driver-table-sort-label"
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === "desc"
+                      ? "sorted descending"
+                      : "sorted ascending"}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            ) : (
+              headCell.label
+            )}
           </TableCell>
         ))}
       </TableRow>
@@ -144,7 +157,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 }
 
 interface DriverTableProps {
-  drivers: Driver[];
+  drivers: DriversLastReport[];
 }
 
 export default function DriverTable({ drivers }: DriverTableProps) {
@@ -157,9 +170,6 @@ export default function DriverTable({ drivers }: DriverTableProps) {
     lastName: string;
     username: string;
   } | null>(null);
-
-  console.log(drivers);
-  console.log(selectedUser);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -223,19 +233,23 @@ export default function DriverTable({ drivers }: DriverTableProps) {
                     selected={isItemSelected ? true : false}
                     className="driver-table-row"
                   >
-                    <TableCell align="left" className="driver-data">
+                    <TableCell align="center" className="driver-data">
                       {row.firstName}
                     </TableCell>
-                    <TableCell align="left" className="driver-data">
+                    <TableCell align="center" className="driver-data">
                       {row.lastName}
                     </TableCell>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      padding="none"
-                      className="driver-data"
-                    >
+                    <TableCell align="center" className="driver-data">
                       {row.username}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className="driver-data"
+                      id="driver-last-report"
+                    >
+                      {row.lastReport
+                        ? `${row.lastReport.date} for Truck ${row.lastReport.truckNumber}`
+                        : "No reports"}
                     </TableCell>
                   </TableRow>
                 );
