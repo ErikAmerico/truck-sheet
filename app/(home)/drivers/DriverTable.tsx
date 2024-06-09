@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import AddDriverModal from "./AddDriverModalAndButton";
+import UpdateDriverModal from "./UpdateDriverModalAndButton";
 import "./driverTable.css";
 
 interface Driver {
@@ -22,15 +23,22 @@ interface Driver {
   lastName: string;
 }
 
+interface DriversLastReport extends Driver {
+  lastReport: {
+    date: string;
+    truckNumber: number;
+  };
+}
+
 const headCells = [
   {
     id: "firstName",
-    numeric: false,
-    disablePadding: false,
     label: "First Name",
+    sortable: true,
   },
-  { id: "lastName", numeric: false, disablePadding: false, label: "Last Name" },
-  { id: "username", numeric: false, disablePadding: true, label: "Username" },
+  { id: "lastName", label: "Last Name", sortable: true },
+  { id: "username", label: "Username", sortable: true },
+  { id: "lastreport", label: "Last Reported Truck Sheet", sortable: false },
 ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -80,23 +88,29 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
+            align="center"
             sortDirection={orderBy === headCell.id ? order : false}
             id="driver-table-head-cell"
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id as keyof Driver)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
+            {headCell.sortable ? (
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id as keyof Driver)}
+                id="driver-table-sort-label"
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === "desc"
+                      ? "sorted descending"
+                      : "sorted ascending"}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            ) : (
+              headCell.label
+            )}
           </TableCell>
         ))}
       </TableRow>
@@ -105,7 +119,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 interface EnhancedTableToolbarProps {
-  selectedUser: string | null;
+  selectedUser: {
+    name: string;
+    id: number;
+    firstName: string;
+    lastName: string;
+    username: string;
+  } | null;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
@@ -115,7 +135,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     <Toolbar id="driver-toolbar" className={selectedUser ? "selected" : ""}>
       {selectedUser ? (
         <Typography className="driver-subtitle" variant="h6" component="div">
-          Selected: {selectedUser}
+          Selected: {selectedUser ? selectedUser.name : null}
         </Typography>
       ) : (
         <Typography
@@ -127,19 +147,29 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           Drivers
         </Typography>
       )}
-      {selectedUser ? null : <AddDriverModal />}
+      {selectedUser ? (
+        <UpdateDriverModal selectedUser={selectedUser} />
+      ) : (
+        <AddDriverModal />
+      )}
     </Toolbar>
   );
 }
 
 interface DriverTableProps {
-  drivers: Driver[];
+  drivers: DriversLastReport[];
 }
 
 export default function DriverTable({ drivers }: DriverTableProps) {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Driver>("lastName");
-  const [selectedUser, setSelectedUser] = React.useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = React.useState<{
+    name: string;
+    id: number;
+    firstName: string;
+    lastName: string;
+    username: string;
+  } | null>(null);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -153,10 +183,17 @@ export default function DriverTable({ drivers }: DriverTableProps) {
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedDriver = drivers.find((row) => row.id === id);
     const selectedUser = selectedDriver
-      ? `${selectedDriver.firstName} ${selectedDriver.lastName}`
+      ? {
+          name: `${selectedDriver.firstName} ${selectedDriver.lastName}`,
+          id: selectedDriver.id,
+          firstName: selectedDriver.firstName,
+          lastName: selectedDriver.lastName,
+          username: selectedDriver.username,
+        }
       : null;
+
     setSelectedUser((prevSelected) =>
-      prevSelected === selectedUser ? null : selectedUser
+      prevSelected && prevSelected.id === selectedUser?.id ? null : selectedUser
     );
   };
 
@@ -176,7 +213,7 @@ export default function DriverTable({ drivers }: DriverTableProps) {
             stickyHeader
           >
             <EnhancedTableHead
-              selectedUser={selectedUser}
+              selectedUser={selectedUser ? selectedUser.name : null}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
@@ -184,28 +221,35 @@ export default function DriverTable({ drivers }: DriverTableProps) {
             <TableBody>
               {sortedRows.map((row) => {
                 const isItemSelected =
-                  selectedUser === `${row.firstName} ${row.lastName}`;
+                  selectedUser &&
+                  selectedUser.name === `${row.firstName} ${row.lastName}`;
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
+                    onClick={(event: React.MouseEvent<unknown>) =>
+                      handleClick(event, row.id)
+                    }
                     key={row.id}
-                    selected={isItemSelected}
+                    selected={isItemSelected ? true : false}
                     className="driver-table-row"
                   >
-                    <TableCell align="left" className="driver-data">
+                    <TableCell align="center" className="driver-data">
                       {row.firstName}
                     </TableCell>
-                    <TableCell align="left" className="driver-data">
+                    <TableCell align="center" className="driver-data">
                       {row.lastName}
                     </TableCell>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      padding="none"
-                      className="driver-data"
-                    >
+                    <TableCell align="center" className="driver-data">
                       {row.username}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className="driver-data"
+                      id="driver-last-report"
+                    >
+                      {row.lastReport
+                        ? `${row.lastReport.date} for Truck ${row.lastReport.truckNumber}`
+                        : "No reports"}
                     </TableCell>
                   </TableRow>
                 );

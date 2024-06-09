@@ -49,6 +49,15 @@
   cursor: pointer;
 }
 
+#driver-table-sort-label {
+  margin-left: 25px;
+}
+
+#driver-last-report {
+  white-space: nowrap;
+  max-width: 1vw;
+}
+
 .MuiTableSortLabel-root {
   color: white !important;
 }

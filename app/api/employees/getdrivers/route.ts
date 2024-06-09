@@ -7,6 +7,9 @@ export async function GET(req: NextRequest) {
       where: {
         role: "driver",
       },
+      include: {
+        trucksheet: true,
+      },
     });
     return NextResponse.json(drivers, { status: 200 });
   } catch (error) {
