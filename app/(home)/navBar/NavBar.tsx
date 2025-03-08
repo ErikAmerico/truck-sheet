@@ -9,6 +9,7 @@ import { auth, signOut } from "auth";
 import "./navBar.css";
 import DriversButton from "./DriversButton";
 import TrucksButton from "./TrucksButton";
+import OfficeEmployeesButton from "./OfficeEmployeesButton";
 
 export default async function NavBar() {
   const session = await auth();
@@ -24,6 +25,9 @@ export default async function NavBar() {
             ) : null}
             {session?.user.role === "office" ? (
               <TrucksButton id="trucks-button" />
+            ) : null}
+            {session?.user.role === "office" ? (
+              <OfficeEmployeesButton id="office-button" />
             ) : null}
           </Box>
 

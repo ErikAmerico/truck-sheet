@@ -19,7 +19,8 @@
 }
 
 #drivers-button,
-#trucks-button {
+#trucks-button,
+#office-button {
   border: 1px solid rgba(9, 159, 255, 0.5);
   color: black;
   min-width: 83.4px;
@@ -43,14 +44,16 @@
 
 #logout-button:hover,
 #drivers-button:hover,
-#trucks-button:hover {
+#trucks-button:hover,
+#office-button:hover {
   background-color: rgb(37, 40, 45);
   color: white;
 }
 
 #logout-button::before,
 #drivers-button::before,
-#trucks-button::before {
+#trucks-button::before,
+#office-button::before {
   content: "";
   position: absolute;
   top: 1px;
@@ -64,6 +67,7 @@
 
 #logout-button:hover::before,
 #drivers-button:hover::before,
-#trucks-button:hover::before {
+#trucks-button:hover::before,
+#office-button:hover::before {
   opacity: 1;
 }
