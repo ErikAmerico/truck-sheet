@@ -1,0 +1,72 @@
+#officeEmployee-toolbar {
+  padding-left: 16px;
+  padding-right: 8px;
+}
+
+#officeEmployee-toolbar.selected {
+  background-color: rgba(25, 118, 210, 0.12);
+}
+
+#officeEmployee-table-head-cell {
+  background-color: rgb(37, 40, 45);
+  color: white;
+  border-top: 2px solid rgba(9, 159, 255, 0.5);
+  border-bottom: 2px solid rgba(9, 159, 255, 0.5);
+}
+
+.officeEmployee-subtitle {
+  flex: 1 1 100%;
+  color: white;
+}
+
+.officeEmployee-table-container {
+  width: 98.6%;
+  margin-left: 0.7%;
+  margin-top: 80px;
+  box-shadow: 0 0 20px 10px rgba(9, 159, 255, 0.5);
+  border-radius: 5px;
+  height: 88.5vh;
+}
+
+.officeEmployee-paper {
+  width: 100%;
+  margin-bottom: 16px;
+  height: 88.5vh;
+  background-color: rgb(37, 40, 45);
+  border-radius: 5px;
+}
+
+.officeEmployee-data {
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.officeEmployee-tableContainer {
+  max-height: 80.5vh;
+}
+
+.officeEmployee-table-row {
+  cursor: pointer;
+}
+
+#officeEmployee-table-sort-label {
+  margin-left: 25px;
+}
+
+#officeEmployee-last-report {
+  white-space: nowrap;
+  max-width: 1vw;
+}
+
+.MuiTableSortLabel-root {
+  color: white !important;
+}
+
+.MuiTableSortLabel-root.Mui-active {
+  color: white !important;
+}
+
+.MuiTableSortLabel-iconDirectionAsc,
+.MuiTableSortLabel-iconDirectionDesc {
+  color: white !important;
+}
