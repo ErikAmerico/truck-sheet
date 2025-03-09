@@ -10,12 +10,9 @@ export default async function SignIn(username: string, password: string) {
       redirect: false,
     });
 
-    if (result?.error) {
-      throw new Error(result.error);
-    }
-
     return result;
   } catch (error) {
-    throw new Error("Invalid username or password.");
+    console.log("CCCAAAAAAAAAAAAAAATCH", error);
+    return { error: "Invalid username or password!" };
   }
 }
