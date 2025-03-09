@@ -55,13 +55,16 @@ export default function UpdateDriverModal(
     };
 
     try {
-      const response = await fetch("/api/employees/updatedriver", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedDriver),
-      });
+      const response = await fetch(
+        process.env.BASEURL + "/api/employees/updatedriver",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedDriver),
+        }
+      );
 
       if (!response.ok) {
         const result = await response.json();

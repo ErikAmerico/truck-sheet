@@ -32,13 +32,16 @@ export default function AddDriverModal() {
     const newDriver = { firstName, lastName, username, password };
 
     try {
-      const response = await fetch("/api/employees/adddriver", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newDriver),
-      });
+      const response = await fetch(
+        process.env.BASEURL + "/api/employees/adddriver",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newDriver),
+        }
+      );
 
       if (!response.ok) {
         const result = await response.json();

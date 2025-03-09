@@ -32,13 +32,16 @@ export default function AddOfficeEmployeeModal() {
     const officeEmployee = { firstName, lastName, username, password };
 
     try {
-      const response = await fetch("/api/employees/addofficeemployee", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(officeEmployee),
-      });
+      const response = await fetch(
+        process.env.BASEURL + "/api/employees/addofficeemployee",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(officeEmployee),
+        }
+      );
 
       if (!response.ok) {
         const result = await response.json();
