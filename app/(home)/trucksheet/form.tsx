@@ -34,7 +34,9 @@ export default function TruckSheetForm() {
   React.useEffect(() => {
     const fetchTrucks = async () => {
       try {
-        const response = await fetch("/api/trucks/gettrucks");
+        const response = await fetch(
+          process.env.BASEURL + "/api/trucks/gettrucks"
+        );
         const data = await response.json();
         setTrucksFromDB(data);
       } catch (error) {
@@ -71,20 +73,23 @@ export default function TruckSheetForm() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const response = await fetch("/api/trucksheets/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        date: new Date(),
-        fuel,
-        mileage,
-        truckId: selectedTruckId,
-        ...checkBoxes,
-        remarks,
-      }),
-    });
+    const response = await fetch(
+      process.env.BASEURL + "/api/trucksheets/create",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          date: new Date(),
+          fuel,
+          mileage,
+          truckId: selectedTruckId,
+          ...checkBoxes,
+          remarks,
+        }),
+      }
+    );
 
     const result = await response.json();
 

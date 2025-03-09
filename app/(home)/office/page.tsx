@@ -14,7 +14,7 @@ export default async function OfficeEmployee() {
   }
 
   const response = await fetch(
-    "http://localhost:3000/api/employees/getofficeemployees"
+    process.env.BASEURL + "/api/employees/getofficeemployees"
   );
   const officeEmployees = await response.json();
 

@@ -27,13 +27,16 @@ export default function CreateTruckModal() {
     const newTruck = { number: parseInt(truckNumber, 10) };
 
     try {
-      const response = await fetch("/api/trucks/addtruck", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newTruck),
-      });
+      const response = await fetch(
+        process.env.BASEURL + "/api/trucks/addtruck",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newTruck),
+        }
+      );
 
       if (!response.ok) {
         const result = await response.json();

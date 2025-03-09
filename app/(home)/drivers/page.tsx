@@ -14,12 +14,12 @@ export default async function Drivers() {
   }
 
   const response = await fetch(
-    "http://localhost:3000/api/employees/getdrivers"
+    process.env.BASEURL + "/api/employees/getdrivers"
   );
   const drivers = await response.json();
 
   const trucksResponse = await fetch(
-    "http://localhost:3000/api/trucks/gettrucks"
+    process.env.BASEURL + "/api/trucks/gettrucks"
   );
   const trucks = await trucksResponse.json();
 

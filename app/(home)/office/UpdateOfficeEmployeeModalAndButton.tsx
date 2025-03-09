@@ -55,13 +55,16 @@ export default function UpdateOfficeEmployeeModal(
     };
 
     try {
-      const response = await fetch("/api/employees/updateofficeemployee", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedOfficeEmployee),
-      });
+      const response = await fetch(
+        process.env.BASEURL + "/api/employees/updateofficeemployee",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedOfficeEmployee),
+        }
+      );
 
       if (!response.ok) {
         const result = await response.json();
