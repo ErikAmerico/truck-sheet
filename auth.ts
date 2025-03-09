@@ -51,36 +51,40 @@ const config = {
       async authorize(credentials) {
         const { username, password } = credentials;
 
-        try {
-          // Fetch the employee from the database using Prisma
-          const employee = await prisma.employee.findUnique({
-            where: { username: username as string },
-          });
-          if (!employee) {
-            throw new Error("Employee not found.");
-          }
-          const isPasswordValid = await comparePassword(
-            password,
-            employee.password
-          );
-          if (!isPasswordValid) {
-            throw new Error("Invalid password.");
-          }
+        console.log("Authorize called with!!!!!!!!!:", username, password);
 
-          // Return the necessary user data
-          return {
-            id: employee.id.toString(),
-            username: employee.username,
-            firstName: employee.firstName,
-            lastName: employee.lastName,
-            role: employee.role,
-          };
-        } catch (error) {
-          console.error("Error finding employee", error);
-          throw new Error(
-            "Authentication failed. Please check your credentials and try again."
-          );
+        if (!username || !password) {
+          console.log("Missing credentials!!!!!!!!!!", username);
+          return null;
         }
+
+        const employee = await prisma.employee.findUnique({
+          where: { username: username as string },
+        });
+
+        if (!employee) {
+          console.log("Employee not found!!!!!!!!!!", username);
+          return null;
+        }
+
+        const isPasswordValid = await comparePassword(
+          password,
+          employee.password
+        );
+
+        if (!isPasswordValid) {
+          console.log("Invalid password!!!!!!!!!!!!", username);
+          return null;
+        }
+
+        console.log("Successful login!@1!!!!!!!!!!!!!!!:", username);
+        return {
+          id: employee.id.toString(),
+          username: employee.username,
+          firstName: employee.firstName,
+          lastName: employee.lastName,
+          role: employee.role,
+        };
       },
     }),
   ],

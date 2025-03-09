@@ -34,15 +34,11 @@ export const LoginForm = () => {
     }
 
     if (valid) {
-      try {
-        const result = await SignIn(username, password);
-        if (!result?.error) {
-          router.push("/");
-        } else {
-          setFormError(result.error);
-        }
-      } catch (error: any) {
-        setFormError(error.message);
+      const result = await SignIn(username, password);
+      if (!result?.error) {
+        router.push("/");
+      } else {
+        setFormError(result.error);
       }
     }
   };
