@@ -14,12 +14,16 @@ export default async function Drivers() {
   }
 
   const response = await fetch(
-    process.env.NEXT_PUBLIC_BASEURL + "/api/employees/getdrivers"
+    process.env.NEXT_PUBLIC_BASEURL + "/api/employees/getdrivers",
+    // Allegedly Prevents caching to always fetch the latest data
+    { cache: "no-store" }
   );
   const drivers = await response.json();
 
   const trucksResponse = await fetch(
-    process.env.NEXT_PUBLIC_BASEURL + "/api/trucks/gettrucks"
+    process.env.NEXT_PUBLIC_BASEURL + "/api/trucks/gettrucks",
+    // Allegedly Prevents caching to always fetch the latest data
+    { cache: "no-store" }
   );
   const trucks = await trucksResponse.json();
 
@@ -46,5 +50,5 @@ export default async function Drivers() {
     };
   });
 
-  return <main>{<DriverTable drivers={formattedDrivers} />}</main>;
+  return <main>{<DriverTable initialDrivers={formattedDrivers} />}</main>;
 }
