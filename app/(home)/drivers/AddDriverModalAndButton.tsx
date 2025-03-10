@@ -33,7 +33,7 @@ export default function AddDriverModal() {
 
     try {
       const response = await fetch(
-        process.env.BASEURL + "/api/employees/adddriver",
+        process.env.NEXT_PUBLIC_BASEURL + "/api/employees/adddriver",
         {
           method: "POST",
           headers: {

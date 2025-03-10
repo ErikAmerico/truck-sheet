@@ -33,7 +33,7 @@ export default function AddOfficeEmployeeModal() {
 
     try {
       const response = await fetch(
-        process.env.BASEURL + "/api/employees/addofficeemployee",
+        process.env.NEXT_PUBLIC_BASEURL + "/api/employees/addofficeemployee",
         {
           method: "POST",
           headers: {

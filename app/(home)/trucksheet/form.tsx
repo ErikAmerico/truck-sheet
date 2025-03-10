@@ -35,7 +35,7 @@ export default function TruckSheetForm() {
     const fetchTrucks = async () => {
       try {
         const response = await fetch(
-          process.env.BASEURL + "/api/trucks/gettrucks"
+          process.env.NEXT_PUBLIC_BASEURL + "/api/trucks/gettrucks"
         );
         const data = await response.json();
         setTrucksFromDB(data);
@@ -74,7 +74,7 @@ export default function TruckSheetForm() {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const response = await fetch(
-      process.env.BASEURL + "/api/trucksheets/create",
+      process.env.NEXT_PUBLIC_BASEURL + "/api/trucksheets/create",
       {
         method: "POST",
         headers: {

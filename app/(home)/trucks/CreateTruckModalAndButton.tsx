@@ -28,7 +28,7 @@ export default function CreateTruckModal() {
 
     try {
       const response = await fetch(
-        process.env.BASEURL + "/api/trucks/addtruck",
+        process.env.NEXT_PUBLIC_BASEURL + "/api/trucks/addtruck",
         {
           method: "POST",
           headers: {
