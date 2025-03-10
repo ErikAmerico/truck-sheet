@@ -150,7 +150,12 @@ function EnhancedTableToolbar({
         </Typography>
       )}
       {selectedUser ? (
-        <UpdateDriverModal selectedUser={selectedUser} />
+        <UpdateDriverModal
+          selectedUser={selectedUser}
+          /* passing fetchDrivers function as onDriverDeleted to the modal
+      so when a new driver is deleted, it can call fetchDrivers and update UI */
+          onDriverDeleted={fetchDrivers}
+        />
       ) : (
         /* passing fetchDrivers function as onDriverAdded to the modal
       so when a new driver is created, it can call fetchDrivers and update UI */
