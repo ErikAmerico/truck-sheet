@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
+import ConfirmDeleteModal from "../confirmDeleteModal/ConfirmDeleteModal";
 import "./updateDriverModalAndButton.css";
 
 interface UpdateDriverModalProps {
@@ -15,11 +16,13 @@ interface UpdateDriverModalProps {
     lastName: string;
     username: string;
   };
+  onDriverDeleted: () => void;
 }
 
-export default function UpdateDriverModal(
-  selectedUser: UpdateDriverModalProps
-) {
+export default function UpdateDriverModal(props: UpdateDriverModalProps) {
+  const { selectedUser, onDriverDeleted } = props;
+
+  const [confirmOpen, setConfirmOpen] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -30,9 +33,9 @@ export default function UpdateDriverModal(
 
   const handleOpen = () => {
     setOpen(true);
-    setFirstName(selectedUser.selectedUser.firstName);
-    setLastName(selectedUser.selectedUser.lastName);
-    setUsername(selectedUser.selectedUser.username);
+    setFirstName(selectedUser.firstName);
+    setLastName(selectedUser.lastName);
+    setUsername(selectedUser.username);
   };
   const handleClose = () => {
     setOpen(false);
@@ -47,7 +50,7 @@ export default function UpdateDriverModal(
     event.preventDefault();
 
     const updatedDriver = {
-      id: selectedUser.selectedUser.id,
+      id: selectedUser.id,
       firstName,
       lastName,
       username,
@@ -86,6 +89,34 @@ export default function UpdateDriverModal(
     }
   };
 
+  const handleDeleteDriver = async () => {
+    setConfirmOpen(false);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASEURL}/api/employees/deleteemployee`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: selectedUser.id }),
+        }
+      );
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error);
+
+      console.log(result.message);
+      setSuccess("Driver deleted!");
+      setTimeout(() => setSuccess(null), 3000);
+
+      handleClose();
+      onDriverDeleted();
+    } catch (error) {
+      console.error("Error deleting driver:", error);
+      setError("Failed to delete driver");
+    }
+  };
+
   return (
     <div>
       <Button
@@ -121,7 +152,7 @@ export default function UpdateDriverModal(
               variant="h6"
               component="h2"
             >
-              Update {selectedUser.selectedUser.name}&apos;s Information
+              Update {selectedUser.name}&apos;s Information
             </Typography>
           )}
           <TextField
@@ -172,6 +203,15 @@ export default function UpdateDriverModal(
           >
             Update Driver
           </Button>
+          <br />
+          <Button
+            onClick={() => setConfirmOpen(true)}
+            variant="contained"
+            color="error"
+            id="driver-delete-button"
+          >
+            Delete Driver
+          </Button>
         </Box>
       </Modal>
       {success && (
@@ -182,6 +222,12 @@ export default function UpdateDriverModal(
           {success}
         </Alert>
       )}
+      <ConfirmDeleteModal
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={handleDeleteDriver}
+        message={`Are you sure you want to delete ${selectedUser.name}?`}
+      />
     </div>
   );
 }
