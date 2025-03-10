@@ -12,7 +12,7 @@ export default async function SignIn(username: string, password: string) {
 
     return result;
   } catch (error) {
-    console.log("CCCAAAAAAAAAAAAAAATCH", error);
+    console.log("error signing in:", error);
     return { error: "Invalid username or password!" };
   }
 }

@@ -7,7 +7,11 @@ import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
 import "./addDriverModalAndButton.css";
 
-export default function AddDriverModal() {
+export default function AddDriverModal({
+  onDriverAdded,
+}: {
+  onDriverAdded: () => void;
+}) {
   const [open, setOpen] = React.useState(false);
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -58,6 +62,8 @@ export default function AddDriverModal() {
       }, 3000);
 
       handleClose();
+      //function to refresh the ui when a new driver is added
+      onDriverAdded();
     } catch (error) {
       console.error("Error creating driver:", error);
     }

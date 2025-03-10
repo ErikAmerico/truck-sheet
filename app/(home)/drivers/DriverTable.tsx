@@ -126,11 +126,13 @@ interface EnhancedTableToolbarProps {
     lastName: string;
     username: string;
   } | null;
+  fetchDrivers: () => void;
 }
 
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { selectedUser } = props;
-
+function EnhancedTableToolbar({
+  selectedUser,
+  fetchDrivers,
+}: EnhancedTableToolbarProps) {
   return (
     <Toolbar id="driver-toolbar" className={selectedUser ? "selected" : ""}>
       {selectedUser ? (
@@ -150,17 +152,19 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
       {selectedUser ? (
         <UpdateDriverModal selectedUser={selectedUser} />
       ) : (
-        <AddDriverModal />
+        /* passing fetchDrivers function as onDriverAdded to the modal
+      so when a new driver is created, it can call fetchDrivers and update UI */
+        <AddDriverModal onDriverAdded={fetchDrivers} />
       )}
     </Toolbar>
   );
 }
 
 interface DriverTableProps {
-  drivers: DriversLastReport[];
+  initialDrivers: DriversLastReport[];
 }
 
-export default function DriverTable({ drivers }: DriverTableProps) {
+export default function DriverTable({ initialDrivers }: DriverTableProps) {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Driver>("lastName");
   const [selectedUser, setSelectedUser] = React.useState<{
@@ -170,6 +174,25 @@ export default function DriverTable({ drivers }: DriverTableProps) {
     lastName: string;
     username: string;
   } | null>(null);
+  //setting drivers as initialDrivers, before creating a new driver
+  const [drivers, setDrivers] =
+    React.useState<DriversLastReport[]>(initialDrivers);
+
+  const fetchDrivers = async () => {
+    //this will get called from the addDriver modal when a new driver is created
+
+    try {
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_BASEURL + "/api/employees/getdrivers",
+        // Allegedly Prevents caching to always fetch the latest data
+        { cache: "no-store" }
+      );
+      const newDrivers = await response.json();
+      setDrivers(newDrivers);
+    } catch (error) {
+      console.error("Error fetching drivers:", error);
+    }
+  };
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -205,7 +228,11 @@ export default function DriverTable({ drivers }: DriverTableProps) {
   return (
     <Box className="driver-table-container">
       <Paper className="driver-paper">
-        <EnhancedTableToolbar selectedUser={selectedUser} />
+        <EnhancedTableToolbar
+          selectedUser={selectedUser}
+          //pass to the toolbar, to then be passed to addDriverModal
+          fetchDrivers={fetchDrivers}
+        />
         <TableContainer className="driver-tableContainer">
           <Table
             aria-labelledby="driver-tableTitle"

@@ -13,8 +13,13 @@ export default async function TrucksPage() {
     redirect("/trucksheet");
   }
 
+  //get trucks instead of lastest trucksheets
+  //in trucktable, we will just get the last trucksheet
+  //in each trucks trucksheet array
   const response = await fetch(
-    process.env.NEXT_PUBLIC_BASEURL + "/api/trucksheets/getlatesttrucksheets"
+    process.env.NEXT_PUBLIC_BASEURL + "/api/trucks/gettrucks",
+    // Allegedly Prevents caching to always fetch the latest data
+    { cache: "no-store" }
   );
   const trucks = await response.json();
 
@@ -33,7 +38,9 @@ export default async function TrucksPage() {
     const driverDetails: any[] = [];
     for (let id of driverIds) {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BASEURL + `/api/employees/getdriver?id=${id}`
+        process.env.NEXT_PUBLIC_BASEURL + `/api/employees/getdriver?id=${id}`,
+        // Allegedly Prevents caching to always fetch the latest data
+        { cache: "no-store" }
       );
       const data = await response.json();
       driverDetails.push(data);
@@ -52,5 +59,9 @@ export default async function TrucksPage() {
 
   const drivers = await fetchDrivers();
 
-  return <main>{<TruckTable trucks={trucks} drivers={drivers} />}</main>;
+  return (
+    <main>
+      <TruckTable initialTrucks={trucks} drivers={drivers} />
+    </main>
+  );
 }

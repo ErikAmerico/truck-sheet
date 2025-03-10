@@ -7,14 +7,16 @@ import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
 import "./createTruckModalAndButton.css";
 
-export default function CreateTruckModal() {
+export default function CreateTruckModal({
+  onTruckAdded,
+}: {
+  onTruckAdded: () => void;
+}) {
   const [open, setOpen] = React.useState(false);
   const [truckNumber, setTruckNumber] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState<string | null>(null);
   const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
-
   const handleClose = () => {
     setOpen(false);
     setError(null);
@@ -53,6 +55,8 @@ export default function CreateTruckModal() {
       }, 3000);
 
       handleClose();
+      //function to refresh the ui when a new truck is added
+      onTruckAdded();
     } catch (error) {
       console.error("Error creating truck:", error);
     }
