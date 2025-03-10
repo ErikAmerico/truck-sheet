@@ -14,9 +14,13 @@ export default async function OfficeEmployee() {
   }
 
   const response = await fetch(
-    process.env.NEXT_PUBLIC_BASEURL + "/api/employees/getofficeemployees"
+    process.env.NEXT_PUBLIC_BASEURL + "/api/employees/getofficeemployees",
+    // Allegedly Prevents caching to always fetch the latest data
+    { cache: "no-store" }
   );
   const officeEmployees = await response.json();
 
-  return <main>{<OfficeEmployeeTable employees={officeEmployees} />}</main>;
+  return (
+    <main>{<OfficeEmployeeTable initialEmployees={officeEmployees} />}</main>
+  );
 }
