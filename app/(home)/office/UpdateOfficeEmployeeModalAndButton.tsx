@@ -116,7 +116,9 @@ export default function UpdateOfficeEmployeeModal(
       onOfficeEmployeeDeleted();
     } catch (error) {
       console.error("Error deleting employee:", error);
-      setError("Failed to delete employee");
+      setError(
+        error instanceof Error ? error.message : "Failed to delete employee"
+      );
     }
   };
 

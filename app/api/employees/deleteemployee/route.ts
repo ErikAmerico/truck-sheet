@@ -25,6 +25,21 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
+    // If the employee is an "office" employee, check the count of office employees
+    // Can't delete all the office employees. There would be nobody to manage the system
+    if (employee.role === "office") {
+      const officeEmployeeCount = await prisma.employee.count({
+        where: { role: "office" },
+      });
+
+      if (officeEmployeeCount <= 1) {
+        return NextResponse.json(
+          { error: "You're firing the last employee? Not Allowed" },
+          { status: 400 }
+        );
+      }
+    }
+
     // Set employeeId to NULL in trucksheet before deleting the employee
     await prisma.trucksheet.updateMany({
       where: { employeeId: id },
