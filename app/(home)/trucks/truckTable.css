@@ -63,3 +63,7 @@
 .truck-table-row {
   cursor: pointer;
 }
+
+#delete-truck-button {
+  width: 160px;
+}
