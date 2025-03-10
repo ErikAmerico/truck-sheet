@@ -1,3 +1,5 @@
+// Ensures the route is always dynamically rendered, bypassing caching
+export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
 
