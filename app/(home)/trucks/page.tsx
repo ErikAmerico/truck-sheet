@@ -28,7 +28,8 @@ export default async function TrucksPage() {
     const driverIds: number[] = [];
     trucks.forEach((truck: any) => {
       truck.trucksheet.forEach((sheet: any) => {
-        if (!driverIds.includes(sheet.employeeId)) {
+        if (sheet.employeeId && !driverIds.includes(sheet.employeeId)) {
+          //Skipping null values
           driverIds.push(sheet.employeeId);
         }
       });
@@ -37,11 +38,19 @@ export default async function TrucksPage() {
     // Fetch driver details for each unique ID
     const driverDetails: any[] = [];
     for (let id of driverIds) {
+      //if a driver was deleted, There will not be a driver ID.
+      //allow this to continue, will display no employed driver on the UI
+      if (!id) continue;
+
       const response = await fetch(
         process.env.NEXT_PUBLIC_BASEURL + `/api/employees/getdriver?id=${id}`,
         // Allegedly Prevents caching to always fetch the latest data
         { cache: "no-store" }
       );
+
+      // Skip if driver doesn't exist
+      if (!response.ok) continue;
+
       const data = await response.json();
       driverDetails.push(data);
     }
