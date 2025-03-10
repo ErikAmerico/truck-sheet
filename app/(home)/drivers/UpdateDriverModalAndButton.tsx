@@ -7,6 +7,7 @@ import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
 import ConfirmDeleteModal from "../confirmDeleteModal/ConfirmDeleteModal";
 import "./updateDriverModalAndButton.css";
+import { useState, FormEvent } from "react";
 
 interface UpdateDriverModalProps {
   selectedUser: {
@@ -22,14 +23,14 @@ interface UpdateDriverModalProps {
 export default function UpdateDriverModal(props: UpdateDriverModalProps) {
   const { selectedUser, onDriverDeleted } = props;
 
-  const [confirmOpen, setConfirmOpen] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState<string | null>(null);
-  const [success, setSuccess] = React.useState<string | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const handleOpen = () => {
     setOpen(true);
@@ -46,7 +47,7 @@ export default function UpdateDriverModal(props: UpdateDriverModalProps) {
     setPassword("");
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
     const updatedDriver = {

@@ -16,7 +16,7 @@ import "./truckTable.css";
 import FuelGauge from "./FuelGauge";
 import ConfirmDeleteModal from "../confirmDeleteModal/ConfirmDeleteModal";
 import { Button } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState, useMemo, MouseEvent } from "react";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
@@ -129,11 +129,11 @@ export default function TruckTable({
   initialTrucks,
   drivers,
 }: TruckTableProps) {
-  const [selectedTruck, setSelectedTruck] = React.useState<string | null>(null);
+  const [selectedTruck, setSelectedTruck] = useState<string | null>(null);
   //setting trucks as initialTrucks, before creating a new truck
-  const [trucks, setTrucks] = React.useState<Truck[]>(initialTrucks);
-  const [truckToDelete, setTruckToDelete] = React.useState<number | null>(null);
-  const [confirmOpen, setConfirmOpen] = React.useState(false);
+  const [trucks, setTrucks] = useState<Truck[]>(initialTrucks);
+  const [truckToDelete, setTruckToDelete] = useState<number | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const fetchTrucks = async () => {
     //this will get called from the createtruck modal when a new truck is created
@@ -194,11 +194,11 @@ export default function TruckTable({
     }
   };
 
-  const sortedTrucks = React.useMemo(() => {
+  const sortedTrucks = useMemo(() => {
     return trucks.slice().sort((a, b) => a.number - b.number);
   }, [trucks]);
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+  const handleClick = (_: MouseEvent<unknown>, id: number) => {
     const selectedTruck = trucks.find((row) => row.id === id);
     setSelectedTruck((prevSelected) =>
       prevSelected === selectedTruck?.number.toString()

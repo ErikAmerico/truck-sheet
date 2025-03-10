@@ -9,6 +9,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
 import Paper from "@mui/material/Paper";
 import { useRouter } from "next/navigation";
+import { FormEvent } from "react";
 
 export const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -18,7 +19,7 @@ export const LoginForm = () => {
   const [formError, setFormError] = useState<string | null>(null);
   const router = useRouter();
 
-  const onSubmit = async (event: React.FormEvent) => {
+  const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setUsernameError(false);
     setPasswordError(false);

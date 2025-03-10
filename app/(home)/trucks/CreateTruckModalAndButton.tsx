@@ -6,16 +6,17 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
 import "./createTruckModalAndButton.css";
+import { useState, FormEvent, ChangeEvent, KeyboardEvent } from "react";
 
 export default function CreateTruckModal({
   onTruckAdded,
 }: {
   onTruckAdded: () => void;
 }) {
-  const [open, setOpen] = React.useState(false);
-  const [truckNumber, setTruckNumber] = React.useState("");
-  const [error, setError] = React.useState<string | null>(null);
-  const [success, setSuccess] = React.useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const [truckNumber, setTruckNumber] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
@@ -23,7 +24,7 @@ export default function CreateTruckModal({
     setTruckNumber("");
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
     const newTruck = { number: parseInt(truckNumber, 10) };
@@ -62,9 +63,7 @@ export default function CreateTruckModal({
     }
   };
 
-  const handleTruckNumberChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleTruckNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
     setError(null);
     const value = event.target.value;
     if (value.match(/^\d*$/) && value.length <= 3) {
@@ -72,9 +71,7 @@ export default function CreateTruckModal({
     }
   };
 
-  const handleTruckNumberKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => {
+  const handleTruckNumberKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     const invalidChars = ["e", "E", "+", "-", "."];
     if (invalidChars.includes(event.key)) {
       event.preventDefault();
