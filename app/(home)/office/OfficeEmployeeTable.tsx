@@ -152,7 +152,12 @@ function EnhancedTableToolbar({
         </Typography>
       )}
       {selectedUser ? (
-        <UpdateOfficeEmployeeModal selectedUser={selectedUser} />
+        <UpdateOfficeEmployeeModal
+          selectedUser={selectedUser}
+          /* passing fetchOfficeEmployees function as onOfficeEmployeeDeleted to the modal
+      so when a new office employee is deleted, it can call fetchOfficeEmployees and update UI */
+          onOfficeEmployeeDeleted={fetchOfficeEmployees}
+        />
       ) : (
         /* passing fetchOfficeEmployees function as onOfficeEmployeeAdded to the modal
       so when a new office employee is created, it can call fetchOfficeEmployees and update UI */
