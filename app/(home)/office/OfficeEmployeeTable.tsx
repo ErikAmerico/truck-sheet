@@ -118,10 +118,15 @@ interface EnhancedTableToolbarProps {
     lastName: string;
     username: string;
   } | null;
+
+  fetchOfficeEmployees: () => void;
 }
 
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { selectedUser } = props;
+function EnhancedTableToolbar({
+  selectedUser,
+  fetchOfficeEmployees,
+}: EnhancedTableToolbarProps) {
+  // const { selectedUser } = props;
 
   return (
     <Toolbar
@@ -149,16 +154,18 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
       {selectedUser ? (
         <UpdateOfficeEmployeeModal selectedUser={selectedUser} />
       ) : (
-        <AddOfficeEmployeeModal />
+        /* passing fetchOfficeEmployees function as onOfficeEmployeeAdded to the modal
+      so when a new office employee is created, it can call fetchOfficeEmployees and update UI */
+        <AddOfficeEmployeeModal onOfficeEmployeeAdded={fetchOfficeEmployees} />
       )}
     </Toolbar>
   );
 }
 
 export default function OfficeEmployeeTable({
-  employees,
+  initialEmployees,
 }: {
-  employees: OfficeEmployee[];
+  initialEmployees: OfficeEmployee[];
 }) {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] =
@@ -170,6 +177,26 @@ export default function OfficeEmployeeTable({
     lastName: string;
     username: string;
   } | null>(null);
+  //setting employees as initialEmployees, before creating a new employee
+  const [employees, setEmployees] =
+    React.useState<OfficeEmployee[]>(initialEmployees);
+
+  const fetchOfficeEmployees = async () => {
+    //this will get called from the addOfficeEmployee modal when a new employee is created
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASEURL}/api/employees/getofficeemployees`,
+        {
+          cache: "no-store",
+          // Allegedly Prevents caching to always fetch the latest data
+        }
+      );
+      const newEmployees = await response.json();
+      setEmployees(newEmployees);
+    } catch (error) {
+      console.error("Error fetching office employees:", error);
+    }
+  };
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -205,7 +232,11 @@ export default function OfficeEmployeeTable({
   return (
     <Box className="officeEmployee-table-container">
       <Paper className="officeEmployee-paper">
-        <EnhancedTableToolbar selectedUser={selectedUser} />
+        <EnhancedTableToolbar
+          selectedUser={selectedUser}
+          //pass to the toolbar, to then be passed to addOfficeEmployee modal
+          fetchOfficeEmployees={fetchOfficeEmployees}
+        />
         <TableContainer className="officeEmployee-tableContainer">
           <Table
             aria-labelledby="officeEmployee-tableTitle"
