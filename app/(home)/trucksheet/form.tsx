@@ -18,20 +18,29 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
+import {
+  useState,
+  useEffect,
+  SyntheticEvent,
+  ChangeEvent,
+  FormEvent,
+  KeyboardEvent,
+  useMemo,
+} from "react";
 
 export default function TruckSheetForm() {
-  const [expanded, setExpanded] = React.useState<string | false>("panel3");
-  const [selectedTruck, setSelectedTruck] = React.useState("");
-  const [fuel, setFuel] = React.useState<number | "">("");
-  const [mileage, setMileage] = React.useState<number | "">("");
-  const [trucksFromDB, setTrucksFromDB] = React.useState<any[]>([]);
-  const [selectedTruckId, setSelectedTruckId] = React.useState<number | "">("");
-  const [mileageError, setMileageError] = React.useState<string | null>(null);
-  const [success, setSuccess] = React.useState<string | null>(null);
-  const [checkBoxes, setCheckBoxes] = React.useState<Object>({});
-  const [remarks, setRemarks] = React.useState<string>("");
+  const [expanded, setExpanded] = useState<string | false>("panel3");
+  const [selectedTruck, setSelectedTruck] = useState("");
+  const [fuel, setFuel] = useState<number | "">("");
+  const [mileage, setMileage] = useState<number | "">("");
+  const [trucksFromDB, setTrucksFromDB] = useState<any[]>([]);
+  const [selectedTruckId, setSelectedTruckId] = useState<number | "">("");
+  const [mileageError, setMileageError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [checkBoxes, setCheckBoxes] = useState<Object>({});
+  const [remarks, setRemarks] = useState<string>("");
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchTrucks = async () => {
       try {
         const response = await fetch(
@@ -60,18 +69,18 @@ export default function TruckSheetForm() {
   };
 
   const handleAccordianChange =
-    (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+    (panel: string) => (_: SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? panel : false);
     };
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCheckBoxes({
       ...checkBoxes,
       [event.target.name]: event.target.checked,
     });
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     const response = await fetch(
       process.env.NEXT_PUBLIC_BASEURL + "/api/trucksheets/create",
@@ -120,7 +129,7 @@ export default function TruckSheetForm() {
     },
   };
 
-  const handleMileageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMileageChange = (event: ChangeEvent<HTMLInputElement>) => {
     setMileageError(null);
     const value = event.target.value;
     if (value.match(/^\d*\.?\d{0,2}$/)) {
@@ -128,16 +137,14 @@ export default function TruckSheetForm() {
     }
   };
 
-  const handleMileageKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => {
+  const handleMileageKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     const invalidChars = ["e", "E", "+", "-"];
     if (invalidChars.includes(event.key)) {
       event.preventDefault();
     }
   };
 
-  const sortedTrucksFromDB = React.useMemo(() => {
+  const sortedTrucksFromDB = useMemo(() => {
     return trucksFromDB.slice().sort((a, b) => a.number - b.number);
   }, [trucksFromDB]);
 

@@ -15,6 +15,7 @@ import { visuallyHidden } from "@mui/utils";
 import AddDriverModal from "./AddDriverModalAndButton";
 import UpdateDriverModal from "./UpdateDriverModalAndButton";
 import "./driverTable.css";
+import { useState, MouseEvent, useMemo } from "react";
 
 interface Driver {
   id: number;
@@ -69,16 +70,13 @@ interface EnhancedTableProps {
   selectedUser: string | null;
   order: Order;
   orderBy: string;
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof Driver
-  ) => void;
+  onRequestSort: (event: MouseEvent<unknown>, property: keyof Driver) => void;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
-    (property: keyof Driver) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof Driver) => (event: MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -150,7 +148,12 @@ function EnhancedTableToolbar({
         </Typography>
       )}
       {selectedUser ? (
-        <UpdateDriverModal selectedUser={selectedUser} />
+        <UpdateDriverModal
+          selectedUser={selectedUser}
+          /* passing fetchDrivers function as onDriverDeleted to the modal
+      so when a new driver is deleted, it can call fetchDrivers and update UI */
+          onDriverDeleted={fetchDrivers}
+        />
       ) : (
         /* passing fetchDrivers function as onDriverAdded to the modal
       so when a new driver is created, it can call fetchDrivers and update UI */
@@ -165,9 +168,9 @@ interface DriverTableProps {
 }
 
 export default function DriverTable({ initialDrivers }: DriverTableProps) {
-  const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Driver>("lastName");
-  const [selectedUser, setSelectedUser] = React.useState<{
+  const [order, setOrder] = useState<Order>("asc");
+  const [orderBy, setOrderBy] = useState<keyof Driver>("lastName");
+  const [selectedUser, setSelectedUser] = useState<{
     name: string;
     id: number;
     firstName: string;
@@ -175,8 +178,7 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
     username: string;
   } | null>(null);
   //setting drivers as initialDrivers, before creating a new driver
-  const [drivers, setDrivers] =
-    React.useState<DriversLastReport[]>(initialDrivers);
+  const [drivers, setDrivers] = useState<DriversLastReport[]>(initialDrivers);
 
   const fetchDrivers = async () => {
     //this will get called from the addDriver modal when a new driver is created
@@ -195,7 +197,7 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
   };
 
   const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
+    event: MouseEvent<unknown>,
     property: keyof Driver
   ) => {
     const isAsc = orderBy === property && order === "asc";
@@ -203,7 +205,7 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
     setOrderBy(property);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+  const handleClick = (event: MouseEvent<unknown>, id: number) => {
     const selectedDriver = drivers.find((row) => row.id === id);
     const selectedUser = selectedDriver
       ? {
@@ -220,7 +222,7 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
     );
   };
 
-  const sortedRows = React.useMemo(
+  const sortedRows = useMemo(
     () => drivers.slice().sort(getComparator(order, orderBy)),
     [order, orderBy, drivers]
   );
@@ -253,7 +255,7 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
                 return (
                   <TableRow
                     hover
-                    onClick={(event: React.MouseEvent<unknown>) =>
+                    onClick={(event: MouseEvent<unknown>) =>
                       handleClick(event, row.id)
                     }
                     key={row.id}

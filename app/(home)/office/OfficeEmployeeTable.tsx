@@ -15,6 +15,7 @@ import { visuallyHidden } from "@mui/utils";
 import AddOfficeEmployeeModal from "./AddOfficeEmployeeModalAndButton";
 import UpdateOfficeEmployeeModal from "./UpdateOfficeEmployeeModalAndButton";
 import "./officeEmployeeTable.css";
+import { useState, MouseEvent, useMemo } from "react";
 
 interface OfficeEmployee {
   id: number;
@@ -62,7 +63,7 @@ interface EnhancedTableProps {
   order: Order;
   orderBy: string;
   onRequestSort: (
-    event: React.MouseEvent<unknown>,
+    event: MouseEvent<unknown>,
     property: keyof OfficeEmployee
   ) => void;
 }
@@ -70,7 +71,7 @@ interface EnhancedTableProps {
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
-    (property: keyof OfficeEmployee) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof OfficeEmployee) => (event: MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -152,7 +153,12 @@ function EnhancedTableToolbar({
         </Typography>
       )}
       {selectedUser ? (
-        <UpdateOfficeEmployeeModal selectedUser={selectedUser} />
+        <UpdateOfficeEmployeeModal
+          selectedUser={selectedUser}
+          /* passing fetchOfficeEmployees function as onOfficeEmployeeDeleted to the modal
+      so when a new office employee is deleted, it can call fetchOfficeEmployees and update UI */
+          onOfficeEmployeeDeleted={fetchOfficeEmployees}
+        />
       ) : (
         /* passing fetchOfficeEmployees function as onOfficeEmployeeAdded to the modal
       so when a new office employee is created, it can call fetchOfficeEmployees and update UI */
@@ -167,10 +173,9 @@ export default function OfficeEmployeeTable({
 }: {
   initialEmployees: OfficeEmployee[];
 }) {
-  const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] =
-    React.useState<keyof OfficeEmployee>("lastName");
-  const [selectedUser, setSelectedUser] = React.useState<{
+  const [order, setOrder] = useState<Order>("asc");
+  const [orderBy, setOrderBy] = useState<keyof OfficeEmployee>("lastName");
+  const [selectedUser, setSelectedUser] = useState<{
     name: string;
     id: number;
     firstName: string;
@@ -179,7 +184,7 @@ export default function OfficeEmployeeTable({
   } | null>(null);
   //setting employees as initialEmployees, before creating a new employee
   const [employees, setEmployees] =
-    React.useState<OfficeEmployee[]>(initialEmployees);
+    useState<OfficeEmployee[]>(initialEmployees);
 
   const fetchOfficeEmployees = async () => {
     //this will get called from the addOfficeEmployee modal when a new employee is created
@@ -199,7 +204,7 @@ export default function OfficeEmployeeTable({
   };
 
   const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
+    _: MouseEvent<unknown>,
     property: keyof OfficeEmployee
   ) => {
     const isAsc = orderBy === property && order === "asc";
@@ -207,7 +212,7 @@ export default function OfficeEmployeeTable({
     setOrderBy(property);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+  const handleClick = (_: MouseEvent<unknown>, id: number) => {
     const selectedOfficeEmployee = employees.find((row) => row.id === id);
     const selectedUser = selectedOfficeEmployee
       ? {
@@ -224,7 +229,7 @@ export default function OfficeEmployeeTable({
     );
   };
 
-  const sortedRows = React.useMemo(
+  const sortedRows = useMemo(
     () => employees.slice().sort(getComparator(order, orderBy)),
     [order, orderBy, employees]
   );
@@ -257,7 +262,7 @@ export default function OfficeEmployeeTable({
                 return (
                   <TableRow
                     hover
-                    onClick={(event: React.MouseEvent<unknown>) =>
+                    onClick={(event: MouseEvent<unknown>) =>
                       handleClick(event, row.id)
                     }
                     key={row.id}

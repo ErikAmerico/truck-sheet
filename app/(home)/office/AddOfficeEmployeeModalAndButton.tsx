@@ -6,19 +6,20 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
 import "./addOfficeEmployeeModalAndButton.css";
+import { useState, FormEvent } from "react";
 
 export default function AddOfficeEmployeeModal({
   onOfficeEmployeeAdded,
 }: {
   onOfficeEmployeeAdded: () => void;
 }) {
-  const [open, setOpen] = React.useState(false);
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState<string | null>(null);
-  const [success, setSuccess] = React.useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -30,7 +31,7 @@ export default function AddOfficeEmployeeModal({
     setPassword("");
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
     const officeEmployee = { firstName, lastName, username, password };

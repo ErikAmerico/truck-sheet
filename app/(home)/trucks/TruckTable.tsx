@@ -14,7 +14,9 @@ import Paper from "@mui/material/Paper";
 import CreateTruckModal from "./CreateTruckModalAndButton";
 import "./truckTable.css";
 import FuelGauge from "./FuelGauge";
-import { useEffect } from "react";
+import ConfirmDeleteModal from "../confirmDeleteModal/ConfirmDeleteModal";
+import { Button } from "@mui/material";
+import { useEffect, useState, useMemo, MouseEvent } from "react";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
@@ -76,11 +78,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 interface EnhancedTableToolbarProps {
   selectedTruck: string | null;
   fetchTrucks: () => void;
+  handleDeleteTruck: () => void;
 }
 
 function EnhancedTableToolbar({
   selectedTruck,
   fetchTrucks,
+  handleDeleteTruck,
 }: EnhancedTableToolbarProps) {
   return (
     <Toolbar id="truck-toolbar" className={selectedTruck ? "selected" : ""}>
@@ -98,9 +102,20 @@ function EnhancedTableToolbar({
           Trucks
         </Typography>
       )}
-      {/* passing fetchTrucks function as onTruckAdded to the modal
-      so when a new truck is created, it can call fetchTrucks and update UI */}
-      {selectedTruck ? null : <CreateTruckModal onTruckAdded={fetchTrucks} />}
+      {selectedTruck ? (
+        <Button
+          variant="contained"
+          color="error"
+          onClick={handleDeleteTruck}
+          id="delete-truck-button"
+        >
+          Delete Truck
+        </Button>
+      ) : (
+        /* passing fetchTrucks function as onTruckAdded to the modal
+      so when a new truck is created, it can call fetchTrucks and update UI */
+        <CreateTruckModal onTruckAdded={fetchTrucks} />
+      )}
     </Toolbar>
   );
 }
@@ -114,9 +129,11 @@ export default function TruckTable({
   initialTrucks,
   drivers,
 }: TruckTableProps) {
-  const [selectedTruck, setSelectedTruck] = React.useState<string | null>(null);
+  const [selectedTruck, setSelectedTruck] = useState<string | null>(null);
   //setting trucks as initialTrucks, before creating a new truck
-  const [trucks, setTrucks] = React.useState<Truck[]>(initialTrucks);
+  const [trucks, setTrucks] = useState<Truck[]>(initialTrucks);
+  const [truckToDelete, setTruckToDelete] = useState<number | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const fetchTrucks = async () => {
     //this will get called from the createtruck modal when a new truck is created
@@ -141,11 +158,47 @@ export default function TruckTable({
     fetchTrucks();
   }, []);
 
-  const sortedTrucks = React.useMemo(() => {
+  const handleDeleteTruck = () => {
+    if (!selectedTruck) return;
+    const truck = trucks.find((t) => t.number.toString() === selectedTruck);
+    if (truck) {
+      setTruckToDelete(truck.id);
+      setConfirmOpen(true);
+    }
+  };
+
+  const confirmDeleteTruck = async () => {
+    if (!truckToDelete) return;
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASEURL}/api/trucks/deletetruck`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: truckToDelete }),
+        }
+      );
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error);
+
+      console.log(result.message);
+      setTrucks((prev) => prev.filter((truck) => truck.id !== truckToDelete));
+      setSelectedTruck(null);
+    } catch (error) {
+      console.error("Error deleting truck:", error);
+    } finally {
+      setConfirmOpen(false);
+      setTruckToDelete(null);
+    }
+  };
+
+  const sortedTrucks = useMemo(() => {
     return trucks.slice().sort((a, b) => a.number - b.number);
   }, [trucks]);
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+  const handleClick = (_: MouseEvent<unknown>, id: number) => {
     const selectedTruck = trucks.find((row) => row.id === id);
     setSelectedTruck((prevSelected) =>
       prevSelected === selectedTruck?.number.toString()
@@ -161,6 +214,7 @@ export default function TruckTable({
           selectedTruck={selectedTruck}
           //pass to the toolbar, to then be passed to createTruckModal
           fetchTrucks={fetchTrucks}
+          handleDeleteTruck={handleDeleteTruck}
         />
         <TableContainer className="truck-tableContainer">
           <Table
@@ -186,7 +240,8 @@ export default function TruckTable({
                       };
 
                 const driverName =
-                  drivers[latestTruckSheet?.employeeId] || "No Driver";
+                  //"No Employed Driver", meaning the driver was deleted, or the truck had just been created by an office employee
+                  drivers[latestTruckSheet?.employeeId] || "No Employed Driver";
                 const isItemSelected = selectedTruck === row.number.toString();
                 return (
                   <TableRow
@@ -234,6 +289,12 @@ export default function TruckTable({
           </Table>
         </TableContainer>
       </Paper>
+      <ConfirmDeleteModal
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={confirmDeleteTruck}
+        message={`Delete Truck ${selectedTruck} and all associated Truck Sheets?`}
+      />
     </Box>
   );
 }

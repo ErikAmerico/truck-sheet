@@ -5,7 +5,9 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
+import ConfirmDeleteModal from "../confirmDeleteModal/ConfirmDeleteModal";
 import "./updateOfficeEmployeeModalAndButton.css";
+import { useState, FormEvent } from "react";
 
 interface UpdateOfficeEmployeeModalProps {
   selectedUser: {
@@ -15,24 +17,28 @@ interface UpdateOfficeEmployeeModalProps {
     lastName: string;
     username: string;
   };
+  onOfficeEmployeeDeleted: () => void;
 }
 
 export default function UpdateOfficeEmployeeModal(
-  selectedUser: UpdateOfficeEmployeeModalProps
+  props: UpdateOfficeEmployeeModalProps
 ) {
-  const [open, setOpen] = React.useState(false);
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState<string | null>(null);
-  const [success, setSuccess] = React.useState<string | null>(null);
+  const { selectedUser, onOfficeEmployeeDeleted } = props;
+
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const handleOpen = () => {
     setOpen(true);
-    setFirstName(selectedUser.selectedUser.firstName);
-    setLastName(selectedUser.selectedUser.lastName);
-    setUsername(selectedUser.selectedUser.username);
+    setFirstName(selectedUser.firstName);
+    setLastName(selectedUser.lastName);
+    setUsername(selectedUser.username);
   };
   const handleClose = () => {
     setOpen(false);
@@ -43,11 +49,11 @@ export default function UpdateOfficeEmployeeModal(
     setPassword("");
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
     const updatedOfficeEmployee = {
-      id: selectedUser.selectedUser.id,
+      id: selectedUser.id,
       firstName,
       lastName,
       username,
@@ -86,6 +92,34 @@ export default function UpdateOfficeEmployeeModal(
     }
   };
 
+  const handleDeleteOfficeEmployee = async () => {
+    setConfirmOpen(false);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASEURL}/api/employees/deleteemployee`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: selectedUser.id }),
+        }
+      );
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error);
+
+      console.log(result.message);
+      setSuccess("Employee deleted!");
+      setTimeout(() => setSuccess(null), 3000);
+
+      handleClose();
+      onOfficeEmployeeDeleted();
+    } catch (error) {
+      console.error("Error deleting employee:", error);
+      setError("Failed to delete employee");
+    }
+  };
+
   return (
     <div>
       <Button
@@ -121,7 +155,7 @@ export default function UpdateOfficeEmployeeModal(
               variant="h6"
               component="h2"
             >
-              Update {selectedUser.selectedUser.name}&apos;s Information
+              Update {selectedUser.name}&apos;s Information
             </Typography>
           )}
           <TextField
@@ -172,6 +206,15 @@ export default function UpdateOfficeEmployeeModal(
           >
             Update Office Employee
           </Button>
+          <br />
+          <Button
+            onClick={() => setConfirmOpen(true)}
+            variant="contained"
+            color="error"
+            id="employee-delete-button"
+          >
+            Delete Employee
+          </Button>
         </Box>
       </Modal>
       {success && (
@@ -182,6 +225,12 @@ export default function UpdateOfficeEmployeeModal(
           {success}
         </Alert>
       )}
+      <ConfirmDeleteModal
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={handleDeleteOfficeEmployee}
+        message={`Are you sure you want to delete ${selectedUser.name}?`}
+      />
     </div>
   );
 }
