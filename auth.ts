@@ -51,10 +51,7 @@ const config = {
       async authorize(credentials) {
         const { username, password } = credentials;
 
-        console.log("Authorize called with!!!!!!!!!:", username, password);
-
         if (!username || !password) {
-          console.log("Missing credentials!!!!!!!!!!", username);
           return null;
         }
 
@@ -63,7 +60,6 @@ const config = {
         });
 
         if (!employee) {
-          console.log("Employee not found!!!!!!!!!!", username);
           return null;
         }
 
@@ -73,11 +69,9 @@ const config = {
         );
 
         if (!isPasswordValid) {
-          console.log("Invalid password!!!!!!!!!!!!", username);
           return null;
         }
 
-        console.log("Successful login!@1!!!!!!!!!!!!!!!:", username);
         return {
           id: employee.id.toString(),
           username: employee.username,
