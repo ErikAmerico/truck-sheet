@@ -3,12 +3,12 @@ import { usePathname } from "next/navigation";
 import Button from "@mui/material/Button";
 import Link from "next/link";
 
-export default function TrucksButton({ id }) {
+export default function HomeButton({ id }) {
   const pathname = usePathname();
 
   return (
-    <Link href="/trucks" className={pathname === "/trucks" ? "activeLink" : ""}>
-      <Button id={id}>Trucks</Button>
+    <Link href="/" className={pathname === "/" ? "activeLink" : ""}>
+      <Button id={id}>Home</Button>
     </Link>
   );
 }

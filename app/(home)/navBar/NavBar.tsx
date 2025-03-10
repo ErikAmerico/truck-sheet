@@ -10,6 +10,7 @@ import "./navBar.css";
 import DriversButton from "./DriversButton";
 import TrucksButton from "./TrucksButton";
 import OfficeEmployeesButton from "./OfficeEmployeesButton";
+import HomeButton from "./HomeButton";
 
 export default async function NavBar() {
   const session = await auth();
@@ -20,6 +21,9 @@ export default async function NavBar() {
         <Toolbar id="nav-toolbar">
           <Image src="/logo.png" alt="Logo" width={140} height={60} priority />
           <Box className="centered-button-container">
+            {session?.user.role === "office" ? (
+              <HomeButton id="home-button" />
+            ) : null}
             {session?.user.role === "office" ? (
               <DriversButton id="drivers-button" />
             ) : null}

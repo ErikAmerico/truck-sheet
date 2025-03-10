@@ -20,7 +20,8 @@
 
 #drivers-button,
 #trucks-button,
-#office-button {
+#office-button,
+#home-button {
   border: 1px solid rgba(9, 159, 255, 0.5);
   color: black;
   min-width: 83.4px;
@@ -45,7 +46,8 @@
 #logout-button:hover,
 #drivers-button:hover,
 #trucks-button:hover,
-#office-button:hover {
+#office-button:hover,
+#home-button:hover {
   background-color: rgb(37, 40, 45);
   color: white;
 }
@@ -53,7 +55,8 @@
 #logout-button::before,
 #drivers-button::before,
 #trucks-button::before,
-#office-button::before {
+#office-button::before,
+#home-button::before {
   content: "";
   position: absolute;
   top: 1px;
@@ -68,6 +71,36 @@
 #logout-button:hover::before,
 #drivers-button:hover::before,
 #trucks-button:hover::before,
-#office-button:hover::before {
+#office-button:hover::before,
+#home-button:hover::before {
   opacity: 1;
+}
+
+.activeLink {
+  width: 83.4px;
+  margin-right: 10px;
+  border-radius: 4px;
+  background-color: rgb(37, 40, 45);
+}
+
+.activeLink #home-button,
+.activeLink #drivers-button,
+.activeLink #trucks-button,
+.activeLink #office-button {
+  color: white;
+}
+
+.activeLink #home-button::before,
+.activeLink #drivers-button::before,
+.activeLink #trucks-button::before,
+.activeLink #office-button::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  left: 1px;
+  right: 1px;
+  border: 2px solid rgba(9, 159, 255, 0.5);
+  opacity: 1;
+  transition: opacity 0.3s;
 }
