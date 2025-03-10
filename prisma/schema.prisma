@@ -25,8 +25,8 @@ model truck {
 
 model trucksheet {
   id          Int    @id @default(autoincrement())
-  employeeId  Int
-  employee    employee @relation(fields: [employeeId], references: [id])
+  employeeId  Int?
+  employee    employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
   truckId     Int
   truck       truck  @relation(fields: [truckId], references: [id])
   date        DateTime
