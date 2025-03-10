@@ -14,6 +14,7 @@ import Paper from "@mui/material/Paper";
 import CreateTruckModal from "./CreateTruckModalAndButton";
 import "./truckTable.css";
 import FuelGauge from "./FuelGauge";
+import { useEffect } from "react";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
@@ -74,11 +75,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   selectedTruck: string | null;
+  fetchTrucks: () => void;
 }
 
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { selectedTruck } = props;
-
+function EnhancedTableToolbar({
+  selectedTruck,
+  fetchTrucks,
+}: EnhancedTableToolbarProps) {
   return (
     <Toolbar id="truck-toolbar" className={selectedTruck ? "selected" : ""}>
       {selectedTruck ? (
@@ -95,18 +98,48 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           Trucks
         </Typography>
       )}
-      {selectedTruck ? null : <CreateTruckModal />}
+      {/* passing fetchTrucks function as onTruckAdded to the modal
+      so when a new truck is created, it can call fetchTrucks and update UI */}
+      {selectedTruck ? null : <CreateTruckModal onTruckAdded={fetchTrucks} />}
     </Toolbar>
   );
 }
 
 interface TruckTableProps {
-  trucks: Truck[];
+  initialTrucks: Truck[];
   drivers: { [key: number]: string };
 }
 
-export default function TruckTable({ trucks, drivers }: TruckTableProps) {
+export default function TruckTable({
+  initialTrucks,
+  drivers,
+}: TruckTableProps) {
   const [selectedTruck, setSelectedTruck] = React.useState<string | null>(null);
+  //setting trucks as initialTrucks, before creating a new truck
+  const [trucks, setTrucks] = React.useState<Truck[]>(initialTrucks);
+
+  const fetchTrucks = async () => {
+    //this will get called from the createtruck modal when a new truck is created
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASEURL}/api/trucks/gettrucks`,
+        {
+          cache: "no-store",
+          // Allegedly Prevents caching to always fetch the latest data
+        }
+      );
+      const newTrucks = await response.json();
+      setTrucks(newTrucks);
+    } catch (error) {
+      console.error("Error fetching trucks:", error);
+    }
+  };
+
+  useEffect(() => {
+    //also gets called here on page load to be sure we initally have truck data
+    //might be redundant?
+    fetchTrucks();
+  }, []);
 
   const sortedTrucks = React.useMemo(() => {
     return trucks.slice().sort((a, b) => a.number - b.number);
@@ -124,7 +157,11 @@ export default function TruckTable({ trucks, drivers }: TruckTableProps) {
   return (
     <Box className="truck-table-container">
       <Paper className="truck-paper">
-        <EnhancedTableToolbar selectedTruck={selectedTruck} />
+        <EnhancedTableToolbar
+          selectedTruck={selectedTruck}
+          //pass to the toolbar, to then be passed to createTruckModal
+          fetchTrucks={fetchTrucks}
+        />
         <TableContainer className="truck-tableContainer">
           <Table
             aria-labelledby="truck-tableTitle"
@@ -134,11 +171,22 @@ export default function TruckTable({ trucks, drivers }: TruckTableProps) {
             <EnhancedTableHead selectedTruck={selectedTruck} />
             <TableBody>
               {sortedTrucks.map((row) => {
-                const latestTruckSheet = row.trucksheet[0] || {
-                  mileage: 0,
-                  fuel: 0,
-                };
-                const driverName = drivers[latestTruckSheet.employeeId];
+                const latestTruckSheet =
+                  //check to make sure there is an array of trucksheets
+                  //if there is, take the last in the array
+                  //if not, give the UI initial data
+                  Array.isArray(row.trucksheet) && row.trucksheet.length > 0
+                    ? row.trucksheet[row.trucksheet.length - 1]
+                    : {
+                        mileage: 0,
+                        fuel: 0,
+                        employeeId: 0,
+                        remarks: "",
+                        date: new Date().toISOString(),
+                      };
+
+                const driverName =
+                  drivers[latestTruckSheet?.employeeId] || "No Driver";
                 const isItemSelected = selectedTruck === row.number.toString();
                 return (
                   <TableRow
