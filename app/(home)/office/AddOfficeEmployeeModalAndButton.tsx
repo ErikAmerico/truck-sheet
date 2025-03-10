@@ -7,7 +7,11 @@ import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
 import "./addOfficeEmployeeModalAndButton.css";
 
-export default function AddOfficeEmployeeModal() {
+export default function AddOfficeEmployeeModal({
+  onOfficeEmployeeAdded,
+}: {
+  onOfficeEmployeeAdded: () => void;
+}) {
   const [open, setOpen] = React.useState(false);
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -58,6 +62,8 @@ export default function AddOfficeEmployeeModal() {
       }, 3000);
 
       handleClose();
+      //function to refresh the ui when a new office employee is added
+      onOfficeEmployeeAdded();
     } catch (error) {
       console.error("Error creating office employee:", error);
     }
