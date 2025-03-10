@@ -56,7 +56,7 @@ export default function UpdateOfficeEmployeeModal(
 
     try {
       const response = await fetch(
-        process.env.BASEURL + "/api/employees/updateofficeemployee",
+        process.env.NEXT_PUBLIC_BASEURL + "/api/employees/updateofficeemployee",
         {
           method: "PUT",
           headers: {

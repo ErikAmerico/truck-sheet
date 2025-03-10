@@ -14,7 +14,7 @@ export default async function OfficeEmployee() {
   }
 
   const response = await fetch(
-    process.env.BASEURL + "/api/employees/getofficeemployees"
+    process.env.NEXT_PUBLIC_BASEURL + "/api/employees/getofficeemployees"
   );
   const officeEmployees = await response.json();
 

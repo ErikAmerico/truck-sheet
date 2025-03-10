@@ -56,7 +56,7 @@ export default function UpdateDriverModal(
 
     try {
       const response = await fetch(
-        process.env.BASEURL + "/api/employees/updatedriver",
+        process.env.NEXT_PUBLIC_BASEURL + "/api/employees/updatedriver",
         {
           method: "PUT",
           headers: {

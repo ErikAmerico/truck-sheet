@@ -14,7 +14,7 @@ export default async function TrucksPage() {
   }
 
   const response = await fetch(
-    process.env.BASEURL + "/api/trucksheets/getlatesttrucksheets"
+    process.env.NEXT_PUBLIC_BASEURL + "/api/trucksheets/getlatesttrucksheets"
   );
   const trucks = await response.json();
 
@@ -33,7 +33,7 @@ export default async function TrucksPage() {
     const driverDetails: any[] = [];
     for (let id of driverIds) {
       const response = await fetch(
-        process.env.BASEURL + `/api/employees/getdriver?id=${id}`
+        process.env.NEXT_PUBLIC_BASEURL + `/api/employees/getdriver?id=${id}`
       );
       const data = await response.json();
       driverDetails.push(data);
