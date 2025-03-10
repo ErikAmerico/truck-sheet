@@ -186,7 +186,8 @@ export default function TruckTable({
                       };
 
                 const driverName =
-                  drivers[latestTruckSheet?.employeeId] || "No Driver";
+                  //"No Employed Driver", meaning the driver was deleted, or the truck had just been created by an office employee
+                  drivers[latestTruckSheet?.employeeId] || "No Employed Driver";
                 const isItemSelected = selectedTruck === row.number.toString();
                 return (
                   <TableRow
