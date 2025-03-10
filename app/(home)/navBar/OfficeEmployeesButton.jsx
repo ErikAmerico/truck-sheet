@@ -1,21 +1,14 @@
 "use client";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Button from "@mui/material/Button";
+import Link from "next/link";
 
 export default function OfficeEmployeesButton({ id }) {
-  const router = useRouter();
   const pathname = usePathname();
 
-  const isOfficeEmployeesPage = pathname === "/office";
-
   return (
-    <Button
-      id={id}
-      onClick={() => {
-        router.push(isOfficeEmployeesPage ? "/" : "/office");
-      }}
-    >
-      {isOfficeEmployeesPage ? "Home" : "Office"}
-    </Button>
+    <Link href="/office" className={pathname === "/office" ? "activeLink" : ""}>
+      <Button id={id}>Office</Button>
+    </Link>
   );
 }

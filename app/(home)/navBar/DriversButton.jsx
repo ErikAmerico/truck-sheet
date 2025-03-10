@@ -1,21 +1,17 @@
 "use client";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Button from "@mui/material/Button";
+import Link from "next/link";
 
 export default function DriversButton({ id }) {
-  const router = useRouter();
   const pathname = usePathname();
 
-  const isDriversPage = pathname === "/drivers";
-
   return (
-    <Button
-      id={id}
-      onClick={() => {
-        router.push(isDriversPage ? "/" : "/drivers");
-      }}
+    <Link
+      href="/drivers"
+      className={pathname === "/drivers" ? "activeLink" : ""}
     >
-      {isDriversPage ? "Home" : "Drivers"}
-    </Button>
+      <Button id={id}>Drivers</Button>
+    </Link>
   );
 }
