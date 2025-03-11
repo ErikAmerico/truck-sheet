@@ -45,8 +45,15 @@ export default function FuelGauge({ value }: { value: number }) {
       endAngle={110}
       value={percentageValue}
     >
-      <GaugeReferenceArc />
-      <GaugeValueArc />
+      <GaugeReferenceArc
+        style={{ stroke: "red", fill: "rgba(84, 190, 255, 0.31)" }}
+      />
+      <GaugeValueArc
+        style={{
+          stroke: "rgba(9, 159, 255, 0.5)",
+          fill: "rgba(9, 161, 255, 0.91)",
+        }}
+      />
       <GaugePointer />
     </GaugeContainer>
   );
