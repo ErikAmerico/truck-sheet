@@ -15,7 +15,8 @@ import { visuallyHidden } from "@mui/utils";
 import AddDriverModal from "./AddDriverModalAndButton";
 import UpdateDriverModal from "./UpdateDriverModalAndButton";
 import "./driverTable.css";
-import { useState, MouseEvent, useMemo } from "react";
+import { useState, useEffect, MouseEvent, useMemo } from "react";
+import pusherClient from "@/lib/pusherClient";
 
 interface Driver {
   id: number;
@@ -25,10 +26,10 @@ interface Driver {
 }
 
 interface DriversLastReport extends Driver {
-  lastReport: {
+  lastReport?: {
     date: string;
     truckNumber: number;
-  };
+  } | null;
 }
 
 const headCells = [
@@ -196,8 +197,46 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
     }
   };
 
+  useEffect(() => {
+    //Subscribe to a Pusher channel named "real-time-drivers".
+    //created in api/trucksheets/create/route.ts
+    //Connects to Pusher's real-time WebSocket server.
+    //Listens to the "real-time-drivers" channel.
+    const channel = pusherClient.subscribe("real-time-drivers");
+
+    channel.bind(
+      //Listen for an event called "new-driver-trucksheet".
+      //Wiats for "new-driver-trucksheet" event to be emitted by the server.
+      "new-driver-trucksheet",
+      //data will contain employeeId and the last report(new truck sheet)
+      (data: {
+        employeeId: number;
+        lastReport: { date: string; truckNumber: number } | null;
+      }) => {
+        //When event is received, call setDrivers
+        //find matching driver using employeeId
+        //update their lastReport with the new data
+        setDrivers((prev) =>
+          //map over drivers, if driver id matches the employeeId from the event
+          //update the lastReport with the new data
+          prev.map((driver) =>
+            driver.id === data.employeeId
+              ? { ...driver, lastReport: data.lastReport }
+              : driver
+          )
+        );
+      }
+    );
+
+    //clea up the subscription when component unmounts
+    //prevent memory leaks
+    return () => {
+      pusherClient.unsubscribe("real-time-drivers");
+    };
+  }, []);
+
   const handleRequestSort = (
-    event: MouseEvent<unknown>,
+    _: MouseEvent<unknown>,
     property: keyof Driver
   ) => {
     const isAsc = orderBy === property && order === "asc";
@@ -276,8 +315,14 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
                       className="driver-data"
                       id="driver-last-report"
                     >
+                      {/* making sure date is in correct format,
+                      pusherClient was sending it incorrectly */}
                       {row.lastReport
-                        ? `${row.lastReport.date} for Truck ${row.lastReport.truckNumber}`
+                        ? `${new Date(
+                            row.lastReport.date
+                          ).toLocaleDateString()} for Truck ${
+                            row.lastReport.truckNumber
+                          }`
                         : "No reports"}
                     </TableCell>
                   </TableRow>
