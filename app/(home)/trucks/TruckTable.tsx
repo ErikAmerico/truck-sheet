@@ -17,6 +17,7 @@ import FuelGauge from "./FuelGauge";
 import ConfirmDeleteModal from "../confirmDeleteModal/ConfirmDeleteModal";
 import { Button } from "@mui/material";
 import { useEffect, useState, useMemo, MouseEvent } from "react";
+import pusherClient from "@/lib/pusherClient";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
@@ -156,6 +157,41 @@ export default function TruckTable({
     //also gets called here on page load to be sure we initally have truck data
     //might be redundant?
     fetchTrucks();
+  }, []);
+
+  useEffect(() => {
+    //subscribe to the pusher channel created in my pusher account
+    //this component is now listening for real-time events related to trucks
+    const channel = pusherClient.subscribe("real-time-trucks");
+
+    //listening for an event called new-trucksheet
+    //when event is triggered on real-time-trucks channel, callback function is called
+    //data received is the new trucksheet
+    channel.bind("new-trucksheet", (data: { trucksheet: any }) => {
+      //mapping over the trucks array, if the truckId matches the truckId of the new trucksheet
+      //then update the trucksheet array of that truck with the new trucksheet
+      setTrucks((prev) => {
+        const updatedTrucks = prev.map((truck) =>
+          //checking for the matching truck
+          truck.id === data.trucksheet.truckId
+            ? //if found, update the trucksheet array with the new trucksheet
+              //spreading existing ...truck object, to create a new object
+              //append data.trucksheet to truck.trucksheet array
+              { ...truck, trucksheet: [...truck.trucksheet, data.trucksheet] }
+            : //if no truck matches, return the existing truck object
+              //no changes made
+              truck
+        );
+        return updatedTrucks;
+      });
+    });
+
+    //clean up function
+    //unsubscribes from real-time-trucks channel to prevent memory leaks
+    //or redundant listeners...
+    return () => {
+      pusherClient.unsubscribe("real-time-trucks");
+    };
   }, []);
 
   const handleDeleteTruck = () => {
