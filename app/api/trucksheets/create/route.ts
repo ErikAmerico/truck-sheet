@@ -171,6 +171,41 @@ export async function POST(req: NextRequest) {
     });
     //__________________________________________________________________________________________________________//
 
+    // Fetch updated last report data for the driver
+    // only date and truck number are needed
+    //this is populating the DriversTable
+    //sorting in descending order, newest sheet will be first in array
+    const driverLastReport = await prisma.trucksheet.findFirst({
+      where: { employeeId: trucksheet.employeeId },
+      orderBy: { date: "desc" },
+      select: {
+        date: true,
+        truckId: true,
+        truck: { select: { number: true } },
+      },
+    });
+
+    //__________________________________________________________________________________________________________//
+    //Pusher Event
+
+    // Trigger event for DriverTable
+    //broadcast real time event
+    //real-time-drivers is the channel name, Clients subscribe to this exact channel to receive the event.
+    //new-driver-trucksheet is the event name, Clients listen for this specific event.
+    //employeeId identifies the driver, lastReport contains the date and truck number of the last report.
+    //this is populating the DriversTable
+    //if there is no last report, lastReport will be null.. maybe when a driver is first added? safety first.
+    await pusher.trigger("real-time-drivers", "new-driver-trucksheet", {
+      employeeId: trucksheet.employeeId,
+      lastReport: driverLastReport
+        ? {
+            date: driverLastReport.date,
+            truckNumber: driverLastReport.truck.number,
+          }
+        : null,
+    });
+    //__________________________________________________________________________________________________________//
+
     return NextResponse.json(trucksheet, { status: 201 });
   } catch (error) {
     console.error("Error creating truck sheet:", error);
