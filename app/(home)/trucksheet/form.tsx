@@ -39,6 +39,8 @@ export default function TruckSheetForm() {
   const [success, setSuccess] = useState<string | null>(null);
   const [checkBoxes, setCheckBoxes] = useState<Object>({});
   const [remarks, setRemarks] = useState<string>("");
+  const [noTruckSelected, setNoTruckSelected] = useState<string | null>(null);
+  const [noMilageEntered, setNoMilageEntered] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTrucks = async () => {
@@ -82,6 +84,29 @@ export default function TruckSheetForm() {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+
+    //prevent keyboard from opening when you click submit on cell phone.
+    //hopefully.
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
+    if (!selectedTruck) {
+      setNoTruckSelected("Please select a truck");
+      setTimeout(() => {
+        setNoTruckSelected(null);
+      }, 3000);
+      return;
+    }
+
+    if (!noMilageEntered) {
+      setNoMilageEntered("Please enter the mileage");
+      setTimeout(() => {
+        setNoMilageEntered(null);
+      }, 3000);
+      return;
+    }
+
     const response = await fetch(
       process.env.NEXT_PUBLIC_BASEURL + "/api/trucksheets/create",
       {
@@ -176,7 +201,6 @@ export default function TruckSheetForm() {
             value={selectedTruck}
             onChange={handleTruckChange}
             MenuProps={menuProps}
-            required
             sx={{
               color: "white",
               border: "1px solid rgba(9, 159, 255, 0.5)",
@@ -525,7 +549,6 @@ export default function TruckSheetForm() {
           <Box sx={{ padding: "10px" }}>
             <TextField
               label="Mileage"
-              required
               type="number"
               value={mileage}
               onChange={handleMileageChange}
@@ -635,6 +658,38 @@ export default function TruckSheetForm() {
           sx={{ position: "fixed", bottom: 20, right: 20 }}
         >
           {success}
+        </Alert>
+      )}
+      {noTruckSelected && (
+        <Alert
+          severity="error"
+          sx={{
+            position: "absolute",
+            top: "40%",
+            left: "50%",
+            zIndex: 1000,
+            transform: "translate(-50%, -50%)",
+            border: "1px solid red",
+            borderRadius: "5px",
+          }}
+        >
+          {noTruckSelected}
+        </Alert>
+      )}
+      {noMilageEntered && (
+        <Alert
+          severity="error"
+          sx={{
+            position: "absolute",
+            top: "40%",
+            left: "50%",
+            zIndex: 1000,
+            transform: "translate(-50%, -50%)",
+            border: "1px solid red",
+            borderRadius: "5px",
+          }}
+        >
+          {noMilageEntered}
         </Alert>
       )}
     </form>
