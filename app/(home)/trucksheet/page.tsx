@@ -2,6 +2,11 @@ import { auth } from "auth";
 import { redirect } from "next/navigation";
 import TruckSheetForm from "./form";
 
+export const metadata = {
+  title: "Trucksheets",
+  description: "Trucksheet page",
+};
+
 export default async function TruckSheet() {
   const session = await auth();
 

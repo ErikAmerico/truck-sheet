@@ -3,6 +3,11 @@ import { redirect } from "next/navigation";
 import DriverTable from "./DriverTable";
 import fetchDriversAndLatestTruckSheet from "./fetchDrivers";
 
+export const metadata = {
+  title: "Trucksheets - Driver Table",
+  description: "Drivers page",
+};
+
 export default async function Drivers() {
   const session = await auth();
 
