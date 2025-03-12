@@ -17,7 +17,7 @@ interface UpdateDriverModalProps {
     lastName: string;
     username: string;
   };
-  onDriverDeleted: () => void;
+  onDriverEdit: () => void;
   setSelectedUser: React.Dispatch<
     React.SetStateAction<{
       name: string;
@@ -30,7 +30,7 @@ interface UpdateDriverModalProps {
 }
 
 export default function UpdateDriverModal(props: UpdateDriverModalProps) {
-  const { selectedUser, setSelectedUser, onDriverDeleted } = props;
+  const { selectedUser, setSelectedUser, onDriverEdit } = props;
 
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -94,6 +94,8 @@ export default function UpdateDriverModal(props: UpdateDriverModalProps) {
       }, 3000);
 
       handleClose();
+      onDriverEdit();
+      setSelectedUser(null);
     } catch (error) {
       console.error("Error updating driver:", error);
     }
@@ -120,7 +122,7 @@ export default function UpdateDriverModal(props: UpdateDriverModalProps) {
       setTimeout(() => setSuccess(null), 3000);
 
       handleClose();
-      onDriverDeleted();
+      onDriverEdit();
       setSelectedUser(null);
     } catch (error) {
       console.error("Error deleting driver:", error);

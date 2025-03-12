@@ -165,7 +165,7 @@ function EnhancedTableToolbar({
         <UpdateDriverModal
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
-          onDriverDeleted={fetchDrivers}
+          onDriverEdit={fetchDrivers}
         />
       ) : (
         <AddDriverModal
