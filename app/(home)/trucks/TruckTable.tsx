@@ -11,12 +11,14 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import CreateTruckModal from "./CreateTruckModalAndButton";
+import CreateTruckModal from "./components/createTruckModal/CreateTruckModalAndButton";
 import "./truckTable.css";
-import FuelGauge from "./FuelGauge";
+import FuelGauge from "./components/FuelGauge";
 import ConfirmDeleteModal from "../components/confirmDeleteModal/ConfirmDeleteModal";
 import { Button } from "@mui/material";
 import { useEffect, useState, useMemo, MouseEvent } from "react";
+import fetchTrucksFromDb from "./fetchTrucks";
+import fetchTruckDriversMap from "./fetchTruckDriversMap";
 
 const formatDate = (date: string) => {
   const d = new Date(date);
@@ -122,18 +124,21 @@ function EnhancedTableToolbar({
 
 interface TruckTableProps {
   initialTrucks: Truck[];
-  drivers: { [key: number]: string };
+  initialDrivers: { [key: number]: string };
 }
 
 export default function TruckTable({
   initialTrucks,
-  drivers,
+  initialDrivers,
 }: TruckTableProps) {
   const [selectedTruck, setSelectedTruck] = useState<string | null>(null);
   //setting trucks as initialTrucks, before creating a new truck
   const [trucks, setTrucks] = useState<Truck[]>(initialTrucks);
   const [truckToDelete, setTruckToDelete] = useState<number | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [drivers, setDrivers] = useState<{ [key: number]: string }>(
+    initialDrivers
+  );
 
   const fetchTrucks = async () => {
     //this will get called from the createtruck modal when a new truck is created
@@ -152,10 +157,28 @@ export default function TruckTable({
     }
   };
 
+  const updateTruckData = async () => {
+    try {
+      const updatedTrucks = await fetchTrucksFromDb();
+      if (!updatedTrucks.length) return;
+
+      const updatedDrivers = await fetchTruckDriversMap(updatedTrucks);
+      setTrucks(updatedTrucks);
+      setDrivers(updatedDrivers);
+    } catch (error) {
+      console.error("Error updating truck data:", error);
+    }
+  };
+
   useEffect(() => {
-    //also gets called here on page load to be sure we initally have truck data
-    //might be redundant?
-    fetchTrucks();
+    updateTruckData();
+
+    const interval = setInterval(() => {
+      //making 2 api calls every 30 seconds here, too much?
+      updateTruckData();
+    }, 30000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleDeleteTruck = () => {
