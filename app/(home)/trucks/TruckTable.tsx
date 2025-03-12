@@ -14,7 +14,7 @@ import Paper from "@mui/material/Paper";
 import CreateTruckModal from "./CreateTruckModalAndButton";
 import "./truckTable.css";
 import FuelGauge from "./FuelGauge";
-import ConfirmDeleteModal from "../confirmDeleteModal/ConfirmDeleteModal";
+import ConfirmDeleteModal from "../components/confirmDeleteModal/ConfirmDeleteModal";
 import { Button } from "@mui/material";
 import { useEffect, useState, useMemo, MouseEvent } from "react";
 
