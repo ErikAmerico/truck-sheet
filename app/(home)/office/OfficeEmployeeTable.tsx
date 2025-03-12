@@ -12,10 +12,11 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
-import AddOfficeEmployeeModal from "./AddOfficeEmployeeModalAndButton";
-import UpdateOfficeEmployeeModal from "./UpdateOfficeEmployeeModalAndButton";
+import AddOfficeEmployeeModal from "./components/addOfficeEmployeeModal/AddOfficeEmployeeModalAndButton";
+import UpdateOfficeEmployeeModal from "./components/updateOfficeEmployeeModal/UpdateOfficeEmployeeModalAndButton";
 import "./officeEmployeeTable.css";
 import { useState, MouseEvent, useMemo } from "react";
+import fetchOfficeEmployees from "./fetchOfficeEmployees";
 
 interface OfficeEmployee {
   id: number;
@@ -120,12 +121,24 @@ interface EnhancedTableToolbarProps {
     username: string;
   } | null;
 
-  fetchOfficeEmployees: () => void;
+  fetchEmployees: () => void;
+  //idk what Dispactch or setStateAction is
+  //but im passing setSelectedUser as a prop
+  setSelectedUser: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      id: number;
+      firstName: string;
+      lastName: string;
+      username: string;
+    } | null>
+  >;
 }
 
 function EnhancedTableToolbar({
   selectedUser,
-  fetchOfficeEmployees,
+  fetchEmployees,
+  setSelectedUser,
 }: EnhancedTableToolbarProps) {
   // const { selectedUser } = props;
 
@@ -157,12 +170,16 @@ function EnhancedTableToolbar({
           selectedUser={selectedUser}
           /* passing fetchOfficeEmployees function as onOfficeEmployeeDeleted to the modal
       so when a new office employee is deleted, it can call fetchOfficeEmployees and update UI */
-          onOfficeEmployeeDeleted={fetchOfficeEmployees}
+          onOfficeEmployeeEdit={fetchEmployees}
+          setSelectedUser={setSelectedUser}
         />
       ) : (
         /* passing fetchOfficeEmployees function as onOfficeEmployeeAdded to the modal
       so when a new office employee is created, it can call fetchOfficeEmployees and update UI */
-        <AddOfficeEmployeeModal onOfficeEmployeeAdded={fetchOfficeEmployees} />
+        <AddOfficeEmployeeModal
+          onOfficeEmployeeAdded={fetchEmployees}
+          setSelectedUser={setSelectedUser}
+        />
       )}
     </Toolbar>
   );
@@ -186,17 +203,9 @@ export default function OfficeEmployeeTable({
   const [employees, setEmployees] =
     useState<OfficeEmployee[]>(initialEmployees);
 
-  const fetchOfficeEmployees = async () => {
-    //this will get called from the addOfficeEmployee modal when a new employee is created
+  const fetchEmployees = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/api/employees/getofficeemployees`,
-        {
-          cache: "no-store",
-          // Allegedly Prevents caching to always fetch the latest data
-        }
-      );
-      const newEmployees = await response.json();
+      const newEmployees = await fetchOfficeEmployees();
       setEmployees(newEmployees);
     } catch (error) {
       console.error("Error fetching office employees:", error);
@@ -240,7 +249,8 @@ export default function OfficeEmployeeTable({
         <EnhancedTableToolbar
           selectedUser={selectedUser}
           //pass to the toolbar, to then be passed to addOfficeEmployee modal
-          fetchOfficeEmployees={fetchOfficeEmployees}
+          fetchEmployees={fetchEmployees}
+          setSelectedUser={setSelectedUser}
         />
         <TableContainer className="officeEmployee-tableContainer">
           <Table

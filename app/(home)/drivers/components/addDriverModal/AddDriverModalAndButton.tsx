@@ -10,8 +10,18 @@ import { useState, FormEvent } from "react";
 
 export default function AddDriverModal({
   onDriverAdded,
+  setSelectedUser,
 }: {
   onDriverAdded: () => void;
+  setSelectedUser: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      id: number;
+      firstName: string;
+      lastName: string;
+      username: string;
+    } | null>
+  >;
 }) {
   const [open, setOpen] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -65,6 +75,7 @@ export default function AddDriverModal({
       handleClose();
       //function to refresh the ui when a new driver is added
       onDriverAdded();
+      setSelectedUser(null);
     } catch (error) {
       console.error("Error creating driver:", error);
     }

@@ -12,10 +12,11 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
-import AddDriverModal from "./AddDriverModalAndButton";
-import UpdateDriverModal from "./UpdateDriverModalAndButton";
+import AddDriverModal from "./components/addDriverModal/AddDriverModalAndButton";
+import UpdateDriverModal from "./components/updateDriverModal/UpdateDriverModalAndButton";
 import "./driverTable.css";
-import { useState, MouseEvent, useMemo } from "react";
+import { useState, useEffect, MouseEvent, useMemo } from "react";
+import fetchDriversAndLatestTruckSheet from "./fetchDrivers";
 
 interface Driver {
   id: number;
@@ -124,11 +125,24 @@ interface EnhancedTableToolbarProps {
     lastName: string;
     username: string;
   } | null;
+
   fetchDrivers: () => void;
+  //idk what Dispactch or setStateAction is
+  //but im passing setSelectedUser as a prop
+  setSelectedUser: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      id: number;
+      firstName: string;
+      lastName: string;
+      username: string;
+    } | null>
+  >;
 }
 
 function EnhancedTableToolbar({
   selectedUser,
+  setSelectedUser,
   fetchDrivers,
 }: EnhancedTableToolbarProps) {
   return (
@@ -150,14 +164,14 @@ function EnhancedTableToolbar({
       {selectedUser ? (
         <UpdateDriverModal
           selectedUser={selectedUser}
-          /* passing fetchDrivers function as onDriverDeleted to the modal
-      so when a new driver is deleted, it can call fetchDrivers and update UI */
-          onDriverDeleted={fetchDrivers}
+          setSelectedUser={setSelectedUser}
+          onDriverEdit={fetchDrivers}
         />
       ) : (
-        /* passing fetchDrivers function as onDriverAdded to the modal
-      so when a new driver is created, it can call fetchDrivers and update UI */
-        <AddDriverModal onDriverAdded={fetchDrivers} />
+        <AddDriverModal
+          onDriverAdded={fetchDrivers}
+          setSelectedUser={setSelectedUser}
+        />
       )}
     </Toolbar>
   );
@@ -181,23 +195,32 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
   const [drivers, setDrivers] = useState<DriversLastReport[]>(initialDrivers);
 
   const fetchDrivers = async () => {
-    //this will get called from the addDriver modal when a new driver is created
-
+    console.log("fetching drivers");
     try {
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_BASEURL + "/api/employees/getdrivers",
-        // Allegedly Prevents caching to always fetch the latest data
-        { cache: "no-store" }
-      );
-      const newDrivers = await response.json();
-      setDrivers(newDrivers);
+      const updatedDrivers = await fetchDriversAndLatestTruckSheet();
+      if (updatedDrivers) {
+        setDrivers(updatedDrivers);
+      }
+      console.log(drivers);
     } catch (error) {
       console.error("Error fetching drivers:", error);
     }
   };
 
+  useEffect(() => {
+    fetchDrivers();
+
+    // this is used to display the latest data
+    const interval = setInterval(() => {
+      fetchDrivers();
+    }, 30000); // Fetch every 30 seconds
+
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleRequestSort = (
-    event: MouseEvent<unknown>,
+    _: MouseEvent<unknown>,
     property: keyof Driver
   ) => {
     const isAsc = orderBy === property && order === "asc";
@@ -205,7 +228,7 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
     setOrderBy(property);
   };
 
-  const handleClick = (event: MouseEvent<unknown>, id: number) => {
+  const handleClick = (_: MouseEvent<unknown>, id: number) => {
     const selectedDriver = drivers.find((row) => row.id === id);
     const selectedUser = selectedDriver
       ? {
@@ -232,7 +255,7 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
       <Paper className="driver-paper">
         <EnhancedTableToolbar
           selectedUser={selectedUser}
-          //pass to the toolbar, to then be passed to addDriverModal
+          setSelectedUser={setSelectedUser}
           fetchDrivers={fetchDrivers}
         />
         <TableContainer className="driver-tableContainer">

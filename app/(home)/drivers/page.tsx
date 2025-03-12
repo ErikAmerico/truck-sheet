@@ -1,6 +1,7 @@
 import { auth } from "auth";
 import { redirect } from "next/navigation";
 import DriverTable from "./DriverTable";
+import fetchDriversAndLatestTruckSheet from "./fetchDrivers";
 
 export default async function Drivers() {
   const session = await auth();
@@ -13,42 +14,7 @@ export default async function Drivers() {
     redirect("/");
   }
 
-  const response = await fetch(
-    process.env.NEXT_PUBLIC_BASEURL + "/api/employees/getdrivers",
-    // Allegedly Prevents caching to always fetch the latest data
-    { cache: "no-store" }
-  );
-  const drivers = await response.json();
-
-  const trucksResponse = await fetch(
-    process.env.NEXT_PUBLIC_BASEURL + "/api/trucks/gettrucks",
-    // Allegedly Prevents caching to always fetch the latest data
-    { cache: "no-store" }
-  );
-  const trucks = await trucksResponse.json();
-
-  const truckMap = trucks.reduce(
-    (map: { [key: string]: string }, truck: any) => {
-      map[truck.id] = truck.number;
-      return map;
-    },
-    {}
-  );
-
-  const formattedDrivers = drivers.map((driver: any) => {
-    const lastSheet = driver.trucksheet[driver.trucksheet.length - 1];
-    const lastReport = lastSheet
-      ? {
-          date: new Date(lastSheet.date).toLocaleDateString(),
-          truckNumber: truckMap[lastSheet.truckId] || "Unknown",
-        }
-      : null;
-
-    return {
-      ...driver,
-      lastReport,
-    };
-  });
+  const formattedDrivers = await fetchDriversAndLatestTruckSheet();
 
   return <main>{<DriverTable initialDrivers={formattedDrivers} />}</main>;
 }
