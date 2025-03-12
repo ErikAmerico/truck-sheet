@@ -10,8 +10,18 @@ import { useState, FormEvent } from "react";
 
 export default function AddOfficeEmployeeModal({
   onOfficeEmployeeAdded,
+  setSelectedUser,
 }: {
   onOfficeEmployeeAdded: () => void;
+  setSelectedUser: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      id: number;
+      firstName: string;
+      lastName: string;
+      username: string;
+    } | null>
+  >;
 }) {
   const [open, setOpen] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -65,6 +75,7 @@ export default function AddOfficeEmployeeModal({
       handleClose();
       //function to refresh the ui when a new office employee is added
       onOfficeEmployeeAdded();
+      setSelectedUser(null);
     } catch (error) {
       console.error("Error creating office employee:", error);
     }

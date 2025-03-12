@@ -17,13 +17,22 @@ interface UpdateOfficeEmployeeModalProps {
     lastName: string;
     username: string;
   };
-  onOfficeEmployeeDeleted: () => void;
+  onOfficeEmployeeEdit: () => void;
+  setSelectedUser: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      id: number;
+      firstName: string;
+      lastName: string;
+      username: string;
+    } | null>
+  >;
 }
 
 export default function UpdateOfficeEmployeeModal(
   props: UpdateOfficeEmployeeModalProps
 ) {
-  const { selectedUser, onOfficeEmployeeDeleted } = props;
+  const { selectedUser, onOfficeEmployeeEdit, setSelectedUser } = props;
 
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -87,6 +96,8 @@ export default function UpdateOfficeEmployeeModal(
       }, 3000);
 
       handleClose();
+      onOfficeEmployeeEdit();
+      setSelectedUser(null);
     } catch (error) {
       console.error("Error updating office employee:", error);
     }
@@ -113,7 +124,8 @@ export default function UpdateOfficeEmployeeModal(
       setTimeout(() => setSuccess(null), 3000);
 
       handleClose();
-      onOfficeEmployeeDeleted();
+      onOfficeEmployeeEdit();
+      setSelectedUser(null);
     } catch (error) {
       console.error("Error deleting employee:", error);
       setError(

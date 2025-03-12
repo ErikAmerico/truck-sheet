@@ -122,11 +122,23 @@ interface EnhancedTableToolbarProps {
   } | null;
 
   fetchEmployees: () => void;
+  //idk what Dispactch or setStateAction is
+  //but im passing setSelectedUser as a prop
+  setSelectedUser: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      id: number;
+      firstName: string;
+      lastName: string;
+      username: string;
+    } | null>
+  >;
 }
 
 function EnhancedTableToolbar({
   selectedUser,
   fetchEmployees,
+  setSelectedUser,
 }: EnhancedTableToolbarProps) {
   // const { selectedUser } = props;
 
@@ -158,12 +170,16 @@ function EnhancedTableToolbar({
           selectedUser={selectedUser}
           /* passing fetchOfficeEmployees function as onOfficeEmployeeDeleted to the modal
       so when a new office employee is deleted, it can call fetchOfficeEmployees and update UI */
-          onOfficeEmployeeDeleted={fetchEmployees}
+          onOfficeEmployeeEdit={fetchEmployees}
+          setSelectedUser={setSelectedUser}
         />
       ) : (
         /* passing fetchOfficeEmployees function as onOfficeEmployeeAdded to the modal
       so when a new office employee is created, it can call fetchOfficeEmployees and update UI */
-        <AddOfficeEmployeeModal onOfficeEmployeeAdded={fetchEmployees} />
+        <AddOfficeEmployeeModal
+          onOfficeEmployeeAdded={fetchEmployees}
+          setSelectedUser={setSelectedUser}
+        />
       )}
     </Toolbar>
   );
@@ -234,6 +250,7 @@ export default function OfficeEmployeeTable({
           selectedUser={selectedUser}
           //pass to the toolbar, to then be passed to addOfficeEmployee modal
           fetchEmployees={fetchEmployees}
+          setSelectedUser={setSelectedUser}
         />
         <TableContainer className="officeEmployee-tableContainer">
           <Table
