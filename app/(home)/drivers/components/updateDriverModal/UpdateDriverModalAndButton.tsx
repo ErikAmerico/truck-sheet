@@ -8,7 +8,6 @@ import Alert from "@mui/material/Alert";
 import ConfirmDeleteModal from "../../../components/confirmDeleteModal/ConfirmDeleteModal";
 import "./updateDriverModalAndButton.css";
 import { useState, FormEvent } from "react";
-import fetchDriversAndLatestTruckSheet from "../../fetchDrivers";
 
 interface UpdateDriverModalProps {
   selectedUser: {
@@ -18,10 +17,20 @@ interface UpdateDriverModalProps {
     lastName: string;
     username: string;
   };
+  onDriverDeleted: () => void;
+  setSelectedUser: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      id: number;
+      firstName: string;
+      lastName: string;
+      username: string;
+    } | null>
+  >;
 }
 
 export default function UpdateDriverModal(props: UpdateDriverModalProps) {
-  const { selectedUser } = props;
+  const { selectedUser, setSelectedUser, onDriverDeleted } = props;
 
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -111,7 +120,8 @@ export default function UpdateDriverModal(props: UpdateDriverModalProps) {
       setTimeout(() => setSuccess(null), 3000);
 
       handleClose();
-      fetchDriversAndLatestTruckSheet();
+      onDriverDeleted();
+      setSelectedUser(null);
     } catch (error) {
       console.error("Error deleting driver:", error);
       setError("Failed to delete driver");

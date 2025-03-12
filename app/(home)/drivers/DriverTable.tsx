@@ -125,9 +125,26 @@ interface EnhancedTableToolbarProps {
     lastName: string;
     username: string;
   } | null;
+
+  fetchDrivers: () => void;
+  //idk what Dispactch or setStateAction is
+  //but im passing setSelectedUser as a prop
+  setSelectedUser: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      id: number;
+      firstName: string;
+      lastName: string;
+      username: string;
+    } | null>
+  >;
 }
 
-function EnhancedTableToolbar({ selectedUser }: EnhancedTableToolbarProps) {
+function EnhancedTableToolbar({
+  selectedUser,
+  setSelectedUser,
+  fetchDrivers,
+}: EnhancedTableToolbarProps) {
   return (
     <Toolbar id="driver-toolbar" className={selectedUser ? "selected" : ""}>
       {selectedUser ? (
@@ -145,9 +162,16 @@ function EnhancedTableToolbar({ selectedUser }: EnhancedTableToolbarProps) {
         </Typography>
       )}
       {selectedUser ? (
-        <UpdateDriverModal selectedUser={selectedUser} />
+        <UpdateDriverModal
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+          onDriverDeleted={fetchDrivers}
+        />
       ) : (
-        <AddDriverModal />
+        <AddDriverModal
+          onDriverAdded={fetchDrivers}
+          setSelectedUser={setSelectedUser}
+        />
       )}
     </Toolbar>
   );
@@ -229,7 +253,11 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
   return (
     <Box className="driver-table-container">
       <Paper className="driver-paper">
-        <EnhancedTableToolbar selectedUser={selectedUser} />
+        <EnhancedTableToolbar
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+          fetchDrivers={fetchDrivers}
+        />
         <TableContainer className="driver-tableContainer">
           <Table
             aria-labelledby="driver-tableTitle"
