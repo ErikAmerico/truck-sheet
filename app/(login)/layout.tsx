@@ -1,5 +1,10 @@
 import "../globals.css";
 
+export const metadata = {
+  title: "Trucksheets - Login",
+  description: "Login page",
+};
+
 export default function LoginLayout({
   children,
 }: {

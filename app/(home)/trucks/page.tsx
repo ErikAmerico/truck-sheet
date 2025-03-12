@@ -4,6 +4,11 @@ import TruckTable from "./TruckTable";
 import fetchTrucksFromDb from "./fetchTrucks";
 import fetchTruckDriversMap from "./fetchTruckDriversMap";
 
+export const metadata = {
+  title: "Trucksheets - Truck Table",
+  description: "Trucks page",
+};
+
 export default async function TrucksPage() {
   const session = await auth();
 

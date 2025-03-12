@@ -3,6 +3,11 @@ import { redirect } from "next/navigation";
 import OfficeEmployeeTable from "./OfficeEmployeeTable";
 import fetchOfficeEmployees from "./fetchOfficeEmployees";
 
+export const metadata = {
+  title: "Trucksheets - Office Table",
+  description: "Office page",
+};
+
 export default async function OfficeEmployee() {
   const session = await auth();
 
