@@ -55,7 +55,7 @@ export default function FuelSlider({ setFuel }: FuelSliderProps) {
   };
 
   return (
-    <Box sx={{ width: 350, marginTop: 5 }}>
+    <Box sx={{ marginTop: 5, width: "100%" }}>
       <Typography
         id="discrete-slider"
         gutterBottom
