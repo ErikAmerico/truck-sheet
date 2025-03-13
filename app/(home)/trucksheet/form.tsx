@@ -99,7 +99,7 @@ export default function TruckSheetForm() {
       return;
     }
 
-    if (!noMilageEntered) {
+    if (!mileage) {
       setNoMilageEntered("Please enter the mileage");
       setTimeout(() => {
         setNoMilageEntered(null);
