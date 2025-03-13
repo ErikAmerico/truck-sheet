@@ -16,10 +16,10 @@ export default async function NavBar() {
   const session = await auth();
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" id="appbar">
+    <Box>
+      <AppBar id="appbar">
         <Toolbar id="nav-toolbar">
-          <Image src="/logo.png" alt="Logo" width={140} height={60} priority />
+          <Image src="/logo.png" alt="Logo" width={135} height={60} priority />
           <Box className="centered-button-container">
             {session?.user.role === "office" ? (
               <HomeButton id="home-button" />
@@ -35,7 +35,6 @@ export default async function NavBar() {
             ) : null}
           </Box>
 
-          <Box sx={{ flexGrow: 1 }} />
           <Box id="user-info-container">
             <Typography variant="h6" component="div" id="first-last-name">
               {session?.user.firstName} {session?.user.lastName}
