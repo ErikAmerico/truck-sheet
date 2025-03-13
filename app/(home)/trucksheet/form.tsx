@@ -136,6 +136,7 @@ export default function TruckSheetForm() {
       setMileage("");
       setSelectedTruck("");
       setSelectedTruckId("");
+      setRemarks("");
     } else {
       console.error("Failed to create truck sheet");
       setMileageError(result.error);
