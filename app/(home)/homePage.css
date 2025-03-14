@@ -1,0 +1,232 @@
+.homepage {
+  background-color: #f4f4f4;
+  color: #333;
+  font-family: "Poppins", sans-serif;
+
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+.homepage .welcome-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to right, #091f36, #114c82);
+  text-align: center;
+  padding: 50px;
+}
+
+.homepage .welcome-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.homepage .welcome-title span {
+  color: #09a9ff;
+}
+
+.homepage .image-text-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 500px;
+  padding: 50px;
+  background-color: white;
+
+  max-width: 100vw;
+  overflow: hidden;
+  position: relative;
+}
+
+.homepage .image-text-section.left {
+  flex-direction: row;
+}
+
+.homepage .image-text-section.right {
+  flex-direction: row-reverse;
+}
+
+.homepage .image-container {
+  flex: 1;
+  text-align: center;
+
+  max-width: 100%;
+  height: auto;
+}
+
+.homepage .image-container img {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.homepage .text-container {
+  flex: 1;
+  padding: 20px;
+}
+
+.homepage .text-container h2 {
+  font-size: 2rem;
+  color: #091f36;
+}
+
+.homepage .text-container p {
+  font-size: 1.2rem;
+  color: #555;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+.login {
+  width: 636px !important;
+  height: 503px !important;
+}
+
+.trucksheet-mileage {
+  width: 367px !important;
+  height: 749px !important;
+
+  clip-path: inset(1px 0px 0px 2.5px);
+  object-fit: cover;
+}
+
+.trucksheet-remarks {
+  width: 367px !important;
+  height: 749px !important;
+
+  clip-path: inset(1px 0px 0px 2px);
+  object-fit: cover;
+}
+
+.truckTable {
+  width: 1162px !important;
+  height: 600px !important;
+  max-width: none !important;
+  margin-left: -400px !important;
+
+  clip-path: inset(1px 0px 0px 0px);
+  object-fit: cover;
+}
+
+.deleteTruck {
+  width: 468px !important;
+  height: 173px !important;
+  max-width: none !important;
+
+  clip-path: inset(0px 4px 0px 4px);
+  object-fit: cover;
+}
+
+.driversTable {
+  width: 1162px !important;
+  height: 601px !important;
+  max-width: none !important;
+
+  margin-left: -400px !important;
+}
+
+.updateDriver {
+  width: 547px !important;
+  height: 640px !important;
+  max-width: none !important;
+}
+
+.officeTable {
+  width: 1162px !important;
+  height: 601px !important;
+  max-width: none !important;
+
+  margin-left: -400px !important;
+
+  clip-path: inset(1px 0px 0px 0px);
+  object-fit: cover;
+}
+
+.addEmployee {
+  width: 525px !important;
+  height: 640px !important;
+}
+
+@media (max-width: 1750px) {
+  .table-responsive {
+    flex-direction: column !important;
+    text-align: center;
+    align-items: center;
+    margin-left: 0px !important;
+  }
+
+  .responsive-title {
+    font-size: 2rem;
+    color: #091f36;
+    text-align: left;
+    max-width: 90%;
+    margin-bottom: 20px;
+  }
+
+  .responsive-description {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    text-align: left;
+    max-width: 90%;
+
+    font-size: 1.2rem;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  .description-section {
+    flex: 1;
+    min-width: 200px;
+    max-width: 450px;
+  }
+
+  .responsive-image-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-left: 22.5%;
+  }
+
+  #driversTable .responsive-description {
+    width: 70%;
+  }
+
+  #driversTable .responsive-description .description-section {
+    max-width: 100%;
+  }
+
+  #officeTable .responsive-description {
+    width: 70%;
+  }
+
+  #officeTable .responsive-description .description-section {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .homepage .welcome-title {
+    font-size: 2.5rem;
+  }
+
+  .homepage .image-text-section {
+    flex-direction: column !important;
+    text-align: center;
+  }
+
+  .homepage .image-container img {
+    max-width: 90%;
+  }
+
+  .homepage .text-container {
+    padding: 20px 10px;
+  }
+}
