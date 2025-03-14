@@ -42,10 +42,6 @@
   max-width: 3vw;
 }
 
-.truck-tableContainer {
-  max-height: 80.5vh;
-}
-
 .truck-table-row {
   cursor: pointer;
 }
