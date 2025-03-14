@@ -10,7 +10,7 @@ body {
 
 html,
 body {
-  overflow-x: hidden;
+  overflow: hidden !important;
   width: 100vw;
   margin: 0;
   padding: 0;
@@ -18,6 +18,7 @@ body {
 
 .no-scroll {
   height: calc(100vh - 1%);
+  overflow: hidden !important;
 }
 
 /* this gets rid of the line to the right of first header table cell
