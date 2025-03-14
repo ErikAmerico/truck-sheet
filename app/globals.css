@@ -16,11 +16,6 @@ body {
   padding: 0;
 }
 
-.no-scroll {
-  height: calc(100vh - 1%);
-  overflow: hidden !important;
-}
-
 /* this gets rid of the line to the right of first header table cell
 but it causes border top and bottom of head cell to disappear on scroll */
 /* .MuiTable-root {

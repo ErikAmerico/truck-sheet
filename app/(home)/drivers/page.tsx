@@ -25,9 +25,7 @@ export default async function Drivers() {
 
   return (
     <ThemeProvider theme={theme}>
-      <main className="no-scroll">
-        {<DriverTable initialDrivers={formattedDrivers} />}
-      </main>
+      <main>{<DriverTable initialDrivers={formattedDrivers} />}</main>
     </ThemeProvider>
   );
 }
