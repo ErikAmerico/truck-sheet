@@ -28,7 +28,7 @@ export default async function TrucksPage() {
 
   return (
     <ThemeProvider theme={theme}>
-      <main className="no-scroll">
+      <main>
         <TruckTable initialTrucks={trucks} initialDrivers={drivers} />
       </main>
     </ThemeProvider>

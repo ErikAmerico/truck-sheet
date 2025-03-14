@@ -3,6 +3,17 @@ import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   components: {
+    MuiTableContainer: {
+      styleOverrides: {
+        root: {
+          maxHeight: "80vh",
+          minHeight: "80vh",
+          overflow: "auto",
+          borderBottomLeftRadius: "8px",
+          borderBottomRightRadius: "8px",
+        },
+      },
+    },
     MuiTableRow: {
       styleOverrides: {
         root: {
