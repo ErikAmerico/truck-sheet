@@ -84,7 +84,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             key={headCell.id}
             align="center"
             sortDirection={orderBy === headCell.id ? order : false}
-            id="officeEmployee-table-head-cell"
           >
             {headCell.sortable ? (
               <TableSortLabel
@@ -279,15 +278,9 @@ export default function OfficeEmployeeTable({
                     selected={isItemSelected ? true : false}
                     className="officeEmployee-table-row"
                   >
-                    <TableCell align="center" className="officeEmployee-data">
-                      {row.firstName}
-                    </TableCell>
-                    <TableCell align="center" className="officeEmployee-data">
-                      {row.lastName}
-                    </TableCell>
-                    <TableCell align="center" className="officeEmployee-data">
-                      {row.username}
-                    </TableCell>
+                    <TableCell align="center">{row.firstName}</TableCell>
+                    <TableCell align="center">{row.lastName}</TableCell>
+                    <TableCell align="center">{row.username}</TableCell>
                   </TableRow>
                 );
               })}

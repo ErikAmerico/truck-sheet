@@ -2,6 +2,8 @@ import { auth } from "auth";
 import { redirect } from "next/navigation";
 import OfficeEmployeeTable from "./OfficeEmployeeTable";
 import fetchOfficeEmployees from "./fetchOfficeEmployees";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "../muiTheme";
 
 export const metadata = {
   title: "Trucksheets - Office Table",
@@ -22,6 +24,8 @@ export default async function OfficeEmployee() {
   const officeEmployees = await fetchOfficeEmployees();
 
   return (
-    <main>{<OfficeEmployeeTable initialEmployees={officeEmployees} />}</main>
+    <ThemeProvider theme={theme}>
+      <main>{<OfficeEmployeeTable initialEmployees={officeEmployees} />}</main>
+    </ThemeProvider>
   );
 }

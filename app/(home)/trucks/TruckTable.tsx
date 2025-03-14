@@ -67,7 +67,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             key={headCell.id}
             align="center"
             padding={headCell.disablePadding ? "none" : "normal"}
-            id="truck-table-head-cell"
           >
             {headCell.label}
           </TableCell>
@@ -274,30 +273,22 @@ export default function TruckTable({
                     selected={isItemSelected}
                     className="truck-table-row"
                   >
-                    <TableCell align="center" className="truck-data">
-                      {row.number}
-                    </TableCell>
-                    <TableCell align="center" className="truck-data">
+                    <TableCell align="center">{row.number}</TableCell>
+                    <TableCell align="center">
                       {latestTruckSheet.mileage}
                     </TableCell>
                     <TableCell align="center" id="truck-fuelgauge-data">
                       <FuelGauge value={latestTruckSheet.fuel} />
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      className="truck-data"
-                      id="truck-remarks"
-                    >
+                    <TableCell align="center" id="truck-remarks">
                       <Tooltip title={latestTruckSheet.remarks}>
                         <span>{latestTruckSheet.remarks}</span>
                       </Tooltip>
                     </TableCell>
-                    <TableCell align="center" className="truck-data">
+                    <TableCell align="center">
                       {formatDate(latestTruckSheet.date)}
                     </TableCell>
-                    <TableCell align="center" className="truck-data">
-                      {driverName}
-                    </TableCell>
+                    <TableCell align="center">{driverName}</TableCell>
                   </TableRow>
                 );
               })}
