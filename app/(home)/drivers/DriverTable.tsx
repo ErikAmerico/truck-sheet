@@ -89,7 +89,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             key={headCell.id}
             align="center"
             sortDirection={orderBy === headCell.id ? order : false}
-            id="driver-table-head-cell"
           >
             {headCell.sortable ? (
               <TableSortLabel
@@ -285,20 +284,10 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
                     selected={isItemSelected ? true : false}
                     className="driver-table-row"
                   >
-                    <TableCell align="center" className="driver-data">
-                      {row.firstName}
-                    </TableCell>
-                    <TableCell align="center" className="driver-data">
-                      {row.lastName}
-                    </TableCell>
-                    <TableCell align="center" className="driver-data">
-                      {row.username}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      className="driver-data"
-                      id="driver-last-report"
-                    >
+                    <TableCell align="center">{row.firstName}</TableCell>
+                    <TableCell align="center">{row.lastName}</TableCell>
+                    <TableCell align="center">{row.username}</TableCell>
+                    <TableCell align="center" id="driver-last-report">
                       {row.lastReport
                         ? `${row.lastReport.date} for Truck ${row.lastReport.truckNumber}`
                         : "No reports"}

@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import TruckTable from "./TruckTable";
 import fetchTrucksFromDb from "./fetchTrucks";
 import fetchTruckDriversMap from "./fetchTruckDriversMap";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "../muiTheme";
 
 export const metadata = {
   title: "Trucksheets - Truck Table",
@@ -25,8 +27,10 @@ export default async function TrucksPage() {
   const drivers = await fetchTruckDriversMap(trucks);
 
   return (
-    <main>
-      <TruckTable initialTrucks={trucks} initialDrivers={drivers} />
-    </main>
+    <ThemeProvider theme={theme}>
+      <main className="no-scroll">
+        <TruckTable initialTrucks={trucks} initialDrivers={drivers} />
+      </main>
+    </ThemeProvider>
   );
 }

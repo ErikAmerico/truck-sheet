@@ -2,6 +2,8 @@ import { auth } from "auth";
 import { redirect } from "next/navigation";
 import DriverTable from "./DriverTable";
 import fetchDriversAndLatestTruckSheet from "./fetchDrivers";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "../muiTheme";
 
 export const metadata = {
   title: "Trucksheets - Driver Table",
@@ -21,5 +23,11 @@ export default async function Drivers() {
 
   const formattedDrivers = await fetchDriversAndLatestTruckSheet();
 
-  return <main>{<DriverTable initialDrivers={formattedDrivers} />}</main>;
+  return (
+    <ThemeProvider theme={theme}>
+      <main className="no-scroll">
+        {<DriverTable initialDrivers={formattedDrivers} />}
+      </main>
+    </ThemeProvider>
+  );
 }
