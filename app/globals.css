@@ -10,10 +10,19 @@ body {
 
 html,
 body {
-  overflow: hidden !important;
   width: 100vw;
   margin: 0;
   padding: 0;
+}
+
+.scrollable {
+  overflow: auto !important;
+  margin-top: 64px !important;
+}
+
+.no-scroll {
+  overflow: hidden !important;
+  margin-top: 97px !important;
 }
 
 /* this gets rid of the line to the right of first header table cell
@@ -31,5 +40,6 @@ input[type="number"]::-webkit-inner-spin-button {
 
 /* Hide increment arrows in Firefox */
 input[type="number"] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }

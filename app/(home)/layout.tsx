@@ -1,5 +1,6 @@
 import "../globals.css";
 import NavBar from "./components/navBar/NavBar";
+import DynamicBody from "./dynamicBody";
 
 export const metadata = {
   title: "Trucksheets - Home",
@@ -13,10 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body style={{ marginTop: "64px" }}>
+      <DynamicBody>
         <NavBar />
         {children}
-      </body>
+      </DynamicBody>
     </html>
   );
 }
