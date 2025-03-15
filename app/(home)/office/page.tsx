@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import OfficeEmployeeTable from "./OfficeEmployeeTable";
 import fetchOfficeEmployees from "./fetchOfficeEmployees";
 import { ThemeProvider } from "@mui/material/styles";
-import theme from "../muiTheme";
+import theme from "../_utils/muiTheme";
 
 export const metadata = {
   title: "Trucksheets - Office Table",
