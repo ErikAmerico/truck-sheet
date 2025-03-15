@@ -4,7 +4,7 @@ import TruckTable from "./TruckTable";
 import fetchTrucksFromDb from "./fetchTrucks";
 import fetchTruckDriversMap from "./fetchTruckDriversMap";
 import { ThemeProvider } from "@mui/material/styles";
-import theme from "../muiTheme";
+import theme from "../_utils/muiTheme";
 
 export const metadata = {
   title: "Trucksheets - Truck Table",

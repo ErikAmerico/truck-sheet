@@ -1,6 +1,6 @@
 import "../globals.css";
 import NavBar from "./components/navBar/NavBar";
-import DynamicBody from "./dynamicBody";
+import DynamicBody from "./_utils/dynamicBody";
 
 export const metadata = {
   title: "Trucksheets - Home",
