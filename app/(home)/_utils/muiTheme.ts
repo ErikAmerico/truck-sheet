@@ -21,6 +21,12 @@ const theme = createTheme({
           "&:last-child": {
             borderBottom: "none",
           },
+          "&.Mui-selected, &.Mui-selected:hover": {
+            backgroundColor: "rgba(25, 118, 210, 0.12)",
+            "& td, & th": {
+              backgroundColor: "rgba(25, 118, 210, 0.12)",
+            },
+          },
         },
       },
     },
