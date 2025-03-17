@@ -4,6 +4,8 @@ import Credentials from "next-auth/providers/credentials";
 import { comparePassword } from "./utils/saltHashPw";
 import { prisma } from "./lib/prisma";
 
+//NextAuth uses JWT's internally for session management.
+
 declare module "next-auth" {
   //extending properties for the user object
   interface User {
