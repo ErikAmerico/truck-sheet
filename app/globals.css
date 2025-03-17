@@ -43,3 +43,63 @@ input[type="number"] {
   appearance: textfield;
   -moz-appearance: textfield;
 }
+
+@media (max-height: 950px) {
+  .no-scroll {
+    margin-top: 90px !important;
+  }
+}
+
+@media (max-height: 885px) {
+  .no-scroll {
+    margin-top: 85px !important;
+  }
+}
+
+@media (max-height: 855px) {
+  .no-scroll {
+    margin-top: 84px !important;
+  }
+}
+
+@media (max-height: 838px) {
+  .no-scroll {
+    margin-top: 83px !important;
+  }
+}
+
+@media (max-height: 825px) {
+  .no-scroll {
+    margin-top: 82px !important;
+  }
+}
+
+@media (max-height: 805px) {
+  .no-scroll {
+    margin-top: 81px !important;
+  }
+}
+
+@media (max-height: 785px) {
+  .no-scroll {
+    margin-top: 80px !important;
+  }
+}
+
+@media (max-height: 765px) {
+  .no-scroll {
+    margin-top: 79px !important;
+  }
+}
+
+@media (max-height: 745px) {
+  .no-scroll {
+    margin-top: 78px !important;
+  }
+}
+
+@media (max-height: 725px) {
+  .no-scroll {
+    margin-top: 75px !important;
+  }
+}

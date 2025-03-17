@@ -101,7 +101,7 @@ export default function HomePageContent() {
         <motion.h1
           className="welcome-title"
           initial={{ opacity: 0, y: -400 }}
-          animate={{ opacity: 1, y: -150 }}
+          animate={{ opacity: 1, y: -125 }}
           transition={{ duration: 1, ease: "easeOut" }}
         >
           Welcome to <span>ABC Trucksheets</span>
