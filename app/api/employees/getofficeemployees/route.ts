@@ -5,12 +5,12 @@ import { prisma } from "../../../../lib/prisma";
 
 export async function GET(req: NextRequest) {
   try {
-    const drivers = await prisma.employee.findMany({
+    const officeEmplyoyees = await prisma.employee.findMany({
       where: {
         role: "office",
       },
     });
-    return NextResponse.json(drivers, { status: 200 });
+    return NextResponse.json(officeEmplyoyees, { status: 200 });
   } catch (error) {
     console.error("Error fetching office employees:", error);
     return NextResponse.json(
