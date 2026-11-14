@@ -79,6 +79,14 @@ export default function FuelSlider({ setFuel }: FuelSliderProps) {
         min={0}
         max={8}
         onChange={handleFuelChange}
+        sx={{
+          "& .MuiSlider-thumb:before": {
+            display: "none",
+          },
+          "& .MuiSlider-thumb:hover, & .MuiSlider-thumb.Mui-focusVisible": {
+            boxShadow: "none",
+          },
+        }}
       />
     </Box>
   );
