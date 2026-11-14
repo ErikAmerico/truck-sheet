@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
 import { saltAndHashPassword } from "../../../../utils/saltHashPw";
+import pusher from "../../../../lib/pusher";
 
 export async function PUT(req: NextRequest) {
   const { id, firstName, lastName, username, password } = await req.json();
@@ -36,6 +37,10 @@ export async function PUT(req: NextRequest) {
     const updatedDriver = await prisma.employee.update({
       where: { id: Number(id) },
       data: updateData,
+    });
+
+    await pusher.trigger("real-time-drivers", "driver-updated", {
+      updatedDriver,
     });
 
     return NextResponse.json(updatedDriver, { status: 200 });

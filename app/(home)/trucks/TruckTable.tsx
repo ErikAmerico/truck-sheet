@@ -78,13 +78,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   selectedTruck: string | null;
-  fetchTrucks: () => void;
   handleDeleteTruck: () => void;
 }
 
 function EnhancedTableToolbar({
   selectedTruck,
-  fetchTrucks,
   handleDeleteTruck,
 }: EnhancedTableToolbarProps) {
   return (
@@ -113,9 +111,7 @@ function EnhancedTableToolbar({
           Delete Truck
         </Button>
       ) : (
-        /* passing fetchTrucks function as onTruckAdded to the modal
-      so when a new truck is created, it can call fetchTrucks and update UI */
-        <CreateTruckModal onTruckAdded={fetchTrucks} />
+        <CreateTruckModal />
       )}
     </Toolbar>
   );
@@ -136,38 +132,16 @@ export default function TruckTable({
   const [truckToDelete, setTruckToDelete] = useState<number | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const fetchTrucks = async () => {
-    //this will get called from the createtruck modal when a new truck is created
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/api/trucks/gettrucks`,
-        {
-          cache: "no-store",
-          // Allegedly Prevents caching to always fetch the latest data
-        }
-      );
-      const newTrucks = await response.json();
-      setTrucks(newTrucks);
-    } catch (error) {
-      console.error("Error fetching trucks:", error);
-    }
-  };
-
-  useEffect(() => {
-    //also gets called here on page load to be sure we initally have truck data
-    //might be redundant?
-    fetchTrucks();
-  }, []);
-
   useEffect(() => {
     //subscribe to the pusher channel created in my pusher account
     //this component is now listening for real-time events related to trucks
-    const channel = pusherClient.subscribe("real-time-trucks");
+    const channelSheets = pusherClient.subscribe("real-time-trucksheets");
+    const channelTrucks = pusherClient.subscribe("real-time-trucks");
 
     //listening for an event called new-trucksheet
     //when event is triggered on real-time-trucks channel, callback function is called
     //data received is the new trucksheet
-    channel.bind("new-trucksheet", (data: { trucksheet: any }) => {
+    channelSheets.bind("new-trucksheet", (data: { trucksheet: any }) => {
       //mapping over the trucks array, if the truckId matches the truckId of the new trucksheet
       //then update the trucksheet array of that truck with the new trucksheet
       setTrucks((prev) => {
@@ -186,10 +160,24 @@ export default function TruckTable({
       });
     });
 
+    // Listen for new trucks
+    channelTrucks.bind("truck-added", (data: { newTruck: Truck }) => {
+      setTrucks((prev) => {
+        const exists = prev.some((truck) => truck.id === data.newTruck.id);
+        return exists ? prev : [...prev, data.newTruck]; // Prevent duplicates
+      });
+    });
+
+    // Listen for truck deletions
+    channelTrucks.bind("truck-deleted", (data: { id: number }) => {
+      setTrucks((prev) => prev.filter((truck) => truck.id !== data.id));
+    });
+
     //clean up function
     //unsubscribes from real-time-trucks channel to prevent memory leaks
     //or redundant listeners...
     return () => {
+      pusherClient.unsubscribe("real-time-trucksheets");
       pusherClient.unsubscribe("real-time-trucks");
     };
   }, []);
@@ -248,8 +236,6 @@ export default function TruckTable({
       <Paper className="truck-paper">
         <EnhancedTableToolbar
           selectedTruck={selectedTruck}
-          //pass to the toolbar, to then be passed to createTruckModal
-          fetchTrucks={fetchTrucks}
           handleDeleteTruck={handleDeleteTruck}
         />
         <TableContainer className="truck-tableContainer">

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
 import { saltAndHashPassword } from "../../../../utils/saltHashPw";
+import pusher from "../../../../lib/pusher";
 
 export async function POST(req: NextRequest) {
   const { username, password, firstName, lastName, role } = await req.json();
@@ -29,6 +30,9 @@ export async function POST(req: NextRequest) {
         role: "driver",
       },
     });
+
+    // Emit event for real-time updates
+    await pusher.trigger("real-time-drivers", "driver-added", { newDriver });
 
     return NextResponse.json(newDriver, { status: 201 });
   } catch (error) {

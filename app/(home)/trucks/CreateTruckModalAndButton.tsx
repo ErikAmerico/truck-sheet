@@ -8,11 +8,7 @@ import Alert from "@mui/material/Alert";
 import "./createTruckModalAndButton.css";
 import { useState, FormEvent, ChangeEvent, KeyboardEvent } from "react";
 
-export default function CreateTruckModal({
-  onTruckAdded,
-}: {
-  onTruckAdded: () => void;
-}) {
+export default function CreateTruckModal() {
   const [open, setOpen] = useState(false);
   const [truckNumber, setTruckNumber] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -56,8 +52,6 @@ export default function CreateTruckModal({
       }, 3000);
 
       handleClose();
-      //function to refresh the ui when a new truck is added
-      onTruckAdded();
     } catch (error) {
       console.error("Error creating truck:", error);
     }

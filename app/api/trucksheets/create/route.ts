@@ -166,7 +166,7 @@ export async function POST(req: NextRequest) {
 
     // The client subscribes to "real-time-trucks".
     // When "new-trucksheet" is emitted, the callback function updates the UI.
-    await pusher.trigger("real-time-trucks", "new-trucksheet", {
+    await pusher.trigger("real-time-trucksheets", "new-trucksheet", {
       trucksheet,
     });
     //__________________________________________________________________________________________________________//

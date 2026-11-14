@@ -8,11 +8,7 @@ import Alert from "@mui/material/Alert";
 import "./addOfficeEmployeeModalAndButton.css";
 import { useState, FormEvent } from "react";
 
-export default function AddOfficeEmployeeModal({
-  onOfficeEmployeeAdded,
-}: {
-  onOfficeEmployeeAdded: () => void;
-}) {
+export default function AddOfficeEmployeeModal() {
   const [open, setOpen] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -63,8 +59,6 @@ export default function AddOfficeEmployeeModal({
       }, 3000);
 
       handleClose();
-      //function to refresh the ui when a new office employee is added
-      onOfficeEmployeeAdded();
     } catch (error) {
       console.error("Error creating office employee:", error);
     }

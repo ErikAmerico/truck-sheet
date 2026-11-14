@@ -125,13 +125,9 @@ interface EnhancedTableToolbarProps {
     lastName: string;
     username: string;
   } | null;
-  fetchDrivers: () => void;
 }
 
-function EnhancedTableToolbar({
-  selectedUser,
-  fetchDrivers,
-}: EnhancedTableToolbarProps) {
+function EnhancedTableToolbar({ selectedUser }: EnhancedTableToolbarProps) {
   return (
     <Toolbar id="driver-toolbar" className={selectedUser ? "selected" : ""}>
       {selectedUser ? (
@@ -149,16 +145,9 @@ function EnhancedTableToolbar({
         </Typography>
       )}
       {selectedUser ? (
-        <UpdateDriverModal
-          selectedUser={selectedUser}
-          /* passing fetchDrivers function as onDriverDeleted to the modal
-      so when a new driver is deleted, it can call fetchDrivers and update UI */
-          onDriverDeleted={fetchDrivers}
-        />
+        <UpdateDriverModal selectedUser={selectedUser} />
       ) : (
-        /* passing fetchDrivers function as onDriverAdded to the modal
-      so when a new driver is created, it can call fetchDrivers and update UI */
-        <AddDriverModal onDriverAdded={fetchDrivers} />
+        <AddDriverModal />
       )}
     </Toolbar>
   );
@@ -181,28 +170,41 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
   //setting drivers as initialDrivers, before creating a new driver
   const [drivers, setDrivers] = useState<DriversLastReport[]>(initialDrivers);
 
-  const fetchDrivers = async () => {
-    //this will get called from the addDriver modal when a new driver is created
-
-    try {
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_BASEURL + "/api/employees/getdrivers",
-        // Allegedly Prevents caching to always fetch the latest data
-        { cache: "no-store" }
-      );
-      const newDrivers = await response.json();
-      setDrivers(newDrivers);
-    } catch (error) {
-      console.error("Error fetching drivers:", error);
-    }
-  };
-
   useEffect(() => {
     //Subscribe to a Pusher channel named "real-time-drivers".
     //created in api/trucksheets/create/route.ts
     //Connects to Pusher's real-time WebSocket server.
     //Listens to the "real-time-drivers" channel.
     const channel = pusherClient.subscribe("real-time-drivers");
+    const deleteChannel = pusherClient.subscribe("real-time-employees");
+
+    // Listen for new drivers
+    channel.bind("driver-added", (data: { newDriver: DriversLastReport }) => {
+      setDrivers((prev) => {
+        const exists = prev.some((driver) => driver.id === data.newDriver.id);
+        return exists ? prev : [...prev, data.newDriver]; // Prevent duplicates
+      });
+      setSelectedUser(null);
+    });
+
+    // Listen for driver updates
+    channel.bind(
+      "driver-updated",
+      (data: { updatedDriver: DriversLastReport }) => {
+        setDrivers((prev) =>
+          prev.map((driver) =>
+            driver.id === data.updatedDriver.id ? data.updatedDriver : driver
+          )
+        );
+        setSelectedUser(null);
+      }
+    );
+
+    // Listen for driver deletions
+    deleteChannel.bind("employee-deleted", (data: { id: number }) => {
+      setDrivers((prev) => prev.filter((driver) => driver.id !== data.id));
+      setSelectedUser(null);
+    });
 
     channel.bind(
       //Listen for an event called "new-driver-trucksheet".
@@ -232,6 +234,7 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
     //prevent memory leaks
     return () => {
       pusherClient.unsubscribe("real-time-drivers");
+      pusherClient.unsubscribe("real-time-employees");
     };
   }, []);
 
@@ -269,11 +272,7 @@ export default function DriverTable({ initialDrivers }: DriverTableProps) {
   return (
     <Box className="driver-table-container">
       <Paper className="driver-paper">
-        <EnhancedTableToolbar
-          selectedUser={selectedUser}
-          //pass to the toolbar, to then be passed to addDriverModal
-          fetchDrivers={fetchDrivers}
-        />
+        <EnhancedTableToolbar selectedUser={selectedUser} />
         <TableContainer className="driver-tableContainer">
           <Table
             aria-labelledby="driver-tableTitle"

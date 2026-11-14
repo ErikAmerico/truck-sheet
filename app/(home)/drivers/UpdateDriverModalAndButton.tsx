@@ -17,11 +17,10 @@ interface UpdateDriverModalProps {
     lastName: string;
     username: string;
   };
-  onDriverDeleted: () => void;
 }
 
 export default function UpdateDriverModal(props: UpdateDriverModalProps) {
-  const { selectedUser, onDriverDeleted } = props;
+  const { selectedUser } = props;
 
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -111,7 +110,6 @@ export default function UpdateDriverModal(props: UpdateDriverModalProps) {
       setTimeout(() => setSuccess(null), 3000);
 
       handleClose();
-      onDriverDeleted();
     } catch (error) {
       console.error("Error deleting driver:", error);
       setError("Failed to delete driver");

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
+import pusher from "@/lib/pusher";
 
 export async function POST(req: NextRequest) {
   const { number } = await req.json();
@@ -20,6 +21,10 @@ export async function POST(req: NextRequest) {
       data: {
         number,
       },
+    });
+
+    await pusher.trigger("real-time-trucks", "truck-added", {
+      newTruck,
     });
 
     return NextResponse.json(newTruck, { status: 201 });

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
+import pusher from "../../../../lib/pusher";
 
 export async function DELETE(req: NextRequest) {
   try {
@@ -50,6 +51,13 @@ export async function DELETE(req: NextRequest) {
     await prisma.employee.delete({
       where: { id },
     });
+
+    await pusher.trigger("real-time-employees", "employee-deleted", { id });
+
+    //     // Send a real-time update via Pusher
+    // await pusher.trigger("real-time-drivers", "driver-deleted", {
+    //   driverId: driverId,
+    // });
 
     return NextResponse.json(
       { message: `${employee.role} deleted successfully` },

@@ -17,13 +17,12 @@ interface UpdateOfficeEmployeeModalProps {
     lastName: string;
     username: string;
   };
-  onOfficeEmployeeDeleted: () => void;
 }
 
 export default function UpdateOfficeEmployeeModal(
   props: UpdateOfficeEmployeeModalProps
 ) {
-  const { selectedUser, onOfficeEmployeeDeleted } = props;
+  const { selectedUser } = props;
 
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -113,7 +112,6 @@ export default function UpdateOfficeEmployeeModal(
       setTimeout(() => setSuccess(null), 3000);
 
       handleClose();
-      onOfficeEmployeeDeleted();
     } catch (error) {
       console.error("Error deleting employee:", error);
       setError(

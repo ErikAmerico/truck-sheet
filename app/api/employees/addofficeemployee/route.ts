@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
 import { saltAndHashPassword } from "../../../../utils/saltHashPw";
+import pusher from "../../../../lib/pusher";
 
 export async function POST(req: NextRequest) {
   const { username, password, firstName, lastName, role } = await req.json();
@@ -29,6 +30,14 @@ export async function POST(req: NextRequest) {
         role: "office",
       },
     });
+
+    await pusher.trigger(
+      "real-time-office-employees",
+      "office-employee-added",
+      {
+        newEmployee: newOfficeEmployee,
+      }
+    );
 
     return NextResponse.json(newOfficeEmployee, { status: 201 });
   } catch (error) {

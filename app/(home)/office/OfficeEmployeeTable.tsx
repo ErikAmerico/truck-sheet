@@ -15,7 +15,8 @@ import { visuallyHidden } from "@mui/utils";
 import AddOfficeEmployeeModal from "./AddOfficeEmployeeModalAndButton";
 import UpdateOfficeEmployeeModal from "./UpdateOfficeEmployeeModalAndButton";
 import "./officeEmployeeTable.css";
-import { useState, MouseEvent, useMemo } from "react";
+import { useState, useEffect, MouseEvent, useMemo } from "react";
+import pusherClient from "../../../lib/pusherClient";
 
 interface OfficeEmployee {
   id: number;
@@ -119,14 +120,9 @@ interface EnhancedTableToolbarProps {
     lastName: string;
     username: string;
   } | null;
-
-  fetchOfficeEmployees: () => void;
 }
 
-function EnhancedTableToolbar({
-  selectedUser,
-  fetchOfficeEmployees,
-}: EnhancedTableToolbarProps) {
+function EnhancedTableToolbar({ selectedUser }: EnhancedTableToolbarProps) {
   // const { selectedUser } = props;
 
   return (
@@ -153,16 +149,9 @@ function EnhancedTableToolbar({
         </Typography>
       )}
       {selectedUser ? (
-        <UpdateOfficeEmployeeModal
-          selectedUser={selectedUser}
-          /* passing fetchOfficeEmployees function as onOfficeEmployeeDeleted to the modal
-      so when a new office employee is deleted, it can call fetchOfficeEmployees and update UI */
-          onOfficeEmployeeDeleted={fetchOfficeEmployees}
-        />
+        <UpdateOfficeEmployeeModal selectedUser={selectedUser} />
       ) : (
-        /* passing fetchOfficeEmployees function as onOfficeEmployeeAdded to the modal
-      so when a new office employee is created, it can call fetchOfficeEmployees and update UI */
-        <AddOfficeEmployeeModal onOfficeEmployeeAdded={fetchOfficeEmployees} />
+        <AddOfficeEmployeeModal />
       )}
     </Toolbar>
   );
@@ -186,22 +175,52 @@ export default function OfficeEmployeeTable({
   const [employees, setEmployees] =
     useState<OfficeEmployee[]>(initialEmployees);
 
-  const fetchOfficeEmployees = async () => {
-    //this will get called from the addOfficeEmployee modal when a new employee is created
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/api/employees/getofficeemployees`,
-        {
-          cache: "no-store",
-          // Allegedly Prevents caching to always fetch the latest data
-        }
+  useEffect(() => {
+    const channel = pusherClient.subscribe("real-time-office-employees");
+    const deleteChannel = pusherClient.subscribe("real-time-employees");
+
+    // Listen for new office employees
+    channel.bind(
+      "office-employee-added",
+      (data: { newEmployee: OfficeEmployee }) => {
+        setEmployees((prev) => {
+          const exists = prev.some(
+            (employee) => employee.id === data.newEmployee.id
+          );
+          return exists ? prev : [...prev, data.newEmployee]; // Add new employee if it doesn't already exist
+        });
+      }
+    );
+
+    // Listen for office employee updates
+    channel.bind(
+      "office-employee-updated",
+      (data: { updatedEmployee: OfficeEmployee }) => {
+        setEmployees((prev) =>
+          prev.map((employee) =>
+            employee.id === data.updatedEmployee.id
+              ? data.updatedEmployee
+              : employee
+          )
+        );
+        setSelectedUser(null);
+      }
+    );
+
+    // Listen for office employee deletions
+    deleteChannel.bind("employee-deleted", (data: { id: number }) => {
+      console.log("Received delete event:", data); // Debugging log
+      setEmployees((prev) =>
+        prev.filter((employee) => employee.id !== data.id)
       );
-      const newEmployees = await response.json();
-      setEmployees(newEmployees);
-    } catch (error) {
-      console.error("Error fetching office employees:", error);
-    }
-  };
+      setSelectedUser(null);
+    });
+
+    return () => {
+      pusherClient.unsubscribe("real-time-office-employees");
+      pusherClient.unsubscribe("real-time-employees");
+    };
+  }, []);
 
   const handleRequestSort = (
     _: MouseEvent<unknown>,
@@ -237,11 +256,7 @@ export default function OfficeEmployeeTable({
   return (
     <Box className="officeEmployee-table-container">
       <Paper className="officeEmployee-paper">
-        <EnhancedTableToolbar
-          selectedUser={selectedUser}
-          //pass to the toolbar, to then be passed to addOfficeEmployee modal
-          fetchOfficeEmployees={fetchOfficeEmployees}
-        />
+        <EnhancedTableToolbar selectedUser={selectedUser} />
         <TableContainer className="officeEmployee-tableContainer">
           <Table
             aria-labelledby="officeEmployee-tableTitle"

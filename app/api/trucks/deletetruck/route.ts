@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
+import pusher from "@/lib/pusher";
 
 export async function DELETE(req: NextRequest) {
   try {
@@ -20,6 +21,8 @@ export async function DELETE(req: NextRequest) {
     await prisma.truck.delete({
       where: { id },
     });
+
+    await pusher.trigger("real-time-trucks", "truck-deleted", { id });
 
     return NextResponse.json(
       { message: "Truck deleted successfully" },

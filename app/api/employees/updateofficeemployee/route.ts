@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
 import { saltAndHashPassword } from "../../../../utils/saltHashPw";
+import pusher from "../../../../lib/pusher";
 
 export async function PUT(req: NextRequest) {
   const { id, firstName, lastName, username, password } = await req.json();
@@ -37,6 +38,14 @@ export async function PUT(req: NextRequest) {
       where: { id: Number(id) },
       data: updateData,
     });
+
+    await pusher.trigger(
+      "real-time-office-employees",
+      "office-employee-updated",
+      {
+        updatedEmployee: updatedOfficeEmployee,
+      }
+    );
 
     return NextResponse.json(updatedOfficeEmployee, { status: 200 });
   } catch (error) {
